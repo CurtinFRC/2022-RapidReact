@@ -66,7 +66,6 @@ model {
 					if (includeSrcInIncludeRoot) {
 							srcDir 'src/main/cpp'
 							srcDir 'TreasureMapper/cpp'
-
 					}
 				}
 			}
