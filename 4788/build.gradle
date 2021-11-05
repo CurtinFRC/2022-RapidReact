@@ -2,7 +2,7 @@ ext {
 	// Robot Project Options
 
 	teamNum = 4788
-	nativeName = "${teamNum}-Robot"
+	nativeName = "${teamNum}"
 }
 
 apply from: rootProject.file('robot.gradle')
