@@ -1,0 +1,133 @@
+# Continuously test on all platforms using azure
+
+trigger:
+- master
+
+resources:
+  containers:
+  - container: wpilib2019
+    image: wpilib/roborio-cross-ubuntu:2019-18.04
+  - container: bionic
+    image: wpilib/aarch64-cross-ubuntu:bionic-18.04
+  - container: raspbian
+    image:  wpilib/raspbian-cross-ubuntu:10-18.04
+
+jobs:
+
+- job: windows_VS2017_Win2016
+  pool:
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - template: azure-init.yml
+  - script: git submodule update --init
+  - script: git submodule update
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoboRioToolchain'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'clean build'
+      #options: '-Pno-roborio'
+
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.14'
+  steps:
+  - template: azure-init.yml
+  - script: git submodule update --init
+  - script: git submodule update
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoboRioToolchain'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'clean build'
+      #options: '-Pno-roborio'
+
+- job: linux_16
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  container: bionic
+  steps:
+  - template: azure-init.yml
+  - script: git submodule update --init
+  - script: git submodule update
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoboRioToolchain'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'clean build'
+      #options: '-Pno-roborio'
+
+
+- job: vision_Win2016
+  pool:
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - template: azure-init.yml
+  - script: git submodule update --init
+  - script: git submodule update
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoboRioToolchain'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: 'CJ-Vision/'
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'clean build'
+      #options: '-Pno-roborio'
+
+# - job: vision_linux_16
+#   pool:
+#     vmImage: 'Ubuntu 16.04'
+#   container: bionic
+#   steps:
+#   - template: azure-init.yml
+#   - task: Gradle@2
+#     inputs:
+#       workingDirectory: 'CJ-Vision/'
+#       gradleWrapperFile: 'gradlew'
+#       gradleOptions: '-Xmx3072m'
+#       publishJUnitResults: false
+#       testResultsFiles: '**/TEST-*.xml'
+#       tasks: 'clean build'
+#       # options: '-Pno-roborio'
