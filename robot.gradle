@@ -1,16 +1,25 @@
+apply plugin: 'org.ysb33r.doxygen'
 apply plugin: 'cpp'
 apply plugin: 'google-test-test-suite'
 apply plugin: 'edu.wpi.first.GradleRIO'
 
+ext {
+	teamID = teamNum
+}
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
 	targets {
 		roboRIO("roborio") {
-			team = frc.getTeamNumber()
+			// Team number is loaded either from the .wpilib/wpilib_preferences.json
+			// or from command line. If not found an exception will be thrown.
+			// You can use getTeamOrDefault(team) instead of getTeamNumber if you
+			// want to store a team number in this file.
+			team = teamNum
 		}
 	}
+
 	artifacts {
 		frcNativeArtifact('frcCpp') {
 			targets << "roborio"
@@ -29,10 +38,6 @@ deploy {
 	}
 }
 
-// Set this to true to include the src folder in the include directories passed
-// to the compiler. Some eclipse project imports depend on this behavior.
-// We recommend leaving this disabled if possible. Note for eclipse project
-// imports this is enabled by default. For new projects, its disabled
 def includeSrcInIncludeRoot = true
 
 // Set this to true to enable desktop support.
@@ -42,11 +47,39 @@ def includeDesktopSupport = false
 // upon debugging
 dependencies {
 	simulation wpi.deps.sim.gui(wpi.platforms.desktop, true)
+	simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, true)
+}
+
+// Simulation configuration (e.g. environment variables).
+sim {
+	// Sets the websocket client remote host.
+	// envVar "HALSIMWS_HOST", "10.0.0.2"
 }
 
 model {
 	components {
-		frcUserProgram(NativeExecutableSpec) {
+
+		treasureMapper(NativeLibrarySpec) {
+			if (includeDesktopSupport) {
+				targetPlatform wpi.platforms.desktop
+			}
+			targetPlatform wpi.platforms.roborio
+
+			sources {
+				cpp {
+					source {
+						srcDir 'TreasureMapper/cpp'
+						include '**/*.cpp', '**/*.cc'
+					}
+
+					exportedHeaders {
+						srcDir rootProject.file('TreasureMapper/include')
+					}
+				}
+			}
+		}
+		
+		"${nativeName}"(NativeExecutableSpec) { // frc user
 			targetPlatform wpi.platforms.roborio
 			if (includeDesktopSupport) {
 				targetPlatform wpi.platforms.desktop
@@ -54,30 +87,41 @@ model {
 
 			sources.cpp {
 				source {
-					srcDir 'src/main/cpp'
-					srcDir 'TreaureMapper/cpp'
+					srcDir 'src/main/cpp' // robot
 					include '**/*.cpp', '**/*.cc'
-
 				}
+
 				exportedHeaders {
-					srcDir 'src/main/include'
-					srcDir 'TreasureMapper/include'
+					srcDir 'src/main/include' // robot
 
 					if (includeSrcInIncludeRoot) {
-							srcDir 'src/main/cpp'
-							srcDir 'TreasureMapper/cpp'
+						srcDir 'src/main/cpp' // robot
 					}
 				}
 			}
 
+			binaries.all {
+				if (includeDesktopSupport) {
+					cppCompiler.define "WML_DESKTOP_SUPPORT"
+				}
+
+				lib library: 'treasureMapper', linkage: 'shared'
+			}
+
 			// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-			wpi.deps.wpilib(it)
 			wpi.deps.vendor.cpp(it)
-		}
+			wpi.deps.wpilib(it)
+		} // frc user
 	}
+
 	testSuites {
-		frcUserProgramTest(GoogleTestTestSuiteSpec) {
-			testing $.components.frcUserProgram
+		"${nativeName}Test"(GoogleTestTestSuiteSpec) {
+			for(NativeComponentSpec c : $.components) {
+				if (c.name == nativeName) {
+					testing c
+					break
+				}
+			}
 
 			sources.cpp {
 				source {
@@ -86,9 +130,26 @@ model {
 				}
 			}
 
+			binaries.all {
+				if (includeDesktopSupport) {
+					cppCompiler.define "WML_DESKTOP_SUPPORT"
+				}
+				lib library: 'treasureMapper', linkage: 'shared'
+			}
+
+			wpi.deps.vendor.cpp(it)
 			wpi.deps.wpilib(it)
 			wpi.deps.googleTest(it)
-			wpi.deps.vendor.cpp(it)
 		}
 	}
+}
+
+doxygen {
+	executables {
+		doxygen version : '1.8.13'
+	}
+
+	generate_html true
+	source project.file('src/main/include')
+	outputDir new File(buildDir,"docs/${nativeName}/doxygen")
 }

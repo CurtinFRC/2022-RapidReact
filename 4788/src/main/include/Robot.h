@@ -3,6 +3,9 @@
 #include <iostream>
 #include <frc/TimedRobot.h>
 
+#include <WMLRev.h>
+#include <WMLCtre.h>
+
 class Robot : public frc::TimedRobot {
  public:
 	void RobotInit() override;

@@ -1,1 +1,8 @@
+ext {
+	// Robot Project Options
+
+	teamNum = 4788
+	nativeName = "${teamNum}-Robot"
+}
+
 apply from: rootProject.file('robot.gradle')
