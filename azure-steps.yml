@@ -1,0 +1,27 @@
+steps:
+
+  # Init
+  - script: git submodule update --init
+  - script: git submodule update --remote -f
+
+  # Get toolchains
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx4096m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoborioToolchain'
+      options: '-PazureBuild'
+
+  # Build project
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx4096m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'clean build'
+      options: '-PazureBuild'
