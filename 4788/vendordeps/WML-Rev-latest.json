@@ -1,18 +1,18 @@
 {
-    "fileName": "WML-Core-latest.json",
-    "name": "WML-Core",
+    "fileName": "WML-Rev-latest.json",
+    "name": "WML-Rev",
     "version": "2021.3.1",
-    "uuid": "a6d30c03-12a8-476d-8fdc-41dacdb7790f",
+    "uuid": "099da10d-4f49-445b-821d-921cd2507f1c",
     "mavenUrls": [
         "http://buchel.family/repository/wml"
     ],
-    "jsonUrl": "http://buchel.family/repository/wml/first/WML-Core/WML-Core-Deps/latest/WML-Core-Deps-latest.json",
+    "jsonUrl": "http://buchel.family/repository/wml/first/WML-Rev/WML-Rev-Deps/latest/WML-Rev-Deps-latest.json",
     "cppDependencies": [
         {
-            "groupId": "first.WML-Core",
-            "artifactId": "WML-Core-cpp",
+            "groupId": "first.WML-Rev",
+            "artifactId": "WML-Rev-cpp",
             "version": "2021.3.1",
-            "libName": "WML-Core",
+            "libName": "WML-Rev",
             "headerClassifier": "headers",
             "sourcesClassifier": "sources",
             "sharedLibrary": true,

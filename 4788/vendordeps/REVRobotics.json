@@ -39,7 +39,7 @@
             "version": "1.5.4",
             "libName": "SparkMax",
             "headerClassifier": "headers",
-            "sharedLibrary": false,
+            "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
                 "windowsx86-64",
@@ -57,7 +57,7 @@
             "version": "1.5.4",
             "libName": "SparkMaxDriver",
             "headerClassifier": "headers",
-            "sharedLibrary": false,
+            "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
                 "windowsx86-64",

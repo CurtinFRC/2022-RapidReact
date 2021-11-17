@@ -27,4 +27,6 @@ pluginManagement {
 }
 
 rootProject.name = '2022-RapidReact'
-include '4788'
+include '4788', 'CJ-Vision'
+
+project(':CJ-Vision').projectDir = file('CJ-Vision/multiProject')

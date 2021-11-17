@@ -1,6 +1,6 @@
 {
-    "currentLanguage": "none",
-    "enableCppIntellisense": false,
+    "currentLanguage": "cpp",
+    "enableCppIntellisense": true,
     "projectYear": "none",
     "teamNumber": 4788
 }

@@ -1,6 +1,9 @@
-[submodule "4788/TreasureMapper"]
-	path = 4788/TreasureMapper
+[submodule "4788/TreasurMapper"]
+	path = 4788/TreasurMapper
 	url = https://github.com/goanna247/TreasureMapper.git
+	branch = master
+
 [submodule "CJ-Vision"]
 	path = CJ-Vision
 	url = https://github.com/wml-frc/CJ-Vision.git
+	branch = master

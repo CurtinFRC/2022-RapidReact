@@ -3,6 +3,9 @@
 #include <iostream>
 #include <frc/TimedRobot.h>
 
+#include <WMLRev.h>
+#include <WMLCtre.h>
+
 class Robot : public frc::TimedRobot {
  public:
 	void RobotInit() override;
@@ -19,5 +22,4 @@ class Robot : public frc::TimedRobot {
 
 	void TestInit() override;
 	void TestPeriodic() override;
-
 };
