@@ -3,8 +3,6 @@
 using namespace frc;
 using namespace wml;
 
-using hand = frc::XboxController::JoystickHand;
-
 double currentTimeStamp;
 double lastTimeStamp;
 double dt;

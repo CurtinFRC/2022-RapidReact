@@ -3,7 +3,6 @@
 
 #include <cameraserver/CameraServer.h>
 #include <frc/DriverStation.h>
- 
 #include "Toggle.h"
 
 /**
@@ -35,5 +34,4 @@ class Robot : public frc::TimedRobot, protected wml::StrategyController, protect
 	RobotMap robotMap;
 	wml::Drivetrain *drivetrain;
 	Intake *intake;
-
 };

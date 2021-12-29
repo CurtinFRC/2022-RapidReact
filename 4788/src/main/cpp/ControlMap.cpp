@@ -4,7 +4,7 @@ using namespace wml;
 using namespace wml::controllers;
 
 void ControlMap::InitsmartControllerGroup(SmartControllerGroup &contGroup) {
-		//Remap here (map POV buttons to names, ect.)
+	//Remap here (map POV buttons to names, ect.)
 }
 
 // -------------------- Values --------------------
@@ -43,6 +43,7 @@ bool ControlMap::IntakeToggle = false;
 
 
 // -------------------- Values --------------------
+//Drive
 const tAxis ControlMap::DrivetrainLeft{ Driver, XboxController::kLeftYAxis };
 const tAxis ControlMap::DrivetrainRight{ Driver, XboxController::kRightYAxis };
 
