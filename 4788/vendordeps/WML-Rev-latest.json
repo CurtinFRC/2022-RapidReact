@@ -1,0 +1,28 @@
+// {
+// 	"fileName": "WML-Rev-latest.json",
+// 	"name": "WML-Rev",
+// 	"version": "2021.3.1",
+// 	"uuid": "099da10d-4f49-445b-821d-921cd2507f1c",
+// 	"mavenUrls": [
+// 			"https://buchel.family/repository/wml"
+// 	],
+// 	"jsonUrl": "https://buchel.family/repository/wml/first/WML-Rev/WML-Rev-Deps/latest/WML-Rev-Deps-latest.json",
+// 	"cppDependencies": [
+// 			{
+// 					"groupId": "first.WML-Rev",
+// 					"artifactId": "WML-Rev-cpp",
+// 					"version": "2021.3.1",
+// 					"libName": "WML-Rev",
+// 					"headerClassifier": "headers",
+// 					"sourcesClassifier": "sources",
+// 					"sharedLibrary": true,
+// 					"skipInvalidPlatforms": true,
+// 					"binaryPlatforms": [
+// 							"linuxx86-64",
+// 							"windowsx86-64",
+// 							"osxx86-64",
+// 							"linuxathena"
+// 					]
+// 			}
+// 	]
+// }

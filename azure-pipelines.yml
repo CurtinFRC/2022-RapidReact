@@ -1,0 +1,82 @@
+# Azure Tester
+trigger: 
+- master # Triggers when on master. Either pr or push
+
+variables:
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+
+resources:
+  containers:
+  - container: wpilib2021
+    image: wpilib/roborio-cross-ubuntu:2021-18.04
+  - container: raspbian
+    image:  wpilib/raspbian-cross-ubuntu:10-18.04
+  - container: bionic
+    image: wpilib/aarch64-cross-ubuntu:bionic-18.04
+
+# Sub Builders (platform dependent)
+jobs:
+- job: linux_master_publisher
+  pool:
+    vmImage: 'Ubuntu-latest'
+    container: bionic
+  steps:
+  - template: azure-init.yml
+  - template: azure-steps.yml
+
+- job: roborio
+  pool:
+    vmImage: 'Ubuntu-latest'
+  container: 'wpilib2021'
+  steps:
+  - template: azure-init.yml
+  - template: azure-steps.yml
+
+- job: r_pi
+  pool:
+    vmImage: 'Ubuntu-latest'
+  container: 'raspbian'
+  steps:
+  - template: azure-init.yml
+  - template: azure-steps.yml
+
+- job: windows
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - template: azure-init.yml
+  - template: azure-steps.yml
+
+- job: mac
+  pool:
+    vmImage: 'macOS-10.14'
+  steps:
+  - template: azure-init.yml
+  - template: azure-steps.yml
+
+# Doxygen publish
+- job: doxygen
+  pool:
+    vmImage: 'Ubuntu-latest'
+  steps:
+  - task: Gradle@2
+    condition: and(succeeded(), eq(variables.isMaster, 'true'))
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx4096m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'installRoborioToolchain'
+      options: '-PazureBuild'
+  - task: Gradle@2
+    condition: and(succeeded(), eq(variables.isMaster, 'true'))
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      tasks: 'doxygen'
+      options: '-PazureBuild'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: 'doxygen'
+      pathtoPublish: build/docs/doxygen
