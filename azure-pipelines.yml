@@ -1,9 +1,10 @@
 # Azure Tester
 trigger: 
 - master # Triggers when on master. Either pr or push
+- ri3d # Triggers on Ri3D
 
 variables:
-  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isMaster: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/ri3d'))]
 
 resources:
   containers:
@@ -16,7 +17,7 @@ resources:
 
 # Sub Builders (platform dependent)
 jobs:
-- job: linux_master_publisher
+- job: linux
   pool:
     vmImage: 'Ubuntu-latest'
     container: bionic
@@ -32,7 +33,7 @@ jobs:
   - template: azure-init.yml
   - template: azure-steps.yml
 
-- job: r_pi
+- job: vision
   pool:
     vmImage: 'Ubuntu-latest'
   container: 'raspbian'
@@ -42,14 +43,14 @@ jobs:
 
 - job: windows
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-latest'
   steps:
   - template: azure-init.yml
   - template: azure-steps.yml
 
 - job: mac
   pool:
-    vmImage: 'macOS-10.14'
+    vmImage: 'macOS-latest'
   steps:
   - template: azure-init.yml
   - template: azure-steps.yml
@@ -77,6 +78,7 @@ jobs:
       tasks: 'doxygen'
       options: '-PazureBuild'
   - task: PublishBuildArtifacts@1
+    condition: and(succeeded(), eq(variables.isMaster, 'true'))
     inputs:
       artifactName: 'doxygen'
-      pathtoPublish: build/docs/doxygen
+      pathtoPublish: build/docs/4788/doxygen

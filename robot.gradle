@@ -148,5 +148,5 @@ doxygen {
 
 	generate_html true
 	source project.file('src/main/include')
-	outputDir new File(buildDir,"docs/${nativeName}/doxygen")
+	outputDir new File(buildDir,"docs/doxygen/${nativeName}")
 }
