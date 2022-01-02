@@ -1,8 +1,8 @@
 steps:
 
   # Init
-  - script: git submodule update --init
-  - script: git submodule update --remote -f
+  - script: git submodule update --init --recursive
+  - script: git submodule update --recursive --remote -f
 
   # Get toolchains
   - task: Gradle@2
