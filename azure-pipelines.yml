@@ -78,6 +78,7 @@ jobs:
       tasks: 'doxygen'
       options: '-PazureBuild'
   - task: PublishBuildArtifacts@1
+    condition: and(succeeded(), eq(variables.isMaster, 'true'))
     inputs:
       artifactName: 'doxygen'
       pathtoPublish: build/docs/doxygen
