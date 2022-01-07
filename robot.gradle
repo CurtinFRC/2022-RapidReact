@@ -23,7 +23,7 @@ deploy {
 	artifacts {
 		frcNativeArtifact('frcCpp') {
 			targets << "roborio"
-			component = 'frcUserProgram'
+			component = "${nativeName}"
 			// Debug can be overridden by command line, for use with VSCode
 			debug = frc.getDebugOrDefault(false)
 		}
