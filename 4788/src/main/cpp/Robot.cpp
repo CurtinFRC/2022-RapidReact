@@ -16,12 +16,15 @@ wml::actuators::DoubleSolenoid pistonL{0, 1, 0.2};
 wml::actuators::DoubleSolenoid pistonR{99, 99, 0.2};
 
 // Compressor
-wml::actuators::Compressor compressor{99};
+wml::actuators::Compressor compressor{0};
 
 // Xbox Controller
 wml::controllers::XboxController xbox{1};
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+	wheelMotorL.SetInverted(true);
+	wheelMotorR.SetInverted(false);
+}
 
 void Robot::RobotPeriodic() {
 	compressor.SetTarget(wml::actuators::kForward);
@@ -38,8 +41,6 @@ void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
-	wheelMotorL.SetInverted(true);
-	wheelMotorR.SetInverted(false);
 }
 
 void Robot::TeleopPeriodic() {
