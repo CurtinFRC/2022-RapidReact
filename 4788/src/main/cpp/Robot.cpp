@@ -8,12 +8,12 @@ bool pressed = false;
 
 
 // Intake Wheel Motors
-wml::TalonSrx wheelMotorL{99};
-wml::TalonSrx wheelMotorR{99};
+wml::TalonSrx wheelMotorL{7};
+wml::TalonSrx wheelMotorR{8};
 
 // Solenoids
-wml::actuators::DoubleSolenoid pistonL{0, 1, 0.2};
-wml::actuators::DoubleSolenoid pistonR{99, 99, 0.2};
+wml::actuators::DoubleSolenoid pistonL{0, 1, 0.2}; // 0 = Forward, 1 = Reverse
+wml::actuators::DoubleSolenoid pistonR{2, 3, 0.2}; // 2 = Forward, 3 = Reverse
 
 // Compressor
 wml::actuators::Compressor compressor{0};
@@ -22,7 +22,7 @@ wml::actuators::Compressor compressor{0};
 wml::controllers::XboxController xbox{1};
 
 void Robot::RobotInit() {
-	wheelMotorL.SetInverted(true);
+	wheelMotorL.SetInverted(false);
 	wheelMotorR.SetInverted(false);
 }
 
