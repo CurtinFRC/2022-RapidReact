@@ -7,7 +7,7 @@ using namespace wml;
 void Robot::RobotInit() {}
 void Robot::RobotPeriodic() {}
 
-
+// Disabled Logic
 void Robot::DisabledInit() {
 	InterruptAll(true);
 }
