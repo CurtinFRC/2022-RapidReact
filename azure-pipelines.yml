@@ -46,6 +46,11 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - template: azure-init.yml
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
   - template: azure-steps.yml
 
 - job: mac
@@ -53,6 +58,11 @@ jobs:
     vmImage: 'macOS-latest'
   steps:
   - template: azure-init.yml
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
   - template: azure-steps.yml
 
 # Doxygen publish
