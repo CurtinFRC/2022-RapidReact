@@ -4,149 +4,126 @@ apply plugin: 'google-test-test-suite'
 apply plugin: 'edu.wpi.first.GradleRIO'
 
 ext {
-	teamID = teamNum
+  teamID = teamNum
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
-	targets {
-		roboRIO("roborio") {
-			// Team number is loaded either from the .wpilib/wpilib_preferences.json
-			// or from command line. If not found an exception will be thrown.
-			// You can use getTeamOrDefault(team) instead of getTeamNumber if you
-			// want to store a team number in this file.
-			team = teamNum
-		}
-	}
+  targets {
+    roborio(getTargetTypeClass('RoboRIO')) {
+      // Team number is loaded either from the .wpilib/wpilib_preferences.json
+      // or from command line. If not found an exception will be thrown.
+      // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+      // want to store a team number in this file.
+      team = teamNum
 
-	artifacts {
-		frcNativeArtifact('frcCpp') {
-			targets << "roborio"
-			component = "${nativeName}"
-			// Debug can be overridden by command line, for use with VSCode
-			debug = frc.getDebugOrDefault(false)
-		}
-		// Built in artifact to deploy arbitrary files to the roboRIO.
-		fileTreeArtifact('frcStaticFileDeploy') {
-			// The directory below is the local directory to deploy
-			files = fileTree(dir: 'src/main/deploy')
-			// Deploy to RoboRIO target, into /home/lvuser/deploy
-			targets << "roborio"
-			directory = '/home/lvuser/deploy'
-		}
-	}
+      artifacts {
+        frcCpp(getArtifactTypeClass('FRCNativeArtifact')) { // <- wtf is this WPI
+        }
+
+        frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
+          files = project.fileTree('src/main/deploy')
+          directory = '/home/lvuser/deploy'
+        }
+      }
+    }
+  }
 }
 
-// Enable simulation gui support. Must check the box in vscode to enable support
-// upon debugging
-dependencies {
-	simulation wpi.deps.sim.gui(wpi.platforms.desktop, true)
-	simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, true)
-}
+def deployArtifact = deploy.targets.roborio.artifacts.frcCpp
 
-// Simulation configuration (e.g. environment variables).
-sim {
-	// Sets the websocket client remote host.
-	// envVar "HALSIMWS_HOST", "10.0.0.2"
-}
+// Set to true to run simulation in debug mode
+wpi.cpp.debugSimulation = false
+
+// Default enable simgui
+wpi.sim.addGui().defaultEnabled = true
+// Enable DS but not by default
+wpi.sim.addDriverstation()
 
 model {
-	components {
+  components {
+    
+    "${nativeName}"(NativeExecutableSpec) { // frc user
+      targetPlatform wpi.platforms.roborio
+      if (includeDesktopSupport) {
+        targetPlatform wpi.platforms.desktop
+      }
 
-		treasureMapper(NativeLibrarySpec) {
-			if (includeDesktopSupport) {
-				targetPlatform wpi.platforms.desktop
-			}
-			targetPlatform wpi.platforms.roborio
+      sources.cpp {
+        source {
+          srcDir 'src/main/cpp' // robot
+          include '**/*.cpp', '**/*.cc'
+        }
 
-			sources {
-				cpp {
-					source {
-						srcDir 'TreasureMapper/cpp'
-						include '**/*.cpp', '**/*.cc'
-					}
+        exportedHeaders {
+          srcDir 'src/main/include' // robot
 
-					exportedHeaders {
-						srcDir rootProject.file('TreasureMapper/include')
-					}
-				}
-			}
-		}
-		
-		"${nativeName}"(NativeExecutableSpec) { // frc user
-			targetPlatform wpi.platforms.roborio
-			if (includeDesktopSupport) {
-				targetPlatform wpi.platforms.desktop
-			}
+          if (includeSrcInIncludeRoot) {
+            srcDir 'src/main/cpp' // robot
+          }
+        }
+      }
 
-			sources.cpp {
-				source {
-					srcDir 'src/main/cpp' // robot
-					include '**/*.cpp', '**/*.cc'
-				}
+      binaries.all {
+        if (includeDesktopSupport) {
+          cppCompiler.define "WML_DESKTOP_SUPPORT"
+        }
+      }
 
-				exportedHeaders {
-					srcDir 'src/main/include' // robot
+      // Specify this component for deploying.
+      deployArtifact.component = it
 
-					if (includeSrcInIncludeRoot) {
-						srcDir 'src/main/cpp' // robot
-					}
-				}
-			}
+      // Enable run tasks for this component
+      wpi.cpp.enableExternalTasks(it)
 
-			binaries.all {
-				if (includeDesktopSupport) {
-					cppCompiler.define "WML_DESKTOP_SUPPORT"
-				}
+      // Enable simulation for this component
+      wpi.sim.enable(it)
+      // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+      wpi.cpp.vendor.cpp(it)
+      wpi.cpp.deps.wpilib(it)
+    } // frc user
+  }
 
-				lib library: 'treasureMapper', linkage: 'shared'
-			}
+  testSuites {
+    "${nativeName}Test"(GoogleTestTestSuiteSpec) {
+      for(NativeComponentSpec c : $.components) {
+        if (c.name == nativeName) {
+          testing c
+          break
+        }
+      }
 
-			// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-			wpi.deps.vendor.cpp(it)
-			wpi.deps.wpilib(it)
-		} // frc user
-	}
+      sources.cpp {
+        source {
+          srcDir 'src/test/cpp'
+          include '**/*.cpp'
+        }
+      }
 
-	testSuites {
-		"${nativeName}Test"(GoogleTestTestSuiteSpec) {
-			for(NativeComponentSpec c : $.components) {
-				if (c.name == nativeName) {
-					testing c
-					break
-				}
-			}
+      binaries.all {
+        if (includeDesktopSupport) {
+          cppCompiler.define "WML_DESKTOP_SUPPORT"
+        }
+      }
 
-			sources.cpp {
-				source {
-					srcDir 'src/test/cpp'
-					include '**/*.cpp'
-				}
-			}
+      wpi.cpp.enableExternalTasks(it)
 
-			binaries.all {
-				if (includeDesktopSupport) {
-					cppCompiler.define "WML_DESKTOP_SUPPORT"
-				}
-				lib library: 'treasureMapper', linkage: 'shared'
-			}
-
-			wpi.deps.vendor.cpp(it)
-			wpi.deps.wpilib(it)
-			wpi.deps.googleTest(it)
-		}
-	}
+      wpi.cpp.vendor.cpp(it)
+      wpi.cpp.deps.wpilib(it)
+      wpi.cpp.deps.googleTest(it)
+    }
+  }
 }
 
 task sim(dependsOn: "simulate${nativeName}${wpi.platforms.desktop.capitalize()}DebugExecutable")
 
 doxygen {
-	executables {
-		doxygen version : '1.8.13'
-	}
+  executables {
+    doxygen version : '1.8.13'
+  }
 
-	generate_html true
-	source project.file('src/main/include')
-	outputDir new File(buildDir,"docs/doxygen/${nativeName}")
+  generate_html true
+  source project.file('src/main/include')
+  outputDir new File(buildDir,"docs/doxygen/${nativeName}")
 }
