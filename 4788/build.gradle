@@ -4,7 +4,7 @@ ext {
 	teamNum = 4788
 	nativeName = "${teamNum}"
 
-	includeDesktopSupport = false
+	includeDesktopSupport = true
 	includeSrcInIncludeRoot = true
 }
 
