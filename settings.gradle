@@ -20,6 +20,7 @@ pluginManagement {
       frcHome = new File(homeRoot, frcYear)
     }
     def frcHomeMaven = new File(frcHome, 'maven')
+
     maven {
       name 'frcHome'
       url frcHomeMaven
