@@ -53,3 +53,19 @@
 
 // WML Rev
 #include <WMLRev.h>
+
+// Local Files
+#include "ControlMap.h"
+
+struct RobotMap {
+
+  // Controllers
+  wml::controllers::XboxController xbox1{ ControlMap::Xbox1Port };
+  wml::controllers::XboxController xbox2{ ControlMap::Xbox2Port };
+  wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2};
+
+  struct ExampleElevatorSystem {
+    wml::TalonSrx elevatorMotor{ControlMap::ElevatorMotorPort, 2048};
+    wml::actuators::DoubleSolenoid elevatorSolenoid{ ControlMap::PCModule, ControlMap::ElevatorSolenoidPort, 0.1};
+  };
+};
