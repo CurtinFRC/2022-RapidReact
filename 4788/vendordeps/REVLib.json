@@ -39,7 +39,7 @@
           "version": "2022.1.1",
           "libName": "REVLib",
           "headerClassifier": "headers",
-          "sharedLibrary": false,
+          "sharedLibrary": true,
           "skipInvalidPlatforms": true,
           "binaryPlatforms": [
               "windowsx86-64",
@@ -57,7 +57,7 @@
           "version": "2022.1.1",
           "libName": "REVLibDriver",
           "headerClassifier": "headers",
-          "sharedLibrary": false,
+          "sharedLibrary": true,
           "skipInvalidPlatforms": true,
           "binaryPlatforms": [
               "windowsx86-64",
