@@ -2,6 +2,7 @@
 	"files.associations": {
 		"*.ejs": "html",
 		"chrono": "cpp",
-		"complex": "cpp"
+		"complex": "cpp",
+		"*.inc": "cpp"
 	}
 }

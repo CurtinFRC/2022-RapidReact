@@ -3,9 +3,31 @@
 using namespace frc;
 using namespace wml;
 
+double currentTimeStamp;
+double lastTimeStamp;
+double dt;
+
 // General Robot Logic
-void Robot::RobotInit() {}
-void Robot::RobotPeriodic() {}
+void Robot::RobotInit() {
+
+	//Init the controllers
+	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
+
+	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid, ControlMap::ElevatorToggle);
+}
+void Robot::RobotPeriodic() {
+	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
+	dt = currentTimeStamp - lastTimeStamp;
+
+	StrategyController::Update(dt);
+
+	robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+	robotMap.controlSystem.compressor.Update(dt);
+
+	NTProvider::Update();
+
+	lastTimeStamp = currentTimeStamp;
+}
 
 // Disabled Logic
 void Robot::DisabledInit() {
@@ -19,7 +41,9 @@ void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+	exampleElevator->TeleopOnUpdate(dt);
+}
 
 // During Test Logic
 void Robot::TestInit() {}

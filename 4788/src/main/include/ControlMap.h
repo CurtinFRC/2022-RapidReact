@@ -19,12 +19,12 @@ struct ControlMap {
   static const int CoDriver = 2;
 
   // Deadzone
-  static const double xboxDeadzone;
+  static const double XboxDeadzone;
   static const double TriggerDeadzone;
 
   // PCM1
   static const int PCModule;
-  // static const int PressureSensorPort, CompressorPort;
+  static const int PressureSensorPort, CompressorPort;
 
   // Drivetrain
 
@@ -54,5 +54,4 @@ struct ControlMap {
   static const wml::controllers::tAxis ExampleElevator;
   static const wml::controllers::tButton ElevatorActuation;
   static const wml::controllers::tButton ElevatorToggleButton;
-
 };

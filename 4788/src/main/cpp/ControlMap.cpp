@@ -15,13 +15,13 @@ const int ControlMap::Xbox1Port = 0;
 const int ControlMap::Xbox2Port = 0;
 
 // Deadzone
-const double ControlMap::xboxDeadzone = 0.1;
+const double ControlMap::XboxDeadzone = 0.1;
 const double ControlMap::TriggerDeadzone = 0.15;
 
 // PCMs
 const int ControlMap::PCModule = 9;
-// const int ControlMap::PressureSensorPort = 0;
-// const int ControlMap::CompressorPort = 0;
+const int ControlMap::PressureSensorPort = 0;
+const int ControlMap::CompressorPort = 0;
 
 // Robot Values
 

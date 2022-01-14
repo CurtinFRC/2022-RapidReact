@@ -43,5 +43,6 @@ class Robot : public frc::TimedRobot, protected wml::StrategyController, protect
 	void TestPeriodic() override;
 
  private:
+	RobotMap robotMap;
 	ExampleElevator *exampleElevator;
 };
