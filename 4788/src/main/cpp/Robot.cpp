@@ -13,7 +13,7 @@ void Robot::RobotInit() {
 	//Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid, ControlMap::ElevatorToggle);
+	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
 }
 void Robot::RobotPeriodic() {
 	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
@@ -42,7 +42,7 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-	exampleElevator->TeleopOnUpdate(dt);
+	exampleElevator->teleopOnUpdate(dt);
 }
 
 // During Test Logic

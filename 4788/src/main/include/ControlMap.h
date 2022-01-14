@@ -2,29 +2,35 @@
 
 #include <vector>
 #include "controllers/Controllers.h"
+
 #define __CONTROLMAP_USING_JOYSTICK__ false
 
+using namespace wml;
+using namespace wml::controllers;
 
 struct ControlMap {
-  static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup);
-
+  static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
+  //remap Here (map POV buttons to names ect)
+  }
 
   // ------------------ Values ------------------
 
   // Controllers
-  static const int Xbox1Port, Xbox2Port;
+  static constexpr int Xbox1Port = 0;
+  static constexpr int Xbox2Port = 1;
 
   // USB port numbers
   static const int Driver = 1;
   static const int CoDriver = 2;
 
   // Deadzone
-  static const double XboxDeadzone;
-  static const double TriggerDeadzone;
+  static constexpr double XboxDeadzone = 0.15;
+  static constexpr double TriggerDeadzone = 0.05;
 
   // PCM1
-  static const int PCModule;
-  static const int PressureSensorPort, CompressorPort;
+  static constexpr int PCModule = 9;
+  static constexpr int PressureSensorPort = 0;
+  static constexpr int CompressorPort = 0;
 
   // Drivetrain
 
@@ -35,10 +41,10 @@ struct ControlMap {
   // Climber
 
   // Example Elevator
-  static const int ElevatorMotorPort;
-  static const int ElevatorSolenoidPort;
-  static bool ElevatorToggle, ReverseElevatorToggle;
-
+  static constexpr int ElevatorMotorPort = 99;
+  static constexpr int ElevatorSolenoidPort = 99;
+  static constexpr bool ElevatorToggle = false;
+  static constexpr bool ReverseElevatorToggle = false;
 
   // ------------------ Controls ------------------
 
@@ -51,7 +57,7 @@ struct ControlMap {
   // Climber
 
   // Example Elevator
-  static const wml::controllers::tAxis ExampleElevator;
-  static const wml::controllers::tButton ElevatorActuation;
-  static const wml::controllers::tButton ElevatorToggleButton;
+  inline static const wml::controllers::tAxis Belevator{ CoDriver, XboxController::kLeftYAxis };
+  inline static const wml::controllers::tButton BelevatorActuation{ CoDriver, XboxController::kY };
+  inline static const wml::controllers::tButton BelevatorToggle{ CoDriver, XboxController::kX };
 };
