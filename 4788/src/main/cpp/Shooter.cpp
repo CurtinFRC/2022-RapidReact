@@ -27,14 +27,14 @@ void Shooter::teleopOnUpdate(double dt) {
 			break;
 	}
 
-	shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+	// shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
 
 	// _flyWheel.transmission->SetVoltage(shooterManualSpeed);
 
-	_leftFlyWheelMotor.Set(shooterManualSpeed);
-	_rightFlyWheelMotor.Set(shooterManualSpeed);
+	// _leftFlyWheelMotor.Set(shooterManualSpeed);
+	// _rightFlyWheelMotor.Set(shooterManualSpeed);
 
-	std::cout << shooterManualSpeed << std::endl;
+	// std::cout << shooterManualSpeed << std::endl;
 
 
 }
@@ -79,7 +79,7 @@ void Shooter::testing(double dt) {
 	_leftFlyWheelMotor.Set(shooterManualSpeed);
 	_rightFlyWheelMotor.Set(shooterManualSpeed);
 
-	// std::cout << shooterManualSpeed << std::endl;
+	std::cout << shooterManualSpeed << std::endl;
 	// std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
 	// std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 
