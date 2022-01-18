@@ -9,23 +9,23 @@ Shooter::Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFly
 }
 
 void Shooter::teleopOnUpdate(double dt) {
-	// switch (_teleopShooter) {
-	// 	case TeleopShooter::kStill:
+	switch (_teleopShooter) {
+		case TeleopShooter::kStill:
 
-	// 		break;
-	// 	case TeleopShooter::kManual:
+			break;
+		case TeleopShooter::kManual:
 
-	// 		manualControl(dt);
+			manualControl(dt);
 
-	// 		break;
-	// 	case TeleopShooter::kTesting:
+			break;
+		case TeleopShooter::kTesting:
 
-	// 		testing(dt);
+			testing(dt);
 
-	// 		break;
-	// 	default:
-	// 		break;
-	// }
+			break;
+		default:
+			break;
+	}
 
 	shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
 
@@ -83,6 +83,6 @@ void Shooter::testing(double dt) {
 	// std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
 	// std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 
-	// frc::SmartDashboard.putNumber("Shooter Speed", shooterManualSpeed);
-	// frc::SmartDashboard.putNumber("Angular velocity", _flyWheel.encoder->GetEncoderAngularVelocity());
+	nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("MagForwards").SetString("FORWARDS");
+	nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("MagForwards").SetString("FORWARDS");
 }
