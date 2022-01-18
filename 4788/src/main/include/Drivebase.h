@@ -6,7 +6,7 @@
 
 class Drivebase {
   public:
-    Drivebase();
+    Drivebase(RobotMap::DrivebaseSystem &drivebaseSystem, SmartControllerGroup &contGroup);
 
     /*
      * Teleop Function
@@ -24,5 +24,6 @@ class Drivebase {
     void testOnUpdate(double dt);
 
   private:
-    
+    RobotMap::DrivebaseSystem &_drivebaseSystem;
+    wml::controllers::SmartControllerGroup &_contGroup;
 };

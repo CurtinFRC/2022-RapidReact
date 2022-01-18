@@ -73,7 +73,7 @@ struct RobotMap {
     wml::actuators::DoubleSolenoid elevatorSolenoid{ ControlMap::PCModule, ControlMap::ElevatorSolenoidPort, 0.1};
   }; ExampleElevatorSystem exampleElevatorSystem;
 
-  struct DrivetrainSystem {
+  struct DrivebaseSystem {
     // Drivetrain Left Motors
     wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
     wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
@@ -97,5 +97,5 @@ struct RobotMap {
     wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
     wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
-  }; DrivetrainSystem drivetrainSystem;
+  }; DrivebaseSystem drivebaseSystem;
 };

@@ -59,7 +59,9 @@ struct ControlMap {
   // ------------------ Controls ------------------
 
   // Drivetrain
-
+  inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
+  inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
+  
   // Intake
 
   // Shoter
