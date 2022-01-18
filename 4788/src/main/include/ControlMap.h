@@ -42,7 +42,7 @@ struct ControlMap {
   static constexpr int rightFlyWheelPort = 13;
   static constexpr double flyWheelMass = 3;
 
-    //shooter PID stuff 
+  //shooter PID stuff 
   static constexpr double kp = 0.01;
 	static constexpr double ki = 0.0001;
 	static constexpr double kd = 0.00001;

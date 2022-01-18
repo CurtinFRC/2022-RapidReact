@@ -79,10 +79,9 @@ void Shooter::testing(double dt) {
 	_leftFlyWheelMotor.Set(shooterManualSpeed);
 	_rightFlyWheelMotor.Set(shooterManualSpeed);
 
-	std::cout << shooterManualSpeed << std::endl;
+	// std::cout << shooterManualSpeed << std::endl;
 	// std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
 	// std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 
-	nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("MagForwards").SetString("FORWARDS");
-	nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("MagForwards").SetString("FORWARDS");
+	// nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("Angular velocity").SetDouble(0.6);
 }

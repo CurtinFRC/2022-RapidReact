@@ -71,8 +71,8 @@ struct RobotMap {
    * Includes Pressure sensor and compressor
    */
   struct ControlSystem {
-    wml::sensors::PressureSensor pressureSensor{ ControlMap::PressureSensorPort };
-    wml::actuators::Compressor compressor{ ControlMap::CompressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+    // wml::sensors::PressureSensor pressureSensor{ ControlMap::PressureSensorPort };
+    // wml::actuators::Compressor compressor{ ControlMap::CompressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
