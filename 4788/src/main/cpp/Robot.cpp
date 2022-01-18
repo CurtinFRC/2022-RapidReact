@@ -13,18 +13,27 @@ void Robot::RobotInit() {
 	//Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
+	// belevator = new Belevator(robotMap.belevatorSystem.belevatorMotor, robotMap.belevatorSystem.belevatorSolenoid);
+
+	shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
+	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
+	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+
+
+
+	intake = new Intake(robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
+	robotMap.intakeSystem.intakeMotor.SetInverted(false);
 }
 void Robot::RobotPeriodic() {
 	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
 	dt = currentTimeStamp - lastTimeStamp;
 
-	StrategyController::Update(dt);
+	// StrategyController::Update(dt);
 
-	robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-	robotMap.controlSystem.compressor.Update(dt);
+	// robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+	// robotMap.controlSystem.compressor.Update(dt);
 
-	NTProvider::Update();
+	// NTProvider::Update();
 
 	lastTimeStamp = currentTimeStamp;
 }
@@ -42,7 +51,9 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-	exampleElevator->teleopOnUpdate(dt);
+	// belevator->teleopOnUpdate(dt);
+	shooter->teleopOnUpdate(dt);
+	intake->teleopOnUpdate(dt);
 }
 
 // During Test Logic

@@ -34,30 +34,52 @@ struct ControlMap {
 
   // Drivetrain
 
+
+  static constexpr double MaxDrivetrainSpeed = 0.6; //never trust drivers
+  static constexpr double TrackWidth = 0.56;
+  static constexpr double TrackDepth = 0.60;
+  static constexpr double WheelRadius = 0.0762;
+  static constexpr double Mass = 50; //50 kgs
+
+  static constexpr int frontLeftPort = 99;
+  static constexpr int frontRightPort = 99;
+
+  static constexpr int backRightPort = 99;
+  static constexpr int backLeftPort = 99;
+
+
   // Intake
 
   // Shooter
+  static constexpr int leftFlyWheelPort = 10;
+  static constexpr int rightFlyWheelPort = 13;
+  static constexpr double flyWheelMass = 3;
+
+    //shooter PID stuff 
+  static constexpr double kp = 0.01;
+	static constexpr double ki = 0.0001;
+	static constexpr double kd = 0.00001;
+
+	static constexpr double goal = 0;
+	static constexpr double sum = 0;
+	static constexpr double derror = 0;
+	static constexpr double previousError = 0;
 
   // Climber
 
-  // Example Elevator
-  static constexpr int ElevatorMotorPort = 99;
-  static constexpr int ElevatorSolenoidPort = 99;
-  static constexpr bool ElevatorToggle = false;
-  static constexpr bool ReverseElevatorToggle = false;
 
   // ------------------ Controls ------------------
 
   // Drivetrain
+  inline static const wml::controllers::tAxis DrivetrainLeft{ Driver, XboxController::kLeftYAxis };
+  inline static const wml::controllers::tAxis DrivetrainRight{ Driver, XboxController::kRightYAxis };
 
   // Intake
+  inline static const wml::controllers::tAxis IntakeManualSpin{ CoDriver, XboxController::kRightThrottle };
 
-  // Shoter
+  // Shooter
+  inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
 
   // Climber
 
-  // Example Elevator
-  inline static const wml::controllers::tAxis Belevator{ CoDriver, XboxController::kLeftYAxis };
-  inline static const wml::controllers::tButton BelevatorActuation{ CoDriver, XboxController::kY };
-  inline static const wml::controllers::tButton BelevatorToggle{ CoDriver, XboxController::kX };
 };
