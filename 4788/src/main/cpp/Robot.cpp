@@ -19,10 +19,6 @@ void Robot::RobotInit() {
 	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
 	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
-
-
-	intake = new Intake(robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
-	robotMap.intakeSystem.intakeMotor.SetInverted(false);
 }
 void Robot::RobotPeriodic() {
 	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
@@ -53,7 +49,6 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
 	// belevator->teleopOnUpdate(dt);
 	shooter->teleopOnUpdate(dt);
-	intake->teleopOnUpdate(dt);
 }
 
 // During Test Logic

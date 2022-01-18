@@ -35,19 +35,6 @@ struct ControlMap {
   // Drivetrain
 
 
-  static constexpr double MaxDrivetrainSpeed = 0.6; //never trust drivers
-  static constexpr double TrackWidth = 0.56;
-  static constexpr double TrackDepth = 0.60;
-  static constexpr double WheelRadius = 0.0762;
-  static constexpr double Mass = 50; //50 kgs
-
-  static constexpr int frontLeftPort = 99;
-  static constexpr int frontRightPort = 99;
-
-  static constexpr int backRightPort = 99;
-  static constexpr int backLeftPort = 99;
-
-
   // Intake
 
   // Shooter
@@ -70,12 +57,6 @@ struct ControlMap {
 
   // ------------------ Controls ------------------
 
-  // Drivetrain
-  inline static const wml::controllers::tAxis DrivetrainLeft{ Driver, XboxController::kLeftYAxis };
-  inline static const wml::controllers::tAxis DrivetrainRight{ Driver, XboxController::kRightYAxis };
-
-  // Intake
-  inline static const wml::controllers::tAxis IntakeManualSpin{ CoDriver, XboxController::kRightThrottle };
 
   // Shooter
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
