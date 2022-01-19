@@ -4,26 +4,14 @@
 #include "controllers/Controllers.h"
 #include "RobotMap.h"
 
-class Drivebase {
+class DrivebaseManual : public wml::Strategy {
   public:
-    Drivebase(RobotMap::DrivebaseSystem &drivebaseSystem, SmartControllerGroup &contGroup);
+    DrivebaseManual(std::string name, Drivetrain &drivetrain, SmartControllerGroup &contGroup);
 
-    /*
-     * Teleop Function
-     */
-    void teleopOnUpdate(double dt);
-    
-    /*
-     * Auto Function
-     */
-    void autoOnUpdate(double dt);
-
-    /*
-     * Test Function
-     */
-    void testOnUpdate(double dt);
+    void OnUpdate(double dt) override;
 
   private:
-    RobotMap::DrivebaseSystem &_drivebaseSystem;
-    wml::controllers::SmartControllerGroup &_contGroup;
+    Drivetrain &_drivetrain;
+    controllers::SmartControllerGroup &_contGroup;
+    double _leftPower, _rightPower;
 };

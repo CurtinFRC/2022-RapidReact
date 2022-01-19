@@ -18,7 +18,23 @@ void Robot::RobotInit() {
 
 	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem);
 
-  drivebase = new Drivebase(robotMap.drivebaseSystem, robotMap.contGroup);
+  drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
+
+  // Zero the Encoders
+  robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  
+  // Set the default strategy for drivetrain to manual
+  drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+  drivetrain->StartLoop(100);
+
+  // Invert one side of our drivetrain so it'll drive straight
+  drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
+  drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
+
+  // Register our systems to be called via strategy
+	StrategyController::Register(drivetrain);
+	NTProvider::Register(drivetrain);
 }
 
 void Robot::RobotPeriodic() {
@@ -48,7 +64,7 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-  drivebase->teleopOnUpdate(dt);
+  Schedule(drivetrain->GetDefaultStrategy(), true);
 }
 
 // During Test Logic
