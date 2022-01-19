@@ -4,6 +4,8 @@
  * Local Files 
  */
 #include "RobotMap.h"
+#include "Shooter.h"
+#include "Drivebase.h"
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
  public:
@@ -40,4 +42,10 @@ class Robot : public frc::TimedRobot, protected wml::StrategyController, protect
 	 */
 	void TestInit() override;
 	void TestPeriodic() override;
+
+ private:
+	RobotMap robotMap;
+	Drivetrain *drivetrain;
+	Shooter *shooter;
+	// ExampleElevator *exampleElevator;
 };
