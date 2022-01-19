@@ -16,7 +16,9 @@ void Robot::RobotInit() {
   //Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	// exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem);
+	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem);
+
+  drivebase = new Drivebase(robotMap.drivebaseSystem, robotMap.contGroup);
 }
 
 void Robot::RobotPeriodic() {
@@ -46,7 +48,7 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-  
+  drivebase->teleopOnUpdate(dt);
 }
 
 // During Test Logic
