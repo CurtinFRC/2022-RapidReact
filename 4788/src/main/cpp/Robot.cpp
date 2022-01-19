@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Intake.h"
 
 using namespace frc;
 using namespace wml;
@@ -13,7 +14,7 @@ void Robot::RobotInit() {
 	//Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
+	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem);
 }
 void Robot::RobotPeriodic() {
 	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();

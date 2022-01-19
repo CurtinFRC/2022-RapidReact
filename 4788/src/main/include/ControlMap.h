@@ -8,7 +8,7 @@
 using namespace wml;
 using namespace wml::controllers;
 
-struct ControlMap {
+struct ControlMap { 
   static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
   //remap Here (map POV buttons to names ect)
   }
@@ -18,7 +18,7 @@ struct ControlMap {
   // Controllers
   static constexpr int Xbox1Port = 0;
   static constexpr int Xbox2Port = 1;
-
+ 
   // USB port numbers
   static const int Driver = 1;
   static const int CoDriver = 2;
@@ -35,9 +35,12 @@ struct ControlMap {
   // Drivetrain
 
   // Intake
-
+  static constexpr int  intakeMotorPort = 99;
+  static constexpr int  intakeMotorPort_2 = 99;
+  static constexpr bool intakeSolenoid = false;
+  static constexpr int  intakeSolenoidPort = 99;
   // Shooter
-
+ 
   // Climber
 
   // Example Elevator
@@ -51,13 +54,14 @@ struct ControlMap {
   // Drivetrain
 
   // Intake
-
-  // Shoter
+  inline static const wml::controllers::tAxis Intake{ CoDriver, wml::controllers::XboxController::kLeftYAxis };
+  inline static const wml::controllers::tButton IntakeActuation{ CoDriver, wml::controllers::XboxController::kB };
+  // Shooter
 
   // Climber
 
   // Example Elevator
-  inline static const wml::controllers::tAxis Belevator{ CoDriver, XboxController::kLeftYAxis };
-  inline static const wml::controllers::tButton BelevatorActuation{ CoDriver, XboxController::kY };
-  inline static const wml::controllers::tButton BelevatorToggle{ CoDriver, XboxController::kX };
+  // inline static const wml::controllers::tAxis Intake{ CoDriver, wml::controllers::XboxController::kRightYAxis };
+  // inline static const wml::controllers::tButton IntakeActuation{ CoDriver, wml::controllers::XboxController::kY };
+  // inline static const wml::controllers::tButton intakeToggle{ CoDriver, wml::controllers::XboxController::kX };
 };

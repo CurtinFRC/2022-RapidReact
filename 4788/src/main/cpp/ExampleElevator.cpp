@@ -4,8 +4,9 @@
 using namespace wml;
 using namespace wml::controllers;
 
-ExampleElevator::ExampleElevator(wml::TalonSrx &elevatorMotor, wml::actuators::DoubleSolenoid &elevatorSolenoid) : _elevatorMotor(elevatorMotor), _elevatorSolenoid(elevatorSolenoid) {
-  _elevatorSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse); // Default State
+ExampleElevator::ExampleElevator(RobotMap::ExampleElevatorSystem &exampleElevatorSystem) : _exampleElevatorSystem(exampleElevatorSystem) {
+  exampleElevatorSystem.elevatorSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+  exampleElevatorSystem.differentMotor.Set(0.5);
 }
 
 void ExampleElevator::teleopOnUpdate(double dt) {
