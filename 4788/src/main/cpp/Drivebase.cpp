@@ -8,7 +8,6 @@ Drivebase::Drivebase(RobotMap::DrivebaseSystem &drivebaseSystem, SmartController
 }
 
 void Drivebase::teleopOnUpdate(double dt) {
-  int dbLeftSpeed = 0, dbRightSpeed = 0;
   
   if(fabs(_contGroup.Get(ControlMap::drivebaseL) >= ControlMap::XboxDeadzone)) {
     dbLeftSpeed = _contGroup.Get(ControlMap::drivebaseL);

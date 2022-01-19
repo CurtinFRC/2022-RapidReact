@@ -26,4 +26,6 @@ class Drivebase {
   private:
     RobotMap::DrivebaseSystem &_drivebaseSystem;
     wml::controllers::SmartControllerGroup &_contGroup;
+
+    int dbLeftSpeed = 0, dbRightSpeed = 0;
 };

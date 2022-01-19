@@ -16,7 +16,9 @@ void Robot::RobotInit() {
   //Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem);
+	shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
+	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
+	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
   drivebase = new Drivebase(robotMap.drivebaseSystem, robotMap.contGroup);
 }
@@ -27,8 +29,8 @@ void Robot::RobotPeriodic() {
 
   StrategyController::Update(dt);
 
-  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  robotMap.controlSystem.compressor.Update(dt);
+  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  // robotMap.controlSystem.compressor.Update(dt);
 
   NTProvider::Update();
 
@@ -48,7 +50,9 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
+	shooter->teleopOnUpdate(dt);
   drivebase->teleopOnUpdate(dt);
+
 }
 
 // During Test Logic
