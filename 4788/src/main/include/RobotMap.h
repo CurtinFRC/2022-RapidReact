@@ -90,4 +90,30 @@ struct RobotMap {
     // wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor);
     // wml::Gearbox ShooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
   }; ShooterSystem shooterSystem;
+
+  struct DrivebaseSystem {
+    // Drivetrain Left Motors
+    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
+    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
+
+    // Drivetrain Right Motors
+    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
+    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
+    
+    // Motor Grouping
+    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
+    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
+
+    // Gearboxes
+    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
+    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
+
+    wml::sensors::NavX navX{};
+    wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
+
+    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass};
+    wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
+    wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
+
+  }; DrivebaseSystem drivebaseSystem;
 };

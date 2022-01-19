@@ -20,8 +20,8 @@ struct ControlMap {
   static constexpr int Xbox2Port = 1;
 
   // USB port numbers
-  static const int Driver = 1;
-  static const int CoDriver = 2;
+  static constexpr int Driver = 1;
+  static constexpr int CoDriver = 2;
 
   // Deadzone
   static constexpr double XboxDeadzone = 0.15;
@@ -33,6 +33,16 @@ struct ControlMap {
   static constexpr int CompressorPort = 0;
 
   // Drivetrain
+  static constexpr double TrackWidth = 0.56;
+  static constexpr double TrackDepth = 0.60;
+  static constexpr double WheelRadius = 0.0762; 
+  static constexpr double Mass = 50;
+
+  static constexpr int dbLeftPort1 = 99;
+  static constexpr int dbLeftPort2 = 99;
+
+  static constexpr int dbRightPort1 = 99;
+  static constexpr int dbRightPort2 = 99;
 
 
   // Intake
@@ -57,9 +67,14 @@ struct ControlMap {
 
   // ------------------ Controls ------------------
 
-
   // Shooter
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+
+  // Drivetrain
+  inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
+  inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
+  
+  // Intake
 
   // Climber
 
