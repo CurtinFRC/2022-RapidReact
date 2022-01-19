@@ -10,28 +10,28 @@ double dt;
 // General Robot Logic
 void Robot::RobotInit() {
 
-	//Init the controllers
-	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
+  //Init the controllers
+  ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
+  exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
 }
 void Robot::RobotPeriodic() {
-	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
-	dt = currentTimeStamp - lastTimeStamp;
+  currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
+  dt = currentTimeStamp - lastTimeStamp;
 
-	StrategyController::Update(dt);
+  StrategyController::Update(dt);
 
-	robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-	robotMap.controlSystem.compressor.Update(dt);
+  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  robotMap.controlSystem.compressor.Update(dt);
 
-	NTProvider::Update();
+  NTProvider::Update();
 
-	lastTimeStamp = currentTimeStamp;
+  lastTimeStamp = currentTimeStamp;
 }
 
 // Disabled Logic
 void Robot::DisabledInit() {
-	InterruptAll(true);
+  InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {}
 
@@ -42,9 +42,9 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
-	exampleElevator->teleopOnUpdate(dt);
+  exampleElevator->teleopOnUpdate(dt);
 }
 
 // During Test Logic
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {} 

@@ -10,15 +10,15 @@ Climber::Climber(wml::actuators::DoubleSolenoid &climberSolenoid, wml::controlle
 }
 
 void Climber::teleopOnUpdate(double dt) {
-	
-	if (_contGroup.Get(ControlMap::ClimberToggle, wml::controllers::XboxController::ONRISE)) {
-		
-		ClimberToggle = !ClimberToggle;
-	}
+  
+  if (_contGroup.Get(ControlMap::ClimberToggle, wml::controllers::XboxController::ONRISE)) {
+    
+    ClimberToggle = !ClimberToggle;
+  }
 
-	if (ClimberToggle) {
-		_climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-	}
+  if (ClimberToggle) {
+    _climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  }
 
 }
 
