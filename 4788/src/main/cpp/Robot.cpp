@@ -16,7 +16,8 @@ void Robot::RobotInit() {
   //Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
+	// shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
+  shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
 	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
 	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 

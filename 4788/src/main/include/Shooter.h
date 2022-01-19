@@ -29,8 +29,8 @@ enum class TeleopShooter {
 
 class Shooter {
  public: 
-	Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, wml::controllers::SmartControllerGroup &contGroup);
-
+	// Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, wml::controllers::SmartControllerGroup &contGroup);
+	Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
 	/**
 	 * 
 	 */
@@ -53,9 +53,10 @@ class Shooter {
 	TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
   wml::controllers::SmartControllerGroup &_contGroup;
 
-	rev::CANSparkMax &_leftFlyWheelMotor;
-	rev::CANSparkMax &_rightFlyWheelMotor;
+	// rev::CANSparkMax &_leftFlyWheelMotor;
+	// rev::CANSparkMax &_rightFlyWheelMotor;
 	// wml::Gearbox &_flyWheel;
 
 	double shooterManualSpeed = 0;
+	RobotMap::ShooterSystem &_shooterSystem;
 };
