@@ -44,19 +44,31 @@ struct ControlMap {
   static constexpr int dbRightPort1 = 99;
   static constexpr int dbRightPort2 = 99;
 
+
   // Intake
 
   // Shooter
+  static constexpr int leftFlyWheelPort = 10;
+  static constexpr int rightFlyWheelPort = 13;
+  static constexpr double flyWheelMass = 3;
+
+  //shooter PID stuff 
+  static constexpr double kp = 0.01;
+	static constexpr double ki = 0.0001;
+	static constexpr double kd = 0.00001;
+
+	static constexpr double goal = 0;
+	static constexpr double sum = 0;
+	static constexpr double derror = 0;
+	static constexpr double previousError = 0;
 
   // Climber
 
-  // Example Elevator
-  static constexpr int ElevatorMotorPort = 99;
-  static constexpr int ElevatorSolenoidPort = 99;
-  static constexpr bool ElevatorToggle = false;
-  static constexpr bool ReverseElevatorToggle = false;
 
   // ------------------ Controls ------------------
+
+  // Shooter
+  inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
@@ -64,12 +76,6 @@ struct ControlMap {
   
   // Intake
 
-  // Shoter
-
   // Climber
 
-  // Example Elevator
-  inline static const wml::controllers::tAxis Belevator{ CoDriver, XboxController::kLeftYAxis };
-  inline static const wml::controllers::tButton BelevatorActuation{ CoDriver, XboxController::kY };
-  inline static const wml::controllers::tButton BelevatorToggle{ CoDriver, XboxController::kX };
 };
