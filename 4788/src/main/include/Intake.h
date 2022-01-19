@@ -11,16 +11,15 @@ enum class IntakeStates{
 };
 
 class Intake {
-  public:
-    Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
-    void TeleopOnUpdate (double dt);
-    void AutoOnUpdate (double dt);
-    void TestOnUpdate (double dt);
-  private:
-    RobotMap::IntakeSystem &_intakeSystem;
-    Controllers &_contGroup;
+ public:
+  Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
+  void teleopOnUpdate (double dt);
+  void autoOnUpdate (double dt);
+  void testOnUpdate (double dt);
+ private:
+  RobotMap::IntakeSystem &_intakeSystem;
+  Controllers &_contGroup;
 
-    double power;
-    IntakeStates _intakeState{IntakeStates::STOWED};
-
+  double power;
+  IntakeStates _intakeState{IntakeStates::STOWED};
 };
