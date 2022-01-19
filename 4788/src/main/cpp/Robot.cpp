@@ -64,9 +64,10 @@ void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
-void Robot::TeleopInit() {}
-void Robot::TeleopPeriodic() {
+void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
+}
+void Robot::TeleopPeriodic() {
 	shooter->teleopOnUpdate(dt);
 
 }

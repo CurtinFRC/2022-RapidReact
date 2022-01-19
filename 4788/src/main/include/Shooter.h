@@ -5,19 +5,23 @@
 
 /**
  * State machine for the shooter in teleop
- * kSpinUp -> spinning up the shooter ready to fire 
- * kInner -> shooting from the circle created by the tarmac 
- * kOuter -> shooting from the circle created by the cargo rings 
- * kManual -> shooter with trigger at a percentage speed
+ * kAuto -> fot auto firing 
+ * kManual -> driver controlled firing with a trigger
+ * kStill -> Shooter is stationary. 
+ * kTesting -> for testing :)
  */
 enum class TeleopShooter {
-	kStill, //like stationary but easier to spell
-	kSpinUp,
-	kInner,
-	kOuter,
+	kAuto,
 	kManual,
-	kTesting,
-	kEject
+	kStill, //like stationary but easier to spell
+	kTesting
+	// kStill, 
+	// kSpinUp,
+	// kInner,
+	// kOuter,
+	// kManual,
+	// kTesting,
+	// kEject
 };
 
 //i could put a state machine inside the state machine so that 
@@ -46,12 +50,12 @@ class Shooter {
 	void testing(double dt);
 
  private:
-	// wml::Gearbox &_flyWheel;
 	TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
   wml::controllers::SmartControllerGroup &_contGroup;
 
 	rev::CANSparkMax &_leftFlyWheelMotor;
 	rev::CANSparkMax &_rightFlyWheelMotor;
+	// wml::Gearbox &_flyWheel;
 
 	double shooterManualSpeed = 0;
 };
