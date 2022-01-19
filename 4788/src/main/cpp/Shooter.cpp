@@ -4,9 +4,14 @@
 using namespace wml;
 using namespace wml::controllers;
 
-Shooter::Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, SmartControllerGroup &contGroup) : _leftFlyWheelMotor(leftFlyWheelMotor), _rightFlyWheelMotor(rightFlyWheelMotor), _contGroup(contGroup) {
+// Shooter::Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, SmartControllerGroup &contGroup) : _leftFlyWheelMotor(leftFlyWheelMotor), _rightFlyWheelMotor(rightFlyWheelMotor), _contGroup(contGroup) {
+
+// }
+
+Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {
 
 }
+
 
 void Shooter::teleopOnUpdate(double dt) {
 	// TODO @Anna decide which case to switch to
@@ -69,8 +74,10 @@ void Shooter::testing(double dt) {
 
 	// _flyWheel.transmission->SetVoltage(shooterManualSpeed);
 
-	_leftFlyWheelMotor.Set(shooterManualSpeed);
-	_rightFlyWheelMotor.Set(shooterManualSpeed);
+	// _leftFlyWheelMotor.Set(shooterManualSpeed);
+	// _rightFlyWheelMotor.Set(shooterManualSpeed);
+	_shooterSystem.leftFlyWheelMotor.Set(shooterManualSpeed);
+	_shooterSystem.rightFlyWheelMotor.Set(shooterManualSpeed);
 
 	std::cout << shooterManualSpeed << std::endl;
 	// std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
