@@ -39,6 +39,7 @@ struct ControlMap {
   // Shooter
 
   // Climber
+  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
 
   // Example Elevator
   static constexpr int ElevatorMotorPort = 99;
@@ -55,6 +56,10 @@ struct ControlMap {
   // Shoter
 
   // Climber
+   static constexpr int ClimberPort = 0;
+   static constexpr int ClimberSolenoidPort1 = 0;
+   static constexpr int ClimberSolenoidPort2 = 0;
+
 
   // Example Elevator
   inline static const wml::controllers::tAxis Belevator{ CoDriver, XboxController::kLeftYAxis };
