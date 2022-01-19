@@ -45,6 +45,7 @@ class Robot : public frc::TimedRobot, protected wml::StrategyController, protect
 
  private:
 	RobotMap robotMap;
+	Drivetrain *drivetrain;
 	Shooter *shooter;
-	Drivebase *drivebase;
+	// ExampleElevator *exampleElevator;
 };
