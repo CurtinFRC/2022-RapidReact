@@ -4,6 +4,7 @@
 		"*.ejs": "html",
 		"chrono": "cpp",
 		"complex": "cpp",
+<<<<<<< HEAD
 		"*.inc": "cpp",
 		"cmath": "cpp",
 		"array": "cpp",
@@ -89,3 +90,9 @@
   "C_Cpp.default.configurationProvider": "vscode-wpilib"
 }
 >>>>>>> 4c757221cfabed31a0373e9742cc0ed81ac2672b
+=======
+		"*.inc": "cpp"
+	},
+	"C_Cpp.errorSquiggles": "Enabled"
+}
+>>>>>>> 58fd4bf82eddaa24f48ac49a264bcc977f9d26ff
