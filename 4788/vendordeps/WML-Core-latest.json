@@ -1,23 +1,19 @@
 {
     "fileName": "WML-Core-latest.json",
     "name": "WML-Core",
-    "version": "2022.1.0-beta",
+    "version": "2022.1.1",
     "uuid": "a6d30c03-12a8-476d-8fdc-41dacdb7790f",
     "mavenUrls": [
         "https://buchel.family/repository/wml"
     ],
     "jsonUrl": "https://buchel.family/repository/wml/first/WML-Core/WML-Core-Deps/latest/WML-Core-Deps-latest.json",
-    "javaDependencies": [
-        
-    ],
-    "jniDependencies": [
-        
-    ],
+    "javaDependencies": [],
+    "jniDependencies": [],
     "cppDependencies": [
         {
             "groupId": "first.WML-Core",
             "artifactId": "WML-Core-cpp",
-            "version": "2022.1.0-beta",
+            "version": "2022.1.1",
             "libName": "WML-Core",
             "headerClassifier": "headers",
             "sourcesClassifier": "sources",
