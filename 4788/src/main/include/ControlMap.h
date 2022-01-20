@@ -8,7 +8,7 @@
 using namespace wml;
 using namespace wml::controllers;
 
-struct ControlMap {
+struct ControlMap { 
   static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
   //remap Here (map POV buttons to names ect)
   }
@@ -18,7 +18,7 @@ struct ControlMap {
   // Controllers
   static constexpr int Xbox1Port = 0;
   static constexpr int Xbox2Port = 1;
-
+ 
   // USB port numbers
   static constexpr int Driver = 1;
   static constexpr int CoDriver = 2;
@@ -46,6 +46,10 @@ struct ControlMap {
 
 
   // Intake
+  static constexpr int  intakeMotorPort = 99;
+  static constexpr int  intakeMotorPort_2 = 99;
+  static constexpr bool intakeSolenoid = false;
+  static constexpr int  intakeSolenoidPort = 99;
 
   // Shooter
   static constexpr int leftFlyWheelPort = 10;
@@ -54,13 +58,13 @@ struct ControlMap {
 
   //shooter PID stuff 
   static constexpr double kp = 0.01;
-	static constexpr double ki = 0.0001;
-	static constexpr double kd = 0.00001;
+  static constexpr double ki = 0.0001;
+  static constexpr double kd = 0.00001;
 
-	static constexpr double goal = 0;
-	static constexpr double sum = 0;
-	static constexpr double derror = 0;
-	static constexpr double previousError = 0;
+  static constexpr double goal = 0;
+  static constexpr double sum = 0;
+  static constexpr double derror = 0;
+  static constexpr double previousError = 0;
 
   // Climber
   inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
@@ -75,12 +79,13 @@ struct ControlMap {
   inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
   
-  // Intake
-
   // Climber
    static constexpr int ClimberPort = 0;
    static constexpr int ClimberSolenoidPort1 = 0;
    static constexpr int ClimberSolenoidPort2 = 0;
 
 
+  // Intake
+  inline static const wml::controllers::tAxis Intake{ CoDriver, wml::controllers::XboxController::kLeftYAxis };
+  inline static const wml::controllers::tButton IntakeActuation{ CoDriver, wml::controllers::XboxController::kB };
 };

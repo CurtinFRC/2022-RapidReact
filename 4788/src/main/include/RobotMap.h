@@ -116,4 +116,10 @@ struct RobotMap {
     wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
   }; DrivebaseSystem drivebaseSystem;
+
+  struct IntakeSystem {
+    wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
+    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::PCModule, ControlMap::intakeSolenoidPort, 0.1};
+  }; IntakeSystem intakeSystem;
+
 };

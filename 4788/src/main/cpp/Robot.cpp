@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Intake.h"
 
 using namespace frc;
 using namespace wml;
@@ -12,14 +13,17 @@ void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
   // exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
-	
+  
   //Init the controllers
-	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
+  ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	// shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
+  // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
-	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+
+  intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
+  robotMap.intakeSystem.intake.SetInverted(false);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
@@ -36,8 +40,8 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
   // Register our systems to be called via strategy
-	StrategyController::Register(drivetrain);
-	NTProvider::Register(drivetrain);
+  StrategyController::Register(drivetrain);
+  NTProvider::Register(drivetrain);
 }
 
 void Robot::RobotPeriodic() {
@@ -69,7 +73,7 @@ void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-	shooter->teleopOnUpdate(dt);
+  shooter->teleopOnUpdate(dt);
 }
 
 // During Test Logic
