@@ -63,6 +63,7 @@ struct ControlMap {
 	static constexpr double previousError = 0;
 
   // Climber
+  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
 
 
   // ------------------ Controls ------------------
@@ -77,5 +78,9 @@ struct ControlMap {
   // Intake
 
   // Climber
+   static constexpr int ClimberPort = 0;
+   static constexpr int ClimberSolenoidPort1 = 0;
+   static constexpr int ClimberSolenoidPort2 = 0;
+
 
 };
