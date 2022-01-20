@@ -48,10 +48,8 @@ void Robot::RobotPeriodic() {
   dt = currentTimeStamp - lastTimeStamp;
 
   StrategyController::Update(dt);
-
   robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   robotMap.controlSystem.compressor.Update(dt);
-
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -78,4 +76,4 @@ void Robot::TeleopPeriodic() {
 
 // During Test Logic
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {} 

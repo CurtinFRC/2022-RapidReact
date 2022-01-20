@@ -13,7 +13,7 @@
 enum class TeleopShooter {
   kAuto,
   kManual,
-  kStill, //like stationary but easier to spell
+  kStill, //like stationary but easier to spell (kIdle)
   kTesting
   // kStill, 
   // kSpinUp,
