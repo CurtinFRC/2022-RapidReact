@@ -5,6 +5,7 @@
  */
 #include "RobotMap.h"
 #include "ExampleElevator.h"
+#include "Intake.h"
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
  public:
