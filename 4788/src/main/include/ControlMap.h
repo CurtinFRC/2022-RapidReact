@@ -54,17 +54,20 @@ struct ControlMap {
 
   //shooter PID stuff 
   static constexpr double kp = 0.01;
-	static constexpr double ki = 0.0001;
-	static constexpr double kd = 0.00001;
+  static constexpr double ki = 0.0001;
+  static constexpr double kd = 0.00001;
 
-	static constexpr double goal = 0;
-	static constexpr double sum = 0;
-	static constexpr double derror = 0;
-	static constexpr double previousError = 0;
+  static constexpr double goal = 0;
+  static constexpr double sum = 0;
+  static constexpr double derror = 0;
+  static constexpr double previousError = 0;
 
   // Climber
-  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
-
+  static constexpr int ClimberPort = 99;
+  static constexpr int leftClimberPort1 = 99;
+  static constexpr int leftClimberPort2 = 99;
+  static constexpr int rightClimberPort1 = 99;
+  static constexpr int rightClimberPort2 = 99;
 
   // ------------------ Controls ------------------
 
@@ -78,9 +81,8 @@ struct ControlMap {
   // Intake
 
   // Climber
-   static constexpr int ClimberPort = 0;
-   static constexpr int ClimberSolenoidPort1 = 0;
-   static constexpr int ClimberSolenoidPort2 = 0;
+ inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
+   
 
 
 };
