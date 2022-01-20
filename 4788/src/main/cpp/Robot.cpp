@@ -19,29 +19,29 @@ void Robot::RobotInit() {
 
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
-  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(false);
+  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(false);
 
-  intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  robotMap.intakeSystem.intake.SetInverted(false);
+  // intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
+  // robotMap.intakeSystem.intake.SetInverted(false);
 
-  drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
+  // drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
-  // Zero the Encoders
-  robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
-  robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  // // Zero the Encoders
+  // robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  // robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
   
-  // Set the default strategy for drivetrain to manual
-  drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
-  drivetrain->StartLoop(100);
+  // // Set the default strategy for drivetrain to manual
+  // drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+  // drivetrain->StartLoop(100);
 
   // Invert one side of our drivetrain so it'll drive straight
-  drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
-  drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
+  // drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
+  // drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
-  // Register our systems to be called via strategy
-  StrategyController::Register(drivetrain);
-  NTProvider::Register(drivetrain);
+  // // Register our systems to be called via strategy
+  // StrategyController::Register(drivetrain);
+  // NTProvider::Register(drivetrain);
 }
 
 void Robot::RobotPeriodic() {
@@ -70,7 +70,7 @@ void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
-  Schedule(drivetrain->GetDefaultStrategy(), true);
+  // Schedule(drivetrain->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);

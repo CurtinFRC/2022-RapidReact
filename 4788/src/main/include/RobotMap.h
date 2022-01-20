@@ -70,10 +70,10 @@ struct RobotMap {
    * Robot Control System
    * Includes Pressure sensor and compressor
    */
-  struct ControlSystem {
-    // wml::sensors::PressureSensor pressureSensor{ ControlMap::PressureSensorPort };
-    // wml::actuators::Compressor compressor{ ControlMap::CompressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
-  }; ControlSystem controlSystem;
+  // struct ControlSystem {
+  //   // wml::sensors::PressureSensor pressureSensor{ ControlMap::PressureSensorPort };
+  //   // wml::actuators::Compressor compressor{ ControlMap::CompressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+  // }; ControlSystem controlSystem;
 
   /**
    * Shooter subsystem 
@@ -91,35 +91,35 @@ struct RobotMap {
     // wml::Gearbox ShooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
   }; ShooterSystem shooterSystem;
 
-  struct DrivebaseSystem {
-    // Drivetrain Left Motors
-    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
-    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
+  // struct DrivebaseSystem {
+  //   // Drivetrain Left Motors
+  //   wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
+  //   wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
 
-    // Drivetrain Right Motors
-    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
-    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
+  //   // Drivetrain Right Motors
+  //   wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
+  //   wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
     
-    // Motor Grouping
-    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
-    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
+  //   // Motor Grouping
+  //   wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
+  //   wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
 
-    // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
-    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
+  //   // Gearboxes
+  //   wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
+  //   wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
 
-    wml::sensors::NavX navX{};
-    wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
+  //   wml::sensors::NavX navX{};
+  //   wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
-    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass};
-    wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
-    wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
+  //   wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass};
+  //   wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
+  //   wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
-  }; DrivebaseSystem drivebaseSystem;
+  // }; DrivebaseSystem drivebaseSystem;
 
-  struct IntakeSystem {
-    wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
-    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::PCModule, ControlMap::intakeSolenoidPort, 0.1};
-  }; IntakeSystem intakeSystem;
+  // struct IntakeSystem {
+  //   wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
+  //   wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::PCModule, ControlMap::intakeSolenoidPort, 0.1};
+  // }; IntakeSystem intakeSystem;
 
 };
