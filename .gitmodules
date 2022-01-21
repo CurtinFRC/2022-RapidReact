@@ -1,1 +1,4 @@
 
+[submodule "CJ-Vision"]
+  path = CJ-Vision
+  url = https://github.com/wml-frc/CJ-Vision.git

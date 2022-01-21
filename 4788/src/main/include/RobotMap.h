@@ -119,7 +119,8 @@ struct RobotMap {
 
   struct IntakeSystem {
     wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
-    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::PCModule, ControlMap::intakeSolenoidPort, 0.1};
+    wml::actuators::DoubleSolenoid intakeSolenoid_left{ ControlMap::PCModule, ControlMap::intakeSolenoidPort_left, 0.1};
+    wml::actuators::DoubleSolenoid intakeSolenoid_right{ ControlMap::PCModule, ControlMap::intakeSolenoidPort_right, 0.1};
   }; IntakeSystem intakeSystem;
 
 };
