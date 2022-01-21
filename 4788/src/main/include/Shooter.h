@@ -53,10 +53,7 @@ class Shooter {
   TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
   wml::controllers::SmartControllerGroup &_contGroup;
 
-  // rev::CANSparkMax &_leftFlyWheelMotor;
-  // rev::CANSparkMax &_rightFlyWheelMotor;
-  // wml::Gearbox &_flyWheel;
-
   double shooterManualSpeed = 0;
+  double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
 };

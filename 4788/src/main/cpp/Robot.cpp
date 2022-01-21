@@ -24,6 +24,8 @@ void Robot::RobotInit() {
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);
 
+  climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
+
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
   // Zero the Encoders
@@ -72,6 +74,7 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
   intake->teleopOnUpdate(dt);
+  climber->teleopOnUpdate(dt);
 }
 
 // During Test Logic
