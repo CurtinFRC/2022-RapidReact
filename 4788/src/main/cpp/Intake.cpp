@@ -13,15 +13,8 @@ void Intake::teleopOnUpdate (double dt){
   _intakeSystem.intake.Set(intakeCont);
 
   //switch to a toggle
-  if (Controller.Get(Intake, Controller::ONRISE)) {
-      toggle = !toggle;
-}
 
-if (toggle) {
-      motor.Set(0.5);
-}
-  
-  if (_contGroup.Get(ControlMap::IntakeActuation)) {
+  if (_contGroup.Get(ControlMap::IntakeActuation, wml::controllers::XboxController::ONRISE)) {
     switch(_intakeState) {
       case IntakeStates::DEPLOYED:
         _intakeSystem.intakeSolenoid_left.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
