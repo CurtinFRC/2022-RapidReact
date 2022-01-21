@@ -125,3 +125,10 @@ struct RobotMap {
     wml::actuators::DoubleSolenoid rightClimberSolenoid{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::rightClimberPort1, ControlMap::rightClimberPort2, 0.1};
   }; ClimberSystem climberSystem;
 };
+
+  struct IntakeSystem {
+    wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
+    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::PCModule, ControlMap::intakeSolenoidPort, 0.1};
+  }; IntakeSystem intakeSystem;
+
+};
