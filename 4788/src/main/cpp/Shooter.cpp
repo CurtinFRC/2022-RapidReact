@@ -41,16 +41,16 @@ void Shooter::teleopOnUpdate(double dt) {
   */
 double Shooter::speed(double metersPerSecond, double dt) {
 
-  double input = _shooterSystem._flyWheel.encoder->GetAngularVelocity();
+  // double input = _shooterSystem._flyWheel.encoder->GetAngularVelocity();
 
-  ControlMap::error = ControlMap::goal - input;
-  ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
-  ControlMap::sum = ControlMap::sum + ControlMap::error * dt;
+  // ControlMap::error = ControlMap::goal - input;
+  // ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
+  // ControlMap::sum = ControlMap::sum + ControlMap::error * dt;
 
-  ControlMap::ouput = ControlMap::kp * ControlMap::error + ControlMap::ki * ControlMap::sum + ControlMap::kd * ControlMap::derror;
-  ControlMap::previousError = ControlMap::error;
+  // ControlMap::ouput = ControlMap::kp * ControlMap::error + ControlMap::ki * ControlMap::sum + ControlMap::kd * ControlMap::derror;
+  // ControlMap::previousError = ControlMap::error;
 
-  return ControlMap::output;
+  // return ControlMap::output;
 }
 
 
