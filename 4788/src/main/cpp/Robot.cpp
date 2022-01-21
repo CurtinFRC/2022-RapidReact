@@ -12,16 +12,16 @@ double dt;
 void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
-  // exampleElevator = new ExampleElevator(robotMap.exampleElevatorSystem.elevatorMotor, robotMap.exampleElevatorSystem.elevatorSolenoid);
-  
-  //Init the controllers
-  ControlMap::InitSmartControllerGroup(robotMap.contGroup);
+
 
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
+
+  climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
+  
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);
 
@@ -74,6 +74,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
+  climber->teleopOnUpdate(dt);
 }
 
 // During Test Logic

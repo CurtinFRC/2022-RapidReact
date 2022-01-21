@@ -6,6 +6,7 @@
 #include "RobotMap.h"
 #include "Shooter.h"
 #include "Drivebase.h"
+#include "Climber.h"
 #include "Intake.h"
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
@@ -49,4 +50,5 @@ private:
   Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
+  Climber *climber;
 };

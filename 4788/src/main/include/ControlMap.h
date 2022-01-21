@@ -67,8 +67,11 @@ struct ControlMap {
   static constexpr double previousError = 0;
 
   // Climber
-  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
-
+  static constexpr int ClimberPort = 99;
+  static constexpr int leftClimberPort1 = 99;
+  static constexpr int leftClimberPort2 = 99;
+  static constexpr int rightClimberPort1 = 99;
+  static constexpr int rightClimberPort2 = 99;
 
   // ------------------ Controls ------------------
 
@@ -80,9 +83,7 @@ struct ControlMap {
   inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
   
   // Climber
-   static constexpr int ClimberPort = 0;
-   static constexpr int ClimberSolenoidPort1 = 0;
-   static constexpr int ClimberSolenoidPort2 = 0;
+  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
 
 
   // Intake
