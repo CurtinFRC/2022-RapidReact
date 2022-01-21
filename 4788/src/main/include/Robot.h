@@ -50,4 +50,5 @@ private:
   Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
+  Climber *climber;
 };

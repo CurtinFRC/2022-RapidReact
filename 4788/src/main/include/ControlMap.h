@@ -83,8 +83,7 @@ struct ControlMap {
   inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
   
   // Climber
- inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
-   
+  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
 
 
   // Intake
