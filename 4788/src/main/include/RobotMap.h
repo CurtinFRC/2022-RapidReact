@@ -80,10 +80,11 @@ struct RobotMap {
    * 2 spark maxs into a gearbox 
    */
   struct ShooterSystem {
-    wml::SparkMax leftFlyWheelMotor{ 10, wml::SparkMax::MotorType::kNEO , 42 };
-    wml::SparkMax rightFlyWheelMotor{ ControlMap::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42 };
+    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO , 42 };
+    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
+    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
 
-    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor);
+    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
     wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
   }; ShooterSystem shooterSystem;
 

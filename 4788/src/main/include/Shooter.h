@@ -40,7 +40,7 @@ class Shooter {
    * Sets the flywheel to a specific speed,
    * later can be called in teleopOnUpdate for different distances.
    */
-  double speed(double metersPerSecond);
+  double speed(double metersPerSecond, double dt);
 
   /**
    * manual control of the shooter. 

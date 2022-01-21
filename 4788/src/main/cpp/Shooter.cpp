@@ -14,9 +14,9 @@ void Shooter::teleopOnUpdate(double dt) {
   switch (_teleopShooter) {
     case TeleopShooter::kAuto:
       //left bumper for close shot, right bumper for far shot, POV button 
-      if (_contGroup.Get(ControlMap::shortShoot)) {
-        speed(8, dt);
-      }
+      // if (_contGroup.Get(ControlMap::shortShoot)) {
+      //   speed(8, dt);
+      // }
       break;
     case TeleopShooter::kStill:
 
@@ -70,7 +70,11 @@ void Shooter::testing(double dt) {
 
   shooterTestingSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
 
-  _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
+  // _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
+
+  _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
 
   // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
