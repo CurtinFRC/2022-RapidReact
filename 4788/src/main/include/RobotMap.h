@@ -80,12 +80,19 @@ struct RobotMap {
    * 2 spark maxs into a gearbox 
    */
   struct ShooterSystem {
-    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO , 42 };
-    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
-    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
+    // wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO , 42 };
+    // wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
+    // wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
 
-    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
-    wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
+    // wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
+    // wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
+
+    wml::TalonSrx leftFlyWheelMotor{ ControlMap::cimLeftFlyWheelPort, 2048};
+    wml::TalonSrx rightFlyWheelMotor{ ControlMap::cimRightFlyWheelPort, 2048};
+
+    wml::actuators::MotorVoltageController cimShooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor);
+    wml::Gearbox cimShooterGearbox{ &cimShooterMotorGroup, &leftFlyWheelMotor};
+
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {

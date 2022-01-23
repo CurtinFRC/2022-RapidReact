@@ -56,6 +56,10 @@ struct ControlMap {
   static constexpr int rightFlyWheelPort = 13;
   static constexpr double flyWheelMass = 3;
 
+  //CIM shooter
+  static constexpr int cimLeftFlyWheelPort = 99;
+  static constexpr int simRightFlyWheelPort = 99;
+
   //shooter PID stuff 
   inline static double kp = 0.01;
   inline static double ki = 0.0001;
@@ -66,6 +70,7 @@ struct ControlMap {
   inline static double derror = 0;
   inline static double previousError = 0;
   inline static double error = 0;
+  inline static double output = 0;
   
 
 
