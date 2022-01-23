@@ -2,9 +2,11 @@
 #include <iostream>
 #include "ControlMap.h"
 
+
 Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) { 
   _intakeSystem.intakeSolenoid_left.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
   _intakeSystem.intakeSolenoid_right.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+ 
 }
 
 void Intake::setState(IntakeStates state) {
@@ -20,14 +22,14 @@ void Intake::setState(IntakeStates state) {
   }
 }
   
-
 void Intake::teleopOnUpdate (double dt){
   double intakeCont = fabs(_contGroup.Get(ControlMap::Intake)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::Intake) : 0;
   _intakeSystem.intake.Set(intakeCont);
 
-  //switch to a toggle
+  //Call StateMachine
 
-  if (_contGroup.Get(ControlMap::IntakeActuation, wml::controllers::XboxController::ONRISE)) {
-    _intakeState == IntakeStates::DEPLOYED ? setState(IntakeStates::STOWED) : setState(IntakeStates::DEPLOYED);
-  }
+   if (_contGroup.Get(ControlMap::IntakeActuation, wml::controllers::XboxController::ONRISE)) {
+     _intakeState == IntakeStates::DEPLOYED ? setState(IntakeStates::STOWED) : setState(IntakeStates::DEPLOYED);
+   }
 }
+
