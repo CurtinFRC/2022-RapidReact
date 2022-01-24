@@ -16,6 +16,8 @@ class Intake {
   void teleopOnUpdate (double dt);
   void autoOnUpdate (double dt);
   void testOnUpdate (double dt);
+  void setState(IntakeStates state);
+
  private:
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
