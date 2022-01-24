@@ -62,8 +62,8 @@ struct RobotMap {
   /**
    * Controllers
    */
-  wml::controllers::XboxController xbox1{ ControlMap::Xbox1Port };
-  wml::controllers::XboxController xbox2{ ControlMap::Xbox2Port };
+  wml::controllers::XboxController xbox1{ ControlMap::xbox1Port };
+  wml::controllers::XboxController xbox2{ ControlMap::xbox2Port };
   wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2};
 
   /**
@@ -71,8 +71,8 @@ struct RobotMap {
    * Includes Pressure sensor and compressor
    */
   struct ControlSystem {
-    wml::sensors::PressureSensor pressureSensor{ ControlMap::PressureSensorPort };
-    wml::actuators::Compressor compressor{ ControlMap::CompressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+    wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
+    wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
@@ -86,6 +86,17 @@ struct RobotMap {
 
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
     wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
+
+      //shooter PID stuff 
+    inline static double kp = 0.01;
+    inline static double ki = 0.0001;
+    inline static double kd = 0.00001;
+
+    inline static double goal = 0;
+    inline static double sum = 0;
+    inline static double derror = 0;
+    inline static double previousError = 0;
+    inline static double error = 0;
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
@@ -108,21 +119,19 @@ struct RobotMap {
     wml::sensors::NavX navX{};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
-    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass};
+    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::trackWidth, ControlMap::trackDepth, ControlMap::wheelRadius, ControlMap::mass};
     wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
     wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
   }; DrivebaseSystem drivebaseSystem;
 
   struct ClimberSystem {
-    wml::actuators::DoubleSolenoid leftClimberSolenoid{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::leftClimberPort1, ControlMap::leftClimberPort2, 0.1};
-    wml::actuators::DoubleSolenoid rightClimberSolenoid{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::rightClimberPort1, ControlMap::rightClimberPort2, 0.1};
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::climberPort1, ControlMap::climberPort2, 0.1};
   }; ClimberSystem climberSystem;
 
   struct IntakeSystem {
     wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
-    wml::actuators::DoubleSolenoid intakeSolenoid_left{ ControlMap::PCModule, ControlMap::intakeSolenoidPort_left, 0.1};
-    wml::actuators::DoubleSolenoid intakeSolenoid_right{ ControlMap::PCModule, ControlMap::intakeSolenoidPort_right, 0.1};
+    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, ControlMap::intakeSolenoidPort, 0.1};
   }; IntakeSystem intakeSystem;
 
 };

@@ -18,7 +18,7 @@ void Shooter::teleopOnUpdate(double dt) {
       //   speed(8, dt);
       // }
       break;
-    case TeleopShooter::kStill:
+    case TeleopShooter::kIdle:
 
       break;
     case TeleopShooter::kManual:
@@ -58,7 +58,7 @@ double Shooter::speed(double metersPerSecond, double dt) {
   * Left trigger controls the shooter manually
   */
 void Shooter::manualControl(double dt) {
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
   _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterManualSpeed);
 }
@@ -68,7 +68,7 @@ void Shooter::manualControl(double dt) {
   */
 void Shooter::testing(double dt) {
 
-  shooterTestingSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  shooterTestingSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
   // _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
 

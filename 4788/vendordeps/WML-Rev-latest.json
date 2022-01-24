@@ -1,7 +1,7 @@
 {
     "fileName": "WML-Rev-latest.json",
     "name": "WML-Rev",
-    "version": "2022.1.1",
+    "version": "2022.2.1",
     "uuid": "099da10d-4f49-445b-821d-921cd2507f1c",
     "mavenUrls": [
         "https://buchel.family/repository/wml"
@@ -13,7 +13,7 @@
         {
             "groupId": "first.WML-Rev",
             "artifactId": "WML-Rev-cpp",
-            "version": "2022.1.1",
+            "version": "2022.2.1",
             "libName": "WML-Rev",
             "headerClassifier": "headers",
             "sourcesClassifier": "sources",

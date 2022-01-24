@@ -13,15 +13,8 @@
 enum class TeleopShooter {
   kAuto,
   kManual,
-  kStill, //like stationary but easier to spell (kIdle)
+  kIdle,
   kTesting
-  // kStill, 
-  // kSpinUp,
-  // kInner,
-  // kOuter,
-  // kManual,
-  // kTesting,
-  // kEject
 };
 
 //i could put a state machine inside the state machine so that 

@@ -10,11 +10,11 @@ DrivebaseManual::DrivebaseManual(std::string name, Drivetrain &drivetrain, Smart
 };
 
 void DrivebaseManual::OnUpdate(double dt) {
-  if(fabs(_contGroup.Get(ControlMap::drivebaseL) >= ControlMap::XboxDeadzone)) {
+  if(fabs(_contGroup.Get(ControlMap::drivebaseL) >= ControlMap::xboxDeadzone)) {
     _leftPower = _contGroup.Get(ControlMap::drivebaseL);
   }
 
-  if(fabs(_contGroup.Get(ControlMap::drivebaseR)) >= ControlMap::XboxDeadzone) {
+  if(fabs(_contGroup.Get(ControlMap::drivebaseR)) >= ControlMap::xboxDeadzone) {
     _rightPower = _contGroup.Get(ControlMap::drivebaseR);
   }
 

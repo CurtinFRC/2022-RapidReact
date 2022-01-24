@@ -1,7 +1,7 @@
 {
     "fileName": "WML-Core-latest.json",
     "name": "WML-Core",
-    "version": "2022.1.1",
+    "version": "2022.2.1",
     "uuid": "a6d30c03-12a8-476d-8fdc-41dacdb7790f",
     "mavenUrls": [
         "https://buchel.family/repository/wml"
@@ -13,7 +13,7 @@
         {
             "groupId": "first.WML-Core",
             "artifactId": "WML-Core-cpp",
-            "version": "2022.1.1",
+            "version": "2022.2.1",
             "libName": "WML-Core",
             "headerClassifier": "headers",
             "sourcesClassifier": "sources",
