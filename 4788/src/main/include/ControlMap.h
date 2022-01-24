@@ -52,13 +52,9 @@ struct ControlMap {
   static constexpr int  intakeSolenoidPort = 99;
 
   // Shooter
-  static constexpr int leftFlyWheelPort = 10;
-  static constexpr int rightFlyWheelPort = 13;
   static constexpr double flyWheelMass = 3;
-
-  //CIM shooter
   static constexpr int cimLeftFlyWheelPort = 99;
-  static constexpr int simRightFlyWheelPort = 99;
+  static constexpr int cimRightFlyWheelPort = 99;
 
   //shooter PID stuff 
   inline static double kp = 0.01;
@@ -71,8 +67,6 @@ struct ControlMap {
   inline static double previousError = 0;
   inline static double error = 0;
   inline static double output = 0;
-  
-
 
 
   // Climber
@@ -86,14 +80,16 @@ struct ControlMap {
 
   // Shooter
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tButton InnerCircleShoot{ CoDriver, XboxController::kBumperLeft };
+  inline static const wml::controllers::tButton OuterCircleShoot{ CoDriver, XboxController::kBumperRight };
+  inline static const wml::controllers::tButton IndexSpin{ CoDriver, XboxController::kY };
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
-  
+
   // Climber
   inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
-
 
   // Intake
   inline static const wml::controllers::tAxis Intake{ CoDriver, wml::controllers::XboxController::kLeftYAxis };

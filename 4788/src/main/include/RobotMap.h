@@ -90,6 +90,8 @@ struct RobotMap {
     wml::TalonSrx leftFlyWheelMotor{ ControlMap::cimLeftFlyWheelPort, 2048};
     wml::TalonSrx rightFlyWheelMotor{ ControlMap::cimRightFlyWheelPort, 2048};
 
+    wml::sensors::DigitalEncoder shooterEncoder{ 0, 1, 2048 };
+
     wml::actuators::MotorVoltageController cimShooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor);
     wml::Gearbox cimShooterGearbox{ &cimShooterMotorGroup, &leftFlyWheelMotor};
 

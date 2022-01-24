@@ -13,10 +13,10 @@ void Shooter::teleopOnUpdate(double dt) {
 
   switch (_teleopShooter) {
     case TeleopShooter::kAuto:
-      //left bumper for close shot, right bumper for far shot, POV button 
-      // if (_contGroup.Get(ControlMap::shortShoot)) {
-      //   speed(8, dt);
-      // }
+      // left bumper for close shot, right bumper for far shot, POV button 
+      if (_contGroup.Get(ControlMap::InnerCircleShoot)) {
+        speed(4000, dt);
+      }
       break;
     case TeleopShooter::kStill:
 
@@ -41,12 +41,7 @@ void Shooter::teleopOnUpdate(double dt) {
   */
 double Shooter::speed(double metersPerSecond, double dt) {
 
-  // take the encoder read out of the 3 NEOs and average them
-  double leftFlyWheelEncoder = _shooterSystem.leftFlyWheelMotor.GetEncoderRotations();
-  double rightFlyWheelEncoder = _shooterSystem.rightFlyWheelMotor.GetEncoderRotations();
-  double centerFlyWheelEncoder = _shooterSystem.centerFlyWheelMotor.GetEncoderRotations();
-
-  double input = (leftFlyWheelEncoder + rightFlyWheelEncoder + centerFlyWheelEncoder) / 3;
+  double input = _shooterSystem.shooterEncoder.GetEncoderRotations();
 
   ControlMap::error = ControlMap::goal - input;
   ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;

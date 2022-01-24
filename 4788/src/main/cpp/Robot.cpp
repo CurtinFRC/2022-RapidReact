@@ -17,7 +17,6 @@ void Robot::RobotInit() {
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
-  robotMap.shooterSystem.centerFlyWheelMotor.SetInverted(true);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);
