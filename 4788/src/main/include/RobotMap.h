@@ -123,5 +123,6 @@ struct RobotMap {
   struct ClimberSystem {
     wml::actuators::DoubleSolenoid leftClimberSolenoid{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::leftClimberPort1, ControlMap::leftClimberPort2, 0.1};
     wml::actuators::DoubleSolenoid rightClimberSolenoid{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::rightClimberPort1, ControlMap::rightClimberPort2, 0.1};
+    bool climberDisable = false;
   }; ClimberSystem climberSystem;
 };
