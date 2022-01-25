@@ -9,7 +9,7 @@
 #include "Intake.h"
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
-public:
+ public:
 
   /**
    * Robot boot initilization.
@@ -44,7 +44,7 @@ public:
   void TestInit() override;
   void TestPeriodic() override;
 
-private:
+ private:
   RobotMap robotMap;
   Drivetrain *drivetrain;
   Shooter *shooter;

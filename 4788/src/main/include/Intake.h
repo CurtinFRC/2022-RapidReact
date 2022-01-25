@@ -7,13 +7,13 @@
 using Controllers = wml::controllers::SmartControllerGroup;
 
 
-//Different states for the arm (stowed or deployed)
+  //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
   STOWED = 0,
   DEPLOYED
 };
 
-//A class to group the gamestage variables and structs from Robotmap.h
+  //A class to group the gamestage variables and structs from Robotmap.h
 class Intake {
  public:
   Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
@@ -30,8 +30,8 @@ class Intake {
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
 
-//variable for power
+  //variable for power
   double _power;
-//sets the default to stowed
+  //sets the default to stowed
   IntakeStates _intakeState{IntakeStates::STOWED};
 };

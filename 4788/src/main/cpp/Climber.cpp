@@ -11,8 +11,7 @@ Climber::Climber(wml::actuators::DoubleSolenoid &climberSolenoid, wml::controlle
 
 void Climber::teleopOnUpdate(double dt) {
   
-  if (_contGroup.Get(ControlMap::ClimberToggle, wml::controllers::XboxController::ONRISE)) {
-    
+  if (_contGroup.Get(ControlMap::climberToggle, wml::controllers::XboxController::ONRISE)) {
     ClimberToggle = !ClimberToggle;
   }
 

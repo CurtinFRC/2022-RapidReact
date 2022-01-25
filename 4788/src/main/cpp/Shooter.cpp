@@ -61,7 +61,7 @@ double Shooter::speed(double metersPerSecond) {
   * Left trigger controls the shooter manually
   */
 void Shooter::manualControl(double dt) {
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
 }
 
@@ -70,7 +70,7 @@ void Shooter::manualControl(double dt) {
   */
 void Shooter::testing(double dt) {
 
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
   // _flyWheel.transmission->SetVoltage(shooterManualSpeed);
 

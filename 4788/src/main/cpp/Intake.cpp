@@ -32,9 +32,9 @@ void Intake::setState(IntakeStates state) {
 
 
 void Intake::teleopOnUpdate (double dt){
-  _power = fabs(_contGroup.Get(ControlMap::Intake)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::Intake) : 0;
+  _power = fabs(_contGroup.Get(ControlMap::intake)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::intake) : 0;
 
-  if (_contGroup.Get(ControlMap::IntakeActuation, wml::controllers::XboxController::ONRISE)) {
+  if (_contGroup.Get(ControlMap::intakeActuation, wml::controllers::XboxController::ONRISE)) {
     _toggleIntake(); // Call Toggle
   }
 
