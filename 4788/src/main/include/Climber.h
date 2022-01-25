@@ -10,15 +10,13 @@ class Climber {
  public:
   Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
-  
   void teleopOnUpdate(double dt);
   void autoOnUpdate(double dt);
   void testOnUpdate(double dt);
 
  private:
   bool ClimberToggle = false;
+  // wml::actuators::DoubleSolenoid &_climberSolenoid;
   RobotMap::ClimberSystem &_climberSystem;
   wml::controllers::SmartControllerGroup &_contGroup;
-
-
 };
