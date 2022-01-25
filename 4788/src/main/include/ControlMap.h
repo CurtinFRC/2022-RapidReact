@@ -48,10 +48,9 @@ struct ControlMap {
   // Intake
   static constexpr int  intakeMotorPort = 99;
   static constexpr int  intakeMotorPort_2 = 99;
-  static constexpr bool intakeSolenoid_left = false;
-  static constexpr int  intakeSolenoidPort_left = 99;
-  static constexpr bool intakeSolenoid_right = false;
-  static constexpr int  intakeSolenoidPort_right = 99;
+  static constexpr bool intakeSolenoid = false;
+  static constexpr int  intakeSolenoidPort = 99;
+ 
 
   // Shooter
   static constexpr int leftFlyWheelPort = 10;
@@ -69,7 +68,6 @@ struct ControlMap {
   static constexpr double previousError = 0;
 
   // Climber
-  inline static const wml::controllers::tButton ClimberToggle{ CoDriver, XboxController::kA };
 
 
   // ------------------ Controls ------------------
@@ -82,12 +80,9 @@ struct ControlMap {
   inline static const wml::controllers::tAxis drivebaseR{Driver, XboxController::kRightYAxis};
   
   // Climber
-   static constexpr int ClimberPort = 0;
-   static constexpr int ClimberSolenoidPort1 = 0;
-   static constexpr int ClimberSolenoidPort2 = 0;
-
 
   // Intake
   inline static const wml::controllers::tAxis Intake{ CoDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton IntakeActuation{ CoDriver, wml::controllers::XboxController::kB };
+  inline static const wml::controllers::tButton IntakeIn{ CoDriver, wml::controllers::XboxController::kB };
 };
