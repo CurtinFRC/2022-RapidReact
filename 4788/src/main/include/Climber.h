@@ -19,5 +19,4 @@ class Climber {
   // wml::actuators::DoubleSolenoid &_climberSolenoid;
   RobotMap::ClimberSystem &_climberSystem;
   wml::controllers::SmartControllerGroup &_contGroup;
-
 };

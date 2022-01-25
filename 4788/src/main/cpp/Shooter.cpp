@@ -4,9 +4,7 @@
 using namespace wml;
 using namespace wml::controllers;
 
-Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {
-
-}
+Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {}
 
 void Shooter::teleopOnUpdate(double dt) {
   // TODO @Anna decide which case to switch to

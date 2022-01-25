@@ -18,4 +18,3 @@ void Climber::teleopOnUpdate(double dt) {
     _climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   }
 }
-
