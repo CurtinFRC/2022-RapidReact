@@ -18,38 +18,36 @@ void Robot::RobotInit() {
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
-  intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  robotMap.intakeSystem.intake.SetInverted(false);
+  // intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
+  // robotMap.intakeSystem.intake.SetInverted(false);
 
-  climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
+  // drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
-  drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
-
-  // Zero the Encoders
-  robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
-  robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  // // Zero the Encoders
+  // robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  // robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
   
-  // Set the default strategy for drivetrain to manual
-  drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
-  drivetrain->StartLoop(100);
+  // // Set the default strategy for drivetrain to manual
+  // drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+  // drivetrain->StartLoop(100);
 
-  //Invert one side of our drivetrain so it'll drive straight
-  drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
-  drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
+  // //Invert one side of our drivetrain so it'll drive straight
+  // drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
+  // drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
-  // Register our systems to be called via strategy
-  StrategyController::Register(drivetrain);
-  NTProvider::Register(drivetrain);
+  // // Register our systems to be called via strategy
+  // StrategyController::Register(drivetrain);
+  // NTProvider::Register(drivetrain);
 }
 
 void Robot::RobotPeriodic() {
   currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
   dt = currentTimeStamp - lastTimeStamp;
 
-  StrategyController::Update(dt);
-  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  robotMap.controlSystem.compressor.Update(dt);
-  NTProvider::Update();
+  // StrategyController::Update(dt);
+  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  // robotMap.controlSystem.compressor.Update(dt);
+  // NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
 }
@@ -66,12 +64,11 @@ void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
-  Schedule(drivetrain->GetDefaultStrategy(), true);
+  // Schedule(drivetrain->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
-  intake->teleopOnUpdate(dt);
-  climber->teleopOnUpdate(dt);
+  // intake->teleopOnUpdate(dt);
 }
 
 // During Test Logic

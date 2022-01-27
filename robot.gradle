@@ -53,14 +53,17 @@ model {
       sources.cpp {
         source {
           srcDir 'src/main/cpp' // robot
+          srcDir 'MP_Trajedy/cpp'
           include '**/*.cpp', '**/*.cc'
         }
 
         exportedHeaders {
           srcDir 'src/main/include' // robot
+          srcDir 'MP_Trajedy/include'
 
           if (includeSrcInIncludeRoot) {
             srcDir 'src/main/cpp' // robot
+            srcDir 'MP_Trajedy/cpp'
           }
         }
       }

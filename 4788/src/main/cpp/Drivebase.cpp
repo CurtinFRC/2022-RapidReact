@@ -7,16 +7,21 @@ DrivebaseManual::DrivebaseManual(std::string name, Drivetrain &drivetrain, Smart
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
   SetCanBeReused(true);
-};
+}
 
 void DrivebaseManual::OnUpdate(double dt) {
-  if(fabs(_contGroup.Get(ControlMap::drivebaseL) >= ControlMap::XboxDeadzone)) {
-    _leftPower = _contGroup.Get(ControlMap::drivebaseL);
+  if(fabs(_contGroup.GetController(1).Get(ControlMap::drivebaseL) >= ControlMap::xboxDeadzone)) {
+    _leftPower = _contGroup.GetController(1).Get(ControlMap::drivebaseL);
+    std::cout << "Left drive" << std::endl;
   }
 
-  if(fabs(_contGroup.Get(ControlMap::drivebaseR)) >= ControlMap::XboxDeadzone) {
-    _rightPower = _contGroup.Get(ControlMap::drivebaseR);
+  if(fabs(_contGroup.GetController(1).Get(ControlMap::drivebaseR)) >= ControlMap::xboxDeadzone) {
+    _rightPower = _contGroup.GetController(1).Get(ControlMap::drivebaseR);
+    std::cout << "right drive" << std::endl;
   }
+
+  _leftPower *= 0.5;
+  _rightPower *= 0.5;
 
   _drivetrain.Set(_leftPower, _rightPower);
 }

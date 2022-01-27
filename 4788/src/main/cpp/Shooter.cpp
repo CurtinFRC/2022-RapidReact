@@ -4,9 +4,7 @@
 using namespace wml;
 using namespace wml::controllers;
 
-Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {
-
-}
+Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {}
 
 void Shooter::teleopOnUpdate(double dt) {
   // TODO @Anna decide which case to switch to
@@ -14,11 +12,11 @@ void Shooter::teleopOnUpdate(double dt) {
   switch (_teleopShooter) {
     case TeleopShooter::kAuto:
       // left bumper for close shot, right bumper for far shot, POV button 
-      if (_contGroup.Get(ControlMap::InnerCircleShoot)) {
-        speed(4000, dt);
-      }
+      // if (_contGroup.Get(ControlMap::InnerCircleShoot)) {
+      //   speed(4000, dt);
+      // }
       break;
-    case TeleopShooter::kStill:
+    case TeleopShooter::kIdle:
 
       break;
     case TeleopShooter::kManual:
@@ -41,16 +39,16 @@ void Shooter::teleopOnUpdate(double dt) {
   */
 double Shooter::speed(double metersPerSecond, double dt) {
 
-  double input = _shooterSystem.shooterEncoder.GetEncoderRotations();
+  // double input = _shooterSystem.shooterEncoder.GetEncoderRotations();
 
-  ControlMap::error = ControlMap::goal - input;
-  ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
-  ControlMap::sum = ControlMap::sum + ControlMap::error * dt;
+  // ControlMap::error = ControlMap::goal - input;
+  // ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
+  // ControlMap::sum = ControlMap::sum + ControlMap::error * dt;
 
-  ControlMap::output = ControlMap::kp * ControlMap::error + ControlMap::ki * ControlMap::sum + ControlMap::kd * ControlMap::derror;
-  ControlMap::previousError = ControlMap::error;
+  // ControlMap::output = ControlMap::kp * ControlMap::error + ControlMap::ki * ControlMap::sum + ControlMap::kd * ControlMap::derror;
+  // ControlMap::previousError = ControlMap::error;
 
-  return ControlMap::output;
+  // return ControlMap::output;
 }
 
 
@@ -58,9 +56,9 @@ double Shooter::speed(double metersPerSecond, double dt) {
   * Left trigger controls the shooter manually
   */
 void Shooter::manualControl(double dt) {
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  // shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
-  _shooterSystem.cimShooterGearbox.transmission->SetVoltage(shooterManualSpeed);
+  // _shooterSystem.cimShooterGearbox.transmission->SetVoltage(shooterManualSpeed);
 }
 
 /**
@@ -68,17 +66,22 @@ void Shooter::manualControl(double dt) {
   */
 void Shooter::testing(double dt) {
 
-  shooterTestingSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
+  shooterTestingSpeed = fabs(_contGroup.GetController(1).Get(ControlMap::ShooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.GetController(1).Get(ControlMap::ShooterManualSpin) : 0;
 
   // _shooterSystem.cimShooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
 
   _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
   _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
-
+  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
 
   // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
   // std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 
-  nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("Angular velocity").SetDouble(0.6);
+  // nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("Angular velocity").SetDouble(0.6);
+
+  if (_contGroup.GetController(1).Get(ControlMap::IndexSpin)) {
+    _shooterSystem.indexWheel.Set(0.5);
+    std::cout << "index" << std::endl;
+  }
 }
