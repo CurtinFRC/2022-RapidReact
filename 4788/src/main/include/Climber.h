@@ -9,27 +9,26 @@ enum class TeleopClimber {kStationary = 0, kZeroing, kManual, kMoving};
 
 enum class ClimberStates {
   STOWED,
-  DEPLOYED
+  DEPLOYED,
+  DISABLED
 };
 
 class Climber {
  public:
   Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
-  
   void teleopOnUpdate(double dt);
   void autoOnUpdate(double dt);
   void testOnUpdate(double dt);
-  void Disabled(double dt);
+  void disabled(double dt);
 
   void setState(ClimberStates state);
 
  private:
   void _update(double dt);
-  void _toggleClimber();
-  
-  ClimberStates _climberState;
+  void _toggle();
+
+  ClimberStates _climberState{ ClimberStates::STOWED };
   RobotMap::ClimberSystem &_climberSystem;
   wml::controllers::SmartControllerGroup &_contGroup;
 };
-

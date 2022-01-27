@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Intake.h"
 
 using namespace frc;
 using namespace wml;
@@ -12,13 +13,15 @@ void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-  //Init the controllers
-  ControlMap::InitSmartControllerGroup(robotMap.contGroup);
-
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.centerFlyWheelMotor.SetInverted(true);
+
+  intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
+  robotMap.intakeSystem.intake.SetInverted(false);
+
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
@@ -31,7 +34,7 @@ void Robot::RobotInit() {
   drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
   drivetrain->StartLoop(100);
 
-  // Invert one side of our drivetrain so it'll drive straight
+  //Invert one side of our drivetrain so it'll drive straight
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
@@ -45,10 +48,8 @@ void Robot::RobotPeriodic() {
   dt = currentTimeStamp - lastTimeStamp;
 
   StrategyController::Update(dt);
-  
-  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  // robotMap.controlSystem.compressor.Update(dt);
-
+  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  robotMap.controlSystem.compressor.Update(dt);
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -58,7 +59,9 @@ void Robot::RobotPeriodic() {
 void Robot::DisabledInit() {
   InterruptAll(true);
 }
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+  climber->disabled(dt);
+}
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {}
@@ -70,6 +73,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
+  intake->teleopOnUpdate(dt);
   climber->teleopOnUpdate(dt);
 }
 

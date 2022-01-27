@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/c++,java,linux,macos,gradle,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++,java,linux,macos,gradle,windows,visualstudiocode
 
@@ -145,10 +144,6 @@ $RECYCLE.BIN/
 ### Gradle ###
 .gradle
 build/
-=======
-.gradle
-/build/
->>>>>>> newBranch
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -161,13 +156,3 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
-<<<<<<< HEAD
-
-### Gradle Patch ###
-**/build/
-
-# End of https://www.toptal.com/developers/gitignore/api/c++,java,linux,macos,gradle,windows,visualstudiocode
-# Ignore Gradle build output directory
-build
-=======
->>>>>>> newBranch
