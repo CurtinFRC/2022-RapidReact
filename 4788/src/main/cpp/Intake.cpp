@@ -16,7 +16,7 @@ void Intake::_update(double dt) {
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
       break;
   }
-
+ 
   _intakeSystem.intakeSolenoid.Update(dt);
   _intakeSystem.intake.Set(_power);
 }
@@ -29,8 +29,6 @@ void Intake::setState(IntakeStates state) {
   _intakeState = state;
 }
 
-
-
 void Intake::teleopOnUpdate (double dt){
   _power = fabs(_contGroup.Get(ControlMap::intake)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::intake) : 0;
 
@@ -40,4 +38,3 @@ void Intake::teleopOnUpdate (double dt){
 
   _update(dt);
 }
-
