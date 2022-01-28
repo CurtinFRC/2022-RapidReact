@@ -2,7 +2,6 @@
 #include <iostream>
 #include "ControlMap.h"
 
-
 Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) { 
   _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
 }
@@ -27,6 +26,9 @@ void Intake::_toggleIntake() {
 
 void Intake::setState(IntakeStates state) {
   _intakeState = state;
+   if (_contGroup.Get(ControlMap::intakeActuation, wml::controllers::XboxController::ONRISE)) {
+     _intakeState == IntakeStates::DEPLOYED ? setState(IntakeStates::STOWED) : setState(IntakeStates::DEPLOYED);
+   }
 }
 
 void Intake::teleopOnUpdate (double dt){

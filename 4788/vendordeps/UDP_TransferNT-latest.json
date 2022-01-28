@@ -1,7 +1,7 @@
 {
     "fileName": "UDP_TransferNT-latest.json",
     "name": "UDP_TransferNT",
-    "version": "2022.1.1",
+    "version": "2022.2.1",
     "uuid": "d7e51e9d-c0f6-4f51-96f1-cf2beab44a24",
     "mavenUrls": [
         "https://buchel.family/repository/wml"
@@ -13,7 +13,7 @@
         {
             "groupId": "first.UDP_TransferNT",
             "artifactId": "UDP_TransferNT-cpp",
-            "version": "2022.1.1",
+            "version": "2022.2.1",
             "libName": "UDP_TransferNT",
             "headerClassifier": "headers",
             "sharedLibrary": true,
