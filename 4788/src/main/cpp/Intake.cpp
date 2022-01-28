@@ -3,21 +3,20 @@
 #include "ControlMap.h"
 
 
-Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) { 
-  _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
-}
+Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) {};
+
 
 void Intake::_update(double dt) {
   switch(_intakeState) {
     case IntakeStates::DEPLOYED:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+      //_intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
       break;
     case IntakeStates::STOWED:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+     // _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
       break;
   }
  
-  _intakeSystem.intakeSolenoid.Update(dt);
+ // _intakeSystem.intakeSolenoid.Update(dt);
   _intakeSystem.intake.Set(_power);
 }
 
