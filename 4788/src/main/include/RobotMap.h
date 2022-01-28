@@ -52,6 +52,8 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
+#include "MP_Trajedy.h"
+
 // WML Rev
 #include <WMLRev.h>
 
