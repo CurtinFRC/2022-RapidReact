@@ -8,7 +8,7 @@ enum class TeleopClimber {kStationary = 0, kZeroing, kManual, kMoving};
 
 class Climber {
  public:
-  Climber(wml::actuators::DoubleSolenoid &climberSolenoid, wml::controllers::SmartControllerGroup &contGroup);
+  Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
   void teleopOnUpdate(double dt);
   void autoOnUpdate(double dt);
@@ -16,7 +16,7 @@ class Climber {
 
  private:
   bool ClimberToggle = false;
-  wml::actuators::DoubleSolenoid &_climberSolenoid;
+  // wml::actuators::DoubleSolenoid &_climberSolenoid;
+  RobotMap::ClimberSystem &_climberSystem;
   wml::controllers::SmartControllerGroup &_contGroup;
-
 };

@@ -4,24 +4,19 @@
 using namespace wml;
 using namespace wml::controllers;
 
-// Shooter::Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, SmartControllerGroup &contGroup) : _leftFlyWheelMotor(leftFlyWheelMotor), _rightFlyWheelMotor(rightFlyWheelMotor), _contGroup(contGroup) {
-
-// }
-
-Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {
-
-}
-
+Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {}
 
 void Shooter::teleopOnUpdate(double dt) {
   // TODO @Anna decide which case to switch to
 
-
   switch (_teleopShooter) {
     case TeleopShooter::kAuto:
       //left bumper for close shot, right bumper for far shot, POV button 
+      // if (_contGroup.Get(ControlMap::shortShoot)) {
+      //   speed(8, dt);
+      // }
       break;
-    case TeleopShooter::kStill:
+    case TeleopShooter::kIdle:
 
       break;
     case TeleopShooter::kManual:
@@ -42,9 +37,9 @@ void Shooter::teleopOnUpdate(double dt) {
   * Needs to be a closed loop PID system 
   * 
   */
-double Shooter::speed(double metersPerSecond) {
+double Shooter::speed(double metersPerSecond, double dt) {
 
-  // double input = _flyWheel.encoder->GetAngularVelocity();
+  // double input = _shooterSystem._flyWheel.encoder->GetAngularVelocity();
 
   // ControlMap::error = ControlMap::goal - input;
   // ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
@@ -63,6 +58,7 @@ double Shooter::speed(double metersPerSecond) {
 void Shooter::manualControl(double dt) {
   shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
+  _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterManualSpeed);
 }
 
 /**
@@ -72,14 +68,13 @@ void Shooter::testing(double dt) {
 
   shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
 
-  // _flyWheel.transmission->SetVoltage(shooterManualSpeed);
+  // _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
 
-  // _leftFlyWheelMotor.Set(shooterManualSpeed);
-  // _rightFlyWheelMotor.Set(shooterManualSpeed);
-  _shooterSystem.leftFlyWheelMotor.Set(shooterManualSpeed);
-  _shooterSystem.rightFlyWheelMotor.Set(shooterManualSpeed);
+  _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
 
-  std::cout << shooterManualSpeed << std::endl;
+  // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
   // std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 

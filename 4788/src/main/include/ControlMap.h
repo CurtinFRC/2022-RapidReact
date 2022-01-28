@@ -46,10 +46,10 @@ struct ControlMap {
 
 
   // Intake
-  static constexpr int  intakeMotorPort = 99;
-  static constexpr int  intakeMotorPort_2 = 99;
-  static constexpr bool intakeSolenoid = false;
-  static constexpr int  intakeSolenoidPort = 99;
+  static constexpr int  intakeMotorPort = 9;
+  //static constexpr int  intakeMotorPort_2 = 99;
+  //static constexpr bool intakeSolenoid = false;
+  //static constexpr int  intakeSolenoidPort = 99;
 
   // Shooter
   static constexpr int leftFlyWheelPort = 10;
