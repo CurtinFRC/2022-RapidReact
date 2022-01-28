@@ -73,22 +73,19 @@ struct RobotMap {
    * Includes Pressure sensor and compressor
    */
   struct ControlSystem {
-    // wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
-    // wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+
   }; ControlSystem controlSystem;
 
   /**
    * Shooter subsystem 
-   * 2 spark maxs into a gearbox 
+   * 3 spark maxs into a gearbox 
    */
   struct ShooterSystem {
-    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO, 42};
-    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42};
-    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42};
+    wml::SparkMax leftFlyWheelMotor{ ControlMap::leftFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
+    wml::SparkMax rightFlyWheelMotor{ ControlMap::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
+    wml::SparkMax centerFlyWheelMotor{ ControlMap::centerFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
 
-    // wml::sensors::DigitalEncoder encoder{0,1,2048};
-
-    wml::TalonSrx indexWheel{ 9, 2048};
+    wml::TalonSrx indexWheel{ ControlMap::indexMotorPort, 2048};
 
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
     wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
@@ -96,12 +93,12 @@ struct RobotMap {
 
   struct DrivebaseSystem {
     // Drivetrain Left Motors
-    wml::TalonSrx dbLeftMotor1{2, 2048};
-    wml::TalonSrx dbLeftMotor2{3, 2048};
+    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
+    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
 
     // Drivetrain Right Motors
-    wml::TalonSrx dbRightMotor1{5, 2048};
-    wml::TalonSrx dbRightMotor2{8, 2048};
+    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
+    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
     
     // Motor Grouping
     wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
@@ -120,9 +117,8 @@ struct RobotMap {
 
   }; DrivebaseSystem drivebaseSystem;
 
-  // struct IntakeSystem {
-  //   wml::TalonSrx intake{4, 2048};
-  //   wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, ControlMap::intakeSolenoidPort, 0.1};
-  // }; IntakeSystem intakeSystem;
+  struct IntakeSystem {
+    wml::TalonSrx intake{ControlMap::intakeMotorPort, 2048};
+  }; IntakeSystem intakeSystem;
 
 };

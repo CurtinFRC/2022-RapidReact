@@ -38,23 +38,24 @@ struct ControlMap {
   static constexpr double wheelRadius = 0.0762; 
   static constexpr double mass = 50;
 
-  static constexpr int dbLeftPort1 = 99;
-  static constexpr int dbLeftPort2 = 99;
+  static constexpr int dbLeftPort1 = 2;
+  static constexpr int dbLeftPort2 = 3;
 
-  static constexpr int dbRightPort1 = 99;
-  static constexpr int dbRightPort2 = 99;
+  static constexpr int dbRightPort1 = 5;
+  static constexpr int dbRightPort2 = 4;
+
+  static constexpr double maxDrivetrainPower = 0.7;
 
 
   // Intake
-  static constexpr int  intakeMotorPort = 99;
-  static constexpr int  intakeMotorPort_2 = 99;
-  static constexpr bool intakeSolenoid = false;
-  static constexpr int  intakeSolenoidPort = 99;
+  static constexpr int  intakeMotorPort = 9;
 
   // Shooter
   static constexpr double flyWheelMass = 3;
-  static constexpr int cimLeftFlyWheelPort = 99;
-  static constexpr int cimRightFlyWheelPort = 99;
+  static constexpr int leftFlyWheelPort = 6;
+  static constexpr int rightFlyWheelPort = 11;
+  static constexpr int centerFlyWheelPort = 7;
+  static constexpr int indexMotorPort = 8;
 
   //shooter PID stuff 
   inline static double kp = 0.01;
@@ -74,12 +75,12 @@ struct ControlMap {
   inline static const wml::controllers::tAxis ShooterManualSpin{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
   inline static const wml::controllers::tButton InnerCircleShoot{ coDriver, XboxController::kBumperLeft };
   inline static const wml::controllers::tButton OuterCircleShoot{ coDriver, XboxController::kBumperRight };
-  inline static const wml::controllers::tButton IndexSpin{ coDriver, XboxController::kY };
+  inline static const wml::controllers::tAxis IndexSpin{ coDriver, XboxController::kRightYAxis };
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
-  
+
   // Climber
   inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
   // Intake

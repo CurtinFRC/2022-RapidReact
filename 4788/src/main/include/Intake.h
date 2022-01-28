@@ -1,27 +1,17 @@
-// #pragma once
+#pragma once
 
-// #include "RobotMap.h";
-// #include "controllers/Controllers.h";
+#include "RobotMap.h";
+#include "controllers/Controllers.h";
 
-// using Controllers = wml::controllers::SmartControllerGroup;
+using Controllers = wml::controllers::SmartControllerGroup;
 
-// enum class IntakeStates{
-//   STOWED = 0,
-//   DEPLOYED
-// };
 
-// class Intake {
-//  public:
-//   Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
-//   void teleopOnUpdate (double dt);
-//   void autoOnUpdate (double dt);
-//   void testOnUpdate (double dt);
-//   void setState(IntakeStates state);
+class Intake {
+ public:
+  Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
+  void teleopOnUpdate (double dt);
 
-//  private:
-//   RobotMap::IntakeSystem &_intakeSystem;
-//   Controllers &_contGroup;
-
-//   double power;
-//   IntakeStates _intakeState{IntakeStates::STOWED};
-// };
+ private:
+  RobotMap::IntakeSystem &_intakeSystem;
+  Controllers &_contGroup;
+};
