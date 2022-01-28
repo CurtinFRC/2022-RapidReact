@@ -16,6 +16,6 @@ void DrivetrainManual::OnUpdate(double dt) {
   leftPower *= ControlMap::maxDrivetrainPower;
   rightPower *= ControlMap::maxDrivetrainPower;
 
-  std::cout << leftPower << std::endl;
+  // std::cout << leftPower << std::endl;
   _drivetrain.Set(leftPower, rightPower);
 }

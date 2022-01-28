@@ -56,6 +56,7 @@ struct ControlMap {
   static constexpr int rightFlyWheelPort = 11;
   static constexpr int centerFlyWheelPort = 7;
   static constexpr int indexMotorPort = 8;
+  inline static double shooterMaxSpeed = 0.5;
 
   //shooter PID stuff 
   inline static double kp = 0.01;
@@ -77,12 +78,15 @@ struct ControlMap {
   inline static const wml::controllers::tButton OuterCircleShoot{ coDriver, XboxController::kBumperRight };
   inline static const wml::controllers::tAxis IndexSpin{ coDriver, XboxController::kRightYAxis };
 
+  inline static const wml::controllers::tButton ShooterSlow{ coDriver, XboxController::kX};
+  inline static const wml::controllers::tButton ShooterMid{ coDriver, XboxController::kY};
+  inline static const wml::controllers::tButton ShooterSpeedChange{ coDriver, XboxController::kB};
+  inline static const wml::controllers::tButton ShooterHighSpeed{ coDriver, XboxController::kA};
+
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
 
-  // Climber
-  inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
