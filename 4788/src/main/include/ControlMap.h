@@ -44,7 +44,7 @@ struct ControlMap {
   static constexpr int dbRightPort1 = 5;
   static constexpr int dbRightPort2 = 4;
 
-  static constexpr double maxDrivetrainPower = 0.7;
+  static constexpr double maxDrivetrainPower = 0.9;
 
 
   // Intake

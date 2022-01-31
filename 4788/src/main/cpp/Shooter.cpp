@@ -29,13 +29,13 @@ void Shooter::teleopOnUpdate(double dt) {
     ControlMap::shooterMaxSpeed = 0.25;
   }
   if (_contGroup.Get(ControlMap::ShooterMid)) {
-    ControlMap::shooterMaxSpeed = 0.5;
+    ControlMap::shooterMaxSpeed = 0.3;
   }
   if (_contGroup.Get(ControlMap::ShooterSpeedChange)) {
-    ControlMap::shooterMaxSpeed = 0.75;
+    ControlMap::shooterMaxSpeed = 0.4;
   }
   if (_contGroup.Get(ControlMap::ShooterHighSpeed)) {
-    ControlMap::shooterMaxSpeed = 1;
+    ControlMap::shooterMaxSpeed = 0.5;
   }
 
   std::cout << ControlMap::shooterMaxSpeed << std::endl;
