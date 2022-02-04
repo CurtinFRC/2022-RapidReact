@@ -60,9 +60,11 @@ struct ControlMap {
   inline static bool shooterPID = false;
 
   //shooter PID stuff 
-  inline static double kp = 0.01;
-  inline static double ki = 0.0001;
-  inline static double kd = 0.00001;
+  inline static double kp = 0.005;
+  inline static double ki = 0.0000;  
+  inline static double kd = 0.0000;
+  inline static double output_deriv_max = 0.2;
+  inline static double IMax = 20;
 
   inline static double goal = 0;
   inline static double sum = 0;

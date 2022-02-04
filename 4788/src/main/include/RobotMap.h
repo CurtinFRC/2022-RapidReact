@@ -60,6 +60,8 @@
 // Local Files
 #include "ControlMap.h"
 
+static wml::physics::DcMotor mNEO { 12.0, wml::physics::DcMotor::rpm2rads(5880), 1.3, 166, 3.36 };
+
 struct RobotMap {
   /**
    * Controllers
@@ -88,7 +90,12 @@ struct RobotMap {
     wml::TalonSrx indexWheel{ ControlMap::indexMotorPort, 2048};
 
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
-    wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
+    wml::Gearbox shooterGearbox{
+      &shooterMotorGroup,
+      &leftFlyWheelMotor,
+      1.0, 
+      mNEO * 3
+    };
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
