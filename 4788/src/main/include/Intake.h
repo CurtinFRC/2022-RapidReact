@@ -1,7 +1,7 @@
 #pragma once
 
-#include "RobotMap.h";
-#include "controllers/Controllers.h";
+#include "RobotMap.h"
+#include "controllers/Controllers.h"
 
 using Controllers = wml::controllers::SmartControllerGroup;
 

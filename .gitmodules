@@ -1,3 +1,8 @@
 [submodule "CJ-Vision"]
   path = CJ-Vision
+  branch = master
   url = https://github.com/wml-frc/CJ-Vision.gits
+[submodule "4788/MP_Trajedy"]
+	path = 4788/MP_Trajedy
+  branch = AnnaPatch
+	url = https://github.com/CurtinFRC/MP_Trajedy.git
