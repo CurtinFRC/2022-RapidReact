@@ -13,8 +13,15 @@
 enum class TeleopShooter {
   kAuto,
   kManual,
-  kIdle,
+  kStill, //like stationary but easier to spell (kIdle)
   kTesting
+  // kStill, 
+  // kSpinUp,
+  // kInner,
+  // kOuter,
+  // kManual,
+  // kTesting,
+  // kEject
 };
 
 //i could put a state machine inside the state machine so that 
@@ -43,10 +50,11 @@ class Shooter {
   void testing(double dt);
 
  private:
-  TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
+  TeleopShooter _teleopShooter{ TeleopShooter::kAuto};
   wml::controllers::SmartControllerGroup &_contGroup;
 
   double shooterManualSpeed = 0;
   double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
+  double shooterSpeed;
 };

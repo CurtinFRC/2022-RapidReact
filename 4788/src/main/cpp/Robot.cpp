@@ -17,12 +17,9 @@ void Robot::RobotInit() {
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
-  robotMap.shooterSystem.centerFlyWheelMotor.SetInverted(true);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);
-
-  climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
@@ -31,8 +28,10 @@ void Robot::RobotInit() {
   robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
   
   // Set the default strategy for drivetrain to manual
-  drivetrain->SetDefault(std::make_shared<DrivebaseManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+  drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
   drivetrain->StartLoop(100);
+
+  robotMap.drivebaseSystem.dbRightMotor1.SetInverted(true);
 
   //Invert one side of our drivetrain so it'll drive straight
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
@@ -48,8 +47,6 @@ void Robot::RobotPeriodic() {
   dt = currentTimeStamp - lastTimeStamp;
 
   StrategyController::Update(dt);
-  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  robotMap.controlSystem.compressor.Update(dt);
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -72,7 +69,6 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
   intake->teleopOnUpdate(dt);
-  climber->teleopOnUpdate(dt);
 }
 
 // During Test Logic

@@ -43,6 +43,31 @@ wpi.sim.addDriverstation()
 
 model {
   components {
+
+    mP_Trajedy(NativeLibrarySpec) {
+      targetPlatform wpi.platforms.roborio
+      if (includeDesktopSupport) {
+        targetPlatform wpi.platforms.desktop
+      }
+
+      sources.cpp {
+        source {
+          srcDir 'MP_Trajedy/cpp'
+          include '**/*.cpp', '**/.cc'
+        }
+
+        exportedHeaders {
+          srcDir 'MP_Trajedy/include'
+        }
+      }
+
+
+      binaries.all {
+        if (includeDesktopSupport) {
+          cppCompiler.define "WML_DESKTOP_SUPPORT"
+        }
+      }
+    }
     
     "${nativeName}"(NativeExecutableSpec) { // frc user
       targetPlatform wpi.platforms.roborio
@@ -69,6 +94,9 @@ model {
         if (includeDesktopSupport) {
           cppCompiler.define "WML_DESKTOP_SUPPORT"
         }
+
+        // lib project: mP_Trajedy, library: mP_Trajedy, linkage: 'shared' 
+        lib library: "mP_Trajedy"
       }
 
       // Specify this component for deploying.

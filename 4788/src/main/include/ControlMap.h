@@ -38,40 +38,58 @@ struct ControlMap {
   static constexpr double wheelRadius = 0.0762; 
   static constexpr double mass = 50;
 
-  static constexpr int dbLeftPort1 = 99;
-  static constexpr int dbLeftPort2 = 99;
+  static constexpr int dbLeftPort1 = 2;
+  static constexpr int dbLeftPort2 = 3;
 
-  static constexpr int dbRightPort1 = 99;
-  static constexpr int dbRightPort2 = 99;
+  static constexpr int dbRightPort1 = 5;
+  static constexpr int dbRightPort2 = 4;
+
+  static constexpr double maxDrivetrainPower = 0.9;
 
 
   // Intake
-  static constexpr int  intakeMotorPort = 99;
-  static constexpr int  intakeMotorPort_2 = 99;
-  static constexpr bool intakeSolenoid = false;
-  static constexpr int  intakeSolenoidPort = 99;
+  static constexpr int  intakeMotorPort = 9;
 
   // Shooter
-  static constexpr int leftFlyWheelPort = 10;
-  static constexpr int rightFlyWheelPort = 13;
   static constexpr double flyWheelMass = 3;
+  static constexpr int leftFlyWheelPort = 6;
+  static constexpr int rightFlyWheelPort = 11;
+  static constexpr int centerFlyWheelPort = 7;
+  static constexpr int indexMotorPort = 8;
+  inline static double shooterMaxSpeed = 0.5;
+  inline static bool shooterPID = false;
 
-  // Climber
-  static constexpr int climberPort = 99;
-  static constexpr int climberPort1 = 99;
-  static constexpr int climberPort2 = 99;
+  //shooter PID stuff 
+  inline static double kp = 0.005;
+  inline static double ki = 0.0000;  
+  inline static double kd = 0.0000;
+  inline static double output_deriv_max = 0.2;
+  inline static double IMax = 20;
+
+  inline static double goal = 0;
+  inline static double sum = 0;
+  inline static double derror = 0;
+  inline static double previousError = 0;
+  inline static double error = 0;
+  inline static double output = 0;
 
   // ------------------ Controls ------------------
 
   // Shooter
-  inline static const wml::controllers::tAxis shooterManualSpin{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tAxis ShooterManualSpin{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tButton InnerCircleShoot{ coDriver, XboxController::kBumperLeft };
+  // inline static const wml::controllers::tButton OuterCircleShoot{ coDriver, XboxController::kBumperRight };
+  inline static const wml::controllers::tButton PIDON{ coDriver, XboxController::kBumperRight };
+  inline static const wml::controllers::tAxis IndexSpin{ coDriver, XboxController::kRightYAxis };
+
+  inline static const wml::controllers::tButton ShooterSlow{ coDriver, XboxController::kX};
+  inline static const wml::controllers::tButton ShooterMid{ coDriver, XboxController::kY};
+  inline static const wml::controllers::tButton ShooterSpeedChange{ coDriver, XboxController::kB};
+  inline static const wml::controllers::tButton ShooterHighSpeed{ coDriver, XboxController::kA};
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
-  
-  // Climber
-  inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
 
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
