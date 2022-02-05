@@ -51,7 +51,6 @@ void Shooter::teleopOnUpdate(double dt) {
       _shooterSystem.shooterGearbox.transmission->SetVoltage(power);
       // _shooterSystem.shooterGearbox.transmission->SetVoltage(10);
 
-
       break;
     case TeleopShooter::kStill:
 
@@ -83,7 +82,7 @@ double previousError = 0;
 double previousOutput = 0;
 double Shooter::speed(double metersPerSecond, double dt) {
   //radians per second 
-  double input = (_shooterSystem.leftFlyWheelMotor.GetEncoderAngularVelocity());
+  double input = (_shooterSystem.rightFlyWheelMotor.GetEncoderAngularVelocity());
   // std::cout << "angular velocity" << input << std::endl;
   // std::cout << "radians per second" << input << std::endl;
   double error = metersPerSecond - input;
@@ -150,8 +149,8 @@ void Shooter::testing(double dt) {
   _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
 
   //get the average angular velocity of all 3 motors
-  double encoderValue = _shooterSystem.leftFlyWheelMotor.GetEncoderTicksPerRotation();
-  double encoder = _shooterSystem.leftFlyWheelMotor.GetEncoderAngularVelocity();
+  double encoderValue = _shooterSystem.rightFlyWheelMotor.GetEncoderTicksPerRotation();
+  double encoder = _shooterSystem.rightFlyWheelMotor.GetEncoderAngularVelocity();
 
   // double encoderValue = _shooterSystem.leftFlyWheelMotor.GetSensorVelocity();
   // double encoderValue = _shooterSystem.leftFlyWheelMotor.GetEncoderTicks();

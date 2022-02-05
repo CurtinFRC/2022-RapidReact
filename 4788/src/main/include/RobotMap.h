@@ -92,7 +92,7 @@ struct RobotMap {
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
     wml::Gearbox shooterGearbox{
       &shooterMotorGroup,
-      &leftFlyWheelMotor,
+      &rightFlyWheelMotor,
       1.0, 
       mNEO * 3
     };
