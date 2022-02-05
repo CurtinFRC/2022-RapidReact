@@ -26,6 +26,8 @@
 #include <networktables/NetworkTableInstance.h>
 #include <wpi/SmallString.h>
 
+#include 
+
 // WML
 #include <WMLCtre.h>
 #include <controllers/Controllers.h>
@@ -51,6 +53,8 @@
 #include <strategy/Strategy.h>
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
+
+#include "MP_Trajedy.h"
 
 // WML Rev
 #include <WMLRev.h>
