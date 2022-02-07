@@ -4,10 +4,12 @@
 #include "controllers/Controller.h"
 #include "RobotMap.h"
 
-class Sim {
- public:
-	void Init();
-	void Periodic();
+class Auto {
+public:
+  Auto(RobotMap::DrivebaseSystem &drivebaseSystem) : _drivebaseSystem(drivebaseSystem) {}
+  void Init();
+  void Periodic();
 
- private:
+private:
+  RobotMap::DrivebaseSystem &_drivebaseSystem;
 };

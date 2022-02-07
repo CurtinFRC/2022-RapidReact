@@ -1,58 +1,60 @@
-#include "Auto.h"
 #include <iostream>
+#include "Auto.h"
+#include "ControlMap.h"
 
 
 double rotsPerMeter = (32/16); // 0.5 rotations per meter
 
-double motors = 0;
 
-Spline spline {{
+Splines::Spline spline {{
   {0,0},{1,0},{2,2},{3,0},{4,0}
 }};
 
 int output = 0;
-SplinePoint locationOnPath = {0,0};
+Splines::SplinePoint locationOnPath = {0,0};
 double leftEncVal = 0;
 double rightEncVal = 0;
 double avgEncVal = 0;
 double totalLength = 0;
 
+
+
 /**
  * Initializer (Updates once)
  */
-void Sim::Init() {
-  output = Generator::buildPath(spline);
+void Auto::Init() {
+  output = Splines::Splines::buildPath(spline);
   std::cout << "Total Length: " << spline.totalLength << std::endl;
 }
 
 /**
  * Periodic Update
  */
-void Sim::Periodic() {
+void Auto::Periodic() {
   double leftPower = 0, rightPower = 0;
 
-  leftEncVal = leftEnc.getRotations();
-  rightEncVal = rightEnc.getRotations();
+  leftEncVal = _drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations();
+  rightEncVal = _drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations();
   avgEncVal = (leftEncVal + rightEncVal) / 2;
 
   double distance = avgEncVal/2;
 
-  std::cout << "Average Encoder: " << avgEncVal << std::endl;
-  std::cout << "Average Meter: " << distance << std::endl;
-  std::cout << "Total Lenght: " << spline.totalLength << std::endl;
+  // std::cout << "Average Encoder: " << avgEncVal << std::endl;
+  // std::cout << "Average Meter: " << distance << std::endl;
+  // std::cout << "Total Lenght: " << spline.totalLength << std::endl;
 
   totalLength = spline.totalLength;
 
   // Main follower
   if (distance < spline.totalLength) {
-    float t = RobotStuff::dist2t(distance, spline);
+    float t = RobotControl::dist2t(distance, spline);
     // std::cout << "t value: " << t << std::endl;
 
     leftPower = 0.1;
     rightPower = 0.1;
 
     double goalAngle = Splines::getSplineAngleDeg(t, spline);
-    double robotAngle = World::getGyro(0);
+    double robotAngle = _drivebaseSystem.drivetrain.GetConfig().gyro->GetAngle(); 
 
     double angleError = (goalAngle - robotAngle) / 180;
 
@@ -60,7 +62,6 @@ void Sim::Periodic() {
     rightPower -= angleError;
   }
 
-  m1.set(leftPower);
-  m3.set(rightPower);
-  // std::cout << "Encoder Rotations: " << leftEnc.getRotations() << std::endl;
+  _drivebaseSystem.drivetrain.Set(leftPower, rightPower);
+
 }
