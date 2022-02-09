@@ -8,6 +8,8 @@
 #include "Drivebase.h"
 #include "Intake.h"
 
+#include "Strategy/ShooterStrategy.h"
+
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
 public:
 

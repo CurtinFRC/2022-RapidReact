@@ -8,6 +8,11 @@ double currentTimeStamp;
 double lastTimeStamp;
 double dt;
 
+template<typename Terminator>
+void t2000(Terminator terminate) {
+  std::cout << terminate << " Target Aquired" << std::endl;
+}
+
 // General Robot Logic
 void Robot::RobotInit() {
   //Init the controllers
@@ -15,6 +20,9 @@ void Robot::RobotInit() {
 
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
+  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Mag Manual Strategy", *shooter, robotMap.contGroup));
+  StrategyController::Register(shooter);
+
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
@@ -46,7 +54,10 @@ void Robot::RobotPeriodic() {
   currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
   dt = currentTimeStamp - lastTimeStamp;
 
+  t2000("<Anna>");
+
   StrategyController::Update(dt);
+  shooter->update(dt);
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -65,9 +76,9 @@ void Robot::AutonomousPeriodic() {}
 // Manual Robot Logic
 void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
+  Schedule(shooter->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-  shooter->teleopOnUpdate(dt);
   intake->teleopOnUpdate(dt);
 }
 
