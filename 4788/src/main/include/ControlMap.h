@@ -9,15 +9,20 @@ using namespace wml;
 using namespace wml::controllers;
 
 struct ControlMap { 
+  // USB port numbers
+  static constexpr int driver = 0;
+  static constexpr int coDriver = 1;
+
   static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
-  //remap Here (map POV buttons to names ect)
+    contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
+      { Controller::POVPos::kLeft, ControlMap::farShoot },
+      { Controller::POVPos::kRight, ControlMap::noahShoot },
+      { Controller::POVPos::kBottom, ControlMap::shooterEject }
+    });
   }
 
   // ------------------ Values ------------------
 
-  // USB port numbers
-  static constexpr int driver = 0;
-  static constexpr int coDriver = 1;
 
   // Controllers
   static constexpr int xbox1Port = driver;
@@ -48,12 +53,10 @@ struct ControlMap {
   static constexpr int  intakeMotorPort = 9;
 
   // Shooter
-  static constexpr double flyWheelMass = 3;
-  static constexpr int leftFlyWheelPort = 6;
-  static constexpr int rightFlyWheelPort = 11;
-  static constexpr int centerFlyWheelPort = 7;
+  static constexpr int leftFlyWheelPort = 99;
+  static constexpr int rightFlyWheelPort = 99;
+  static constexpr int centerFlyWheelPort = 99;
   static constexpr int indexMotorPort = 8;
-  inline static double shooterMaxSpeed = 0.5;
   inline static bool shooterPID = false;
 
   inline static double shooterEjectPower = 0.2;
@@ -63,13 +66,6 @@ struct ControlMap {
   inline static double ki = 0;  
   inline static double kd = -0.00001;
   inline static double IMax = 40;
-
-  inline static double goal = 0;
-  inline static double sum = 0;
-  inline static double derror = 0;
-  inline static double previousError = 0;
-  inline static double error = 0;
-  inline static double output = 0;
 
   // Climber
   static constexpr int climberPort = 99;
@@ -85,7 +81,11 @@ struct ControlMap {
 
   // inline static const wml::controllers::tButton pidON{ coDriver, XboxController::kBumperRight }; //used only for PID testing
   inline static const wml::controllers::tAxis indexSpin{ coDriver, XboxController::kRightYAxis };
-  inline static const wml::controllers::tButton shooterEject{ coDriver, XboxController::kA }; //switch to a POV button later
+  inline static const wml::controllers::tButton shooterEject{ coDriver, __LINE__ + 30 }; //switch to a POV button later
+
+  inline static const wml::controllers::tPOV shoot{ coDriver, 0};
+  inline static const wml::controllers::tButton farShoot{ coDriver, __LINE__ + 30 };
+  inline static const wml::controllers::tButton noahShoot{ coDriver, __LINE__ + 30 }; //haha get it, like noahtunes launch pad
 
   // Drivetrain
   inline static const wml::controllers::tAxis leftDrive{driver, XboxController::kLeftYAxis};
@@ -97,4 +97,6 @@ struct ControlMap {
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
+
+
 };
