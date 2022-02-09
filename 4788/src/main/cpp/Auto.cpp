@@ -2,7 +2,6 @@
 #include "Auto.h"
 #include "ControlMap.h"
 
-
 // double rotsPerMeter = (32/16); // 0.5 rotations per meter
 
 
