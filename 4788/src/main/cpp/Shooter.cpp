@@ -79,14 +79,8 @@ double Shooter::speed(double goal, double dt) {
   double derror = (error - previousError) / dt;
   sum += error * dt;
 
-  double output = 0.46 * error + 0 * sum + (-0.00001) * derror;
+  double output = ControlMap::kp * error + ControlMap::ki * sum + (ControlMap::kd) * derror;
   std::cout << "P Value: " << ControlMap::kp << std::endl;
-
-  // double deriv = (output - previousOutput) / dt;
-  // if (std::fabs(deriv) > ControlMap::output_deriv_max) {
-  //   output = previousOutput + ((deriv > 0) ? 1 : -1) * ControlMap::output_deriv_max * dt;
-  //   std::cout << "Limit" << std::endl;
-  // }
 
   auto &motor = _shooterSystem.shooterGearbox.motor;
   double Vmax = ControlMap::IMax * motor.R() + motor.kw() * input;
@@ -97,7 +91,6 @@ double Shooter::speed(double goal, double dt) {
   previousError = error;
   previousOutput = output;
 
-  // ControlMap::output = (-(ControlMap::output)) / 10;
   std::cout << "error: " << error << std::endl;
   std::cout << "Output: " << output*12 << std::endl;
   // std::cout << "DT: " << dt << std::endl;

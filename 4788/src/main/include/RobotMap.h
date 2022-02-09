@@ -75,7 +75,8 @@ struct RobotMap {
    * Includes Pressure sensor and compressor
    */
   struct ControlSystem {
-
+    wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
+    wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
@@ -99,21 +100,16 @@ struct RobotMap {
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
-    // Drivetrain Left Motors
-    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
-    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
+    wml::TalonFX leftMotor{ ControlMap::leftMotorPort, 2048 };
+    wml::TalonFX rightMotor{ ControlMap::rightMotorPort, 2048 };
 
-    // Drivetrain Right Motors
-    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
-    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
-    
     // Motor Grouping
-    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
-    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
+    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(leftMotor);
+    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(rightMotor);
 
     // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
-    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
+    wml::Gearbox LGearbox{&leftMotors, &leftMotor};
+    wml::Gearbox RGearbox{&rightMotors, &rightMotor};
 
     wml::sensors::NavX navX{};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
@@ -127,5 +123,9 @@ struct RobotMap {
   struct IntakeSystem {
     wml::TalonSrx intake{ControlMap::intakeMotorPort, 2048};
   }; IntakeSystem intakeSystem;
+
+  struct ClimberSystem {
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::climberPort1, ControlMap::climberPort2, 0.1};
+  }; ClimberSystem climberSystem;
 
 };

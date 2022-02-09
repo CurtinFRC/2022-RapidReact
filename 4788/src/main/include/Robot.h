@@ -7,6 +7,7 @@
 #include "Shooter.h"
 #include "Drivebase.h"
 #include "Intake.h"
+#include "Climber.h"
 
 #include "Strategy/ShooterStrategy.h"
 
@@ -51,4 +52,5 @@ private:
   wml::Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
+  Climber *climber;
 };

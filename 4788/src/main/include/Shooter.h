@@ -18,6 +18,8 @@ class Shooter : public wml::StrategySystem {
   void setFlywheel(double power);
   void setIndex(double power);
   void setAuto(double goal, double dt);
+
+  //PID for the shooter
   double speed(double goal, double dt);
 
   void updateShooter(double dt);
@@ -26,11 +28,7 @@ class Shooter : public wml::StrategySystem {
  private:
   TeleopShooter _teleopShooter{ TeleopShooter::kAuto};
   wml::controllers::SmartControllerGroup &_contGroup;
-
-  double shooterManualSpeed = 0;
-  double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
-  double shooterSpeed;
 
   double flyWheelGoal = 0;
   double setFlyWheelPower = 0;
