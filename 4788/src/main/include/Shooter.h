@@ -3,35 +3,34 @@
 #include "controllers/Controllers.h"
 #include "RobotMap.h"
 
-enum class TeleopShooter {
-  kAuto,
+enum class ShooterState {
+  kPID,
   kManual,
-  kIdle,
-  kTesting,
-  kekekekek
+  kIdle
 };
 
 class Shooter : public wml::StrategySystem {
  public: 
   Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
 
-  void setFlywheel(double power);
+  void setManual(double voltage);
+  void setPID(double angularVelocity, double dt);
   void setIndex(double power);
-  void setAuto(double goal, double dt);
 
   //PID for the shooter
-  double speed(double goal, double dt);
+  double calculatePID(double angularVelocity, double dt);
 
   void updateShooter(double dt);
   void update(double dt);
 
  private:
-  TeleopShooter _teleopShooter{ TeleopShooter::kAuto};
+  ShooterState _state{ ShooterState::kPID};
   wml::controllers::SmartControllerGroup &_contGroup;
   RobotMap::ShooterSystem &_shooterSystem;
 
   double flyWheelGoal = 0;
-  double setFlyWheelPower = 0;
+  double setFlyWheelVoltage = 0;
   double pidShooterSpeed = 0;
-  double setIndexPower = 0;
+  double setIndexVoltage = 0;
+  double angularVelocityGoal = 0;
 };

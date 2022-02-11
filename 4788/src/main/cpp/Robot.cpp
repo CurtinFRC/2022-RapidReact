@@ -20,7 +20,7 @@ void Robot::RobotInit() {
 
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Mag Manual Strategy", *shooter, robotMap.contGroup));
+  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
   StrategyController::Register(shooter);
 
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
@@ -40,8 +40,6 @@ void Robot::RobotInit() {
   // Set the default strategy for drivetrain to manual
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
   drivetrain->StartLoop(100);
-
-  robotMap.drivebaseSystem.rightMotor.SetInverted(true);
 
   //Invert one side of our drivetrain so it'll drive straight
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);

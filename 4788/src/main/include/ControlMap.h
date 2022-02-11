@@ -60,6 +60,10 @@ struct ControlMap {
   inline static bool shooterPID = false;
 
   inline static double shooterEjectPower = 0.2;
+  inline static double innerCircleShootValue = 200;
+  inline static double outerCircleShootValue = 400;
+  inline static double farShootValue = 500;
+  inline static double noahShootValue = 600;
 
   //shooter PID stuff 
   inline static double kp = 0.46;
@@ -97,6 +101,4 @@ struct ControlMap {
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
-
-
 };
