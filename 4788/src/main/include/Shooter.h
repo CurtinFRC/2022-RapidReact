@@ -3,50 +3,34 @@
 #include "controllers/Controllers.h"
 #include "RobotMap.h"
 
-/**
- * State machine for the shooter in teleop
- * kAuto -> fot auto firing 
- * kManual -> driver controlled firing with a trigger
- * kStill -> Shooter is stationary. 
- * kTesting -> for testing :)
- */
-enum class TeleopShooter {
-  kAuto,
+enum class ShooterState {
+  kPID,
   kManual,
-  kIdle,
-  kTesting
+  kIdle
 };
 
-//i could put a state machine inside the state machine so that 
-// manual and teleop modes can have a couple of states. 
-
-class Shooter {
+class Shooter : public wml::StrategySystem {
  public: 
-  // Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, wml::controllers::SmartControllerGroup &contGroup);
   Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
-  /**
-   * 
-   */
-  void teleopOnUpdate(double dt);
 
-  /**
-   * Sets the flywheel to a specific speed,
-   * later can be called in teleopOnUpdate for different distances.
-   */
-  double speed(double metersPerSecond, double dt);
+  void setManual(double voltage);
+  void setPID(double angularVelocity, double dt);
+  void setIndex(double voltage);
 
-  /**
-   * manual control of the shooter. 
-   */
-  void manualControl(double dt);
+  //PID for the shooter
+  double calculatePID(double angularVelocity, double dt);
 
-  void testing(double dt);
+  void updateShooter(double dt);
+  void update(double dt);
 
  private:
-  TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
+  ShooterState _state{ ShooterState::kPID};
   wml::controllers::SmartControllerGroup &_contGroup;
-
-  double shooterManualSpeed = 0;
-  double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
+
+  double _flyWheelVoltage = 0;
+  double _setIndexVoltage = 0;
+  double _angularVelocityGoal = 0;
+  double _sum = 0;
+  double _previousError = 0;
 };

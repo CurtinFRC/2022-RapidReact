@@ -9,15 +9,20 @@ using namespace wml;
 using namespace wml::controllers;
 
 struct ControlMap { 
-  static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
-  //remap Here (map POV buttons to names ect)
-  }
-
-  // ------------------ Values ------------------
-
   // USB port numbers
   static constexpr int driver = 0;
   static constexpr int coDriver = 1;
+
+  static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
+    contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
+      { Controller::POVPos::kLeft, ControlMap::farShoot },
+      { Controller::POVPos::kRight, ControlMap::noahShoot },
+      { Controller::POVPos::kBottom, ControlMap::shooterEject }
+    });
+  }
+
+  // ------------------ Values ------------------
+  //structmap 2 electric boogaloo
 
   // Controllers
   static constexpr int xbox1Port = driver;
@@ -33,43 +38,68 @@ struct ControlMap {
   static constexpr int compressorPort = 0;
 
   // Drivetrain
-  static constexpr double trackWidth = 0.56;
-  static constexpr double trackDepth = 0.60;
-  static constexpr double wheelRadius = 0.0762; 
-  static constexpr double mass = 50;
+  struct Drivetrain {
+    static constexpr double trackWidth = 0.56;
+    static constexpr double trackDepth = 0.60;
+    static constexpr double wheelRadius = 0.0762; 
+    static constexpr double mass = 50;
 
-  static constexpr int dbLeftPort1 = 99;
-  static constexpr int dbLeftPort2 = 99;
+    static constexpr int leftMotorPort = 99;
+    static constexpr int rightMotorPort = 99;
 
-  static constexpr int dbRightPort1 = 99;
-  static constexpr int dbRightPort2 = 99;
+    static constexpr double maxDrivetrainPower = 0.5; //never trust drivers
+  };
 
+  struct Intake {
+    static constexpr int  intakeMotorPort = 9;
+  };
 
-  // Intake
-  static constexpr int  intakeMotorPort = 99;
-  static constexpr int  intakeMotorPort_2 = 99;
-  static constexpr bool intakeSolenoid = false;
-  static constexpr int  intakeSolenoidPort = 99;
+  struct Shooter {
+    static constexpr int leftFlyWheelPort = 99;
+    static constexpr int rightFlyWheelPort = 99;
+    static constexpr int centerFlyWheelPort = 99;
+    static constexpr int indexMotorPort = 8;
+    inline static bool shooterPID = false;
 
-  // Shooter
-  static constexpr int leftFlyWheelPort = 10;
-  static constexpr int rightFlyWheelPort = 13;
-  static constexpr double flyWheelMass = 3;
+    inline static double shooterEjectPower = 0.2;
+    inline static double innerCircleShootValue = 200;
+    inline static double outerCircleShootValue = 400;
+    inline static double farShootValue = 500;
+    inline static double noahShootValue = 600;
+  };
 
-  // Climber
-  static constexpr int climberPort = 99;
-  static constexpr int climberPort1 = 99;
-  static constexpr int climberPort2 = 99;
+  struct ShooterGains {
+    inline static double kp = 0.46;
+    inline static double ki = 0;  
+    inline static double kd = -0.00001;
+    inline static double IMax = 40;
+  };
+
+  struct Climber {
+    static constexpr int climberPort = 99;
+    static constexpr int climberPort1 = 99;
+    static constexpr int climberPort2 = 99;
+  };
 
   // ------------------ Controls ------------------
 
   // Shooter
-  inline static const wml::controllers::tAxis shooterManualSpin{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tAxis manualFlyWheel{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tButton innerCircleShoot{ coDriver, XboxController::kBumperLeft };
+  inline static const wml::controllers::tButton outerCircleShoot{ coDriver, XboxController::kBumperRight };
+
+  // inline static const wml::controllers::tButton pidON{ coDriver, XboxController::kBumperRight }; //used only for PID testing
+  inline static const wml::controllers::tAxis indexSpin{ coDriver, XboxController::kRightYAxis };
+  inline static const wml::controllers::tButton shooterEject{ coDriver, __LINE__ + 30 }; //switch to a POV button later
+
+  inline static const wml::controllers::tPOV shoot{ coDriver, 0};
+  inline static const wml::controllers::tButton farShoot{ coDriver, __LINE__ + 30 };
+  inline static const wml::controllers::tButton noahShoot{ coDriver, __LINE__ + 30 }; //haha get it, like noahtunes launch pad
 
   // Drivetrain
-  inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
-  inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
-  
+  inline static const wml::controllers::tAxis leftDrive{driver, XboxController::kLeftYAxis};
+  inline static const wml::controllers::tAxis rightDrive{driver, XboxController::kRightYAxis};
+
   // Climber
   inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
 

@@ -11,8 +11,7 @@ class Climber {
   Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
   void teleopOnUpdate(double dt);
-  void autoOnUpdate(double dt);
-  void testOnUpdate(double dt);
+  void onDisable(double dt);
 
  private:
   bool ClimberToggle = false;
