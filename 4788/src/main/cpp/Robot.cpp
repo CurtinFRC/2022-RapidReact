@@ -23,8 +23,7 @@ void Robot::RobotInit() {
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
   StrategyController::Register(shooter);
 
-  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
-  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);

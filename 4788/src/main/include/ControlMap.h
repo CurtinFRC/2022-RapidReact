@@ -22,7 +22,7 @@ struct ControlMap {
   }
 
   // ------------------ Values ------------------
-
+  //structmap 2 electric boogaloo
 
   // Controllers
   static constexpr int xbox1Port = driver;
@@ -38,43 +38,48 @@ struct ControlMap {
   static constexpr int compressorPort = 0;
 
   // Drivetrain
-  static constexpr double trackWidth = 0.56;
-  static constexpr double trackDepth = 0.60;
-  static constexpr double wheelRadius = 0.0762; 
-  static constexpr double mass = 50;
+  struct Drivetrain {
+    static constexpr double trackWidth = 0.56;
+    static constexpr double trackDepth = 0.60;
+    static constexpr double wheelRadius = 0.0762; 
+    static constexpr double mass = 50;
 
-  static constexpr int leftMotorPort = 99;
-  static constexpr int rightMotorPort = 99;
+    static constexpr int leftMotorPort = 99;
+    static constexpr int rightMotorPort = 99;
 
-  static constexpr double maxDrivetrainPower = 0.5; //never trust drivers
+    static constexpr double maxDrivetrainPower = 0.5; //never trust drivers
+  };
 
+  struct Intake {
+    static constexpr int  intakeMotorPort = 9;
+  };
 
-  // Intake
-  static constexpr int  intakeMotorPort = 9;
+  struct Shooter {
+    static constexpr int leftFlyWheelPort = 99;
+    static constexpr int rightFlyWheelPort = 99;
+    static constexpr int centerFlyWheelPort = 99;
+    static constexpr int indexMotorPort = 8;
+    inline static bool shooterPID = false;
 
-  // Shooter
-  static constexpr int leftFlyWheelPort = 99;
-  static constexpr int rightFlyWheelPort = 99;
-  static constexpr int centerFlyWheelPort = 99;
-  static constexpr int indexMotorPort = 8;
-  inline static bool shooterPID = false;
+    inline static double shooterEjectPower = 0.2;
+    inline static double innerCircleShootValue = 200;
+    inline static double outerCircleShootValue = 400;
+    inline static double farShootValue = 500;
+    inline static double noahShootValue = 600;
+  };
 
-  inline static double shooterEjectPower = 0.2;
-  inline static double innerCircleShootValue = 200;
-  inline static double outerCircleShootValue = 400;
-  inline static double farShootValue = 500;
-  inline static double noahShootValue = 600;
+  struct ShooterGains {
+    inline static double kp = 0.46;
+    inline static double ki = 0;  
+    inline static double kd = -0.00001;
+    inline static double IMax = 40;
+  };
 
-  //shooter PID stuff 
-  inline static double kp = 0.46;
-  inline static double ki = 0;  
-  inline static double kd = -0.00001;
-  inline static double IMax = 40;
-
-  // Climber
-  static constexpr int climberPort = 99;
-  static constexpr int climberPort1 = 99;
-  static constexpr int climberPort2 = 99;
+  struct Climber {
+    static constexpr int climberPort = 99;
+    static constexpr int climberPort1 = 99;
+    static constexpr int climberPort2 = 99;
+  };
 
   // ------------------ Controls ------------------
 

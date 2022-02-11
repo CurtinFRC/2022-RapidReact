@@ -8,46 +8,47 @@ using namespace wml::controllers;
 Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {}
 
 void Shooter::setManual(double voltage) {
-  setFlyWheelVoltage = voltage;
+  _flyWheelVoltage = voltage;
   _state = ShooterState::kManual;
 }
 
-void Shooter::setIndex(double power) {
-  setIndexVoltage = power;
+void Shooter::setIndex(double voltage) {
+  _setIndexVoltage = voltage;
 }
 
 void Shooter::setPID(double goal, double dt) {
   _state = ShooterState::kPID;
-  angularVelocityGoal = goal;
+  _angularVelocityGoal = goal;
 }
 
 void Shooter::updateShooter(double dt) {
-  double pidSetPower = calculatePID(angularVelocityGoal, dt);
 
 
   switch (_state) {
   case ShooterState::kManual:
-    _shooterSystem.shooterGearbox.transmission->SetVoltage(setFlyWheelVoltage * 12);
+    _shooterSystem.shooterGearbox.transmission->SetVoltage(_flyWheelVoltage * 12);
 
-    _shooterSystem.indexWheel.Set(setIndexVoltage);
+    _shooterSystem.indexWheel.Set(_setIndexVoltage);
 
     break;
 
   case ShooterState::kIdle:
 
-    _shooterSystem.indexWheel.Set(setIndexVoltage);
+    _shooterSystem.indexWheel.Set(_setIndexVoltage);
     _shooterSystem.shooterGearbox.transmission->SetVoltage(0);
 
     break;
 
   case ShooterState::kPID:
-    _shooterSystem.indexWheel.Set(setIndexVoltage);
+    _flyWheelVoltage = calculatePID(_angularVelocityGoal, dt);
+    _shooterSystem.indexWheel.Set(_setIndexVoltage);
 
-    _shooterSystem.shooterGearbox.transmission->SetVoltage(pidSetPower * 12);
+    _shooterSystem.shooterGearbox.transmission->SetVoltage(_flyWheelVoltage * 12);
     std::cout << "shooter speed" << _shooterSystem.rightFlyWheelMotor.GetEncoderAngularVelocity() << std::endl; 
     break;
 
   default:
+    _state = ShooterState::kIdle;
     std::cout << "in default case, somthing is wrong" << std::endl;
     break;
   }
@@ -58,26 +59,23 @@ void Shooter::update(double dt) {
 }
 
 
-double sum = 0;
-double previousError = 0;
 double Shooter::calculatePID(double angularVelocity, double dt) {
-  std::cout << "goal: " << angularVelocityGoal << std::endl;
   double input = (_shooterSystem.leftFlyWheelMotor.GetEncoderAngularVelocity());
   std::cout << "angular velocity" << input << std::endl;
-  double error = angularVelocityGoal - input;
-  double derror = (error - previousError) / dt;
-  sum += error * dt;
+  double error = _angularVelocityGoal - input;
+  double derror = (error - _previousError) / dt;
+  _sum += error * dt;
 
-  double output = ControlMap::kp * error + ControlMap::ki * sum + (ControlMap::kd) * derror;
-  std::cout << "P Value: " << ControlMap::kp << std::endl;
+  double output = ControlMap::ShooterGains::kp * error + ControlMap::ShooterGains::ki * _sum + (ControlMap::ShooterGains::kd) * derror;
+  std::cout << "P Value: " << ControlMap::ShooterGains::kp << std::endl;
 
   auto &motor = _shooterSystem.shooterGearbox.motor;
-  double Vmax = ControlMap::IMax * motor.R() + motor.kw() * input;
-  double Vmin = -(ControlMap::IMax) * motor.R() + motor.kw() * input;
+  double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * input;
+  double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * input;
 
   output = std::min(std::max(output, Vmin), Vmax);
 
-  previousError = error;
+  _previousError = error;
 
   std::cout << "error: " << error << std::endl;
   std::cout << "Output: " << output*12 << std::endl;

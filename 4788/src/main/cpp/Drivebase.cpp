@@ -13,8 +13,8 @@ void DrivetrainManual::OnUpdate(double dt) {
   double leftPower = fabs(_contGroup.Get(ControlMap::leftDrive)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::leftDrive) : 0;
   double rightPower = fabs(_contGroup.Get(ControlMap::rightDrive)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::rightDrive) : 0;
 
-  leftPower *= ControlMap::maxDrivetrainPower;
-  rightPower *= ControlMap::maxDrivetrainPower;
+  leftPower *= ControlMap::Drivetrain::maxDrivetrainPower;
+  rightPower *= ControlMap::Drivetrain::maxDrivetrainPower;
 
   _drivetrain.Set(leftPower, rightPower);
 }

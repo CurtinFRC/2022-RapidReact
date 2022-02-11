@@ -15,7 +15,7 @@ class Shooter : public wml::StrategySystem {
 
   void setManual(double voltage);
   void setPID(double angularVelocity, double dt);
-  void setIndex(double power);
+  void setIndex(double voltage);
 
   //PID for the shooter
   double calculatePID(double angularVelocity, double dt);
@@ -28,9 +28,9 @@ class Shooter : public wml::StrategySystem {
   wml::controllers::SmartControllerGroup &_contGroup;
   RobotMap::ShooterSystem &_shooterSystem;
 
-  double flyWheelGoal = 0;
-  double setFlyWheelVoltage = 0;
-  double pidShooterSpeed = 0;
-  double setIndexVoltage = 0;
-  double angularVelocityGoal = 0;
+  double _flyWheelVoltage = 0;
+  double _setIndexVoltage = 0;
+  double _angularVelocityGoal = 0;
+  double _sum = 0;
+  double _previousError = 0;
 };

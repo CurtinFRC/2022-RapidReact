@@ -12,15 +12,15 @@ void ShooterManualStrategy::OnUpdate(double dt) {
   double manualFlyWheelPower = fabs(_contGroup.Get(ControlMap::manualFlyWheel)) > fabs(ControlMap::xboxDeadzone) ? _contGroup.Get(ControlMap::manualFlyWheel) : 0;
 
   if (_contGroup.Get(ControlMap::innerCircleShoot)) {
-    _shooter.setPID(ControlMap::innerCircleShootValue, dt);
+    _shooter.setPID(ControlMap::Shooter::innerCircleShootValue, dt);
   } else if (_contGroup.Get(ControlMap::outerCircleShoot)) {
-    _shooter.setPID(ControlMap::outerCircleShootValue, dt);
+    _shooter.setPID(ControlMap::Shooter::outerCircleShootValue, dt);
   } else if (_contGroup.Get(ControlMap::shooterEject)) {
-    _shooter.setManual(-ControlMap::shooterEjectPower);
+    _shooter.setManual(-ControlMap::Shooter::shooterEjectPower);
   } else if (_contGroup.Get(ControlMap::farShoot)) {
-    _shooter.setPID(ControlMap::farShootValue, dt);
+    _shooter.setPID(ControlMap::Shooter::farShootValue, dt);
   } else if (_contGroup.Get(ControlMap::noahShoot)) {
-    _shooter.setPID(ControlMap::noahShootValue, dt);
+    _shooter.setPID(ControlMap::Shooter::noahShootValue, dt);
   } else {
     _shooter.setManual(manualFlyWheelPower);
   }
