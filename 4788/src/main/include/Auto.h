@@ -6,10 +6,11 @@
 
 class Auto {
 public:
-  Auto(RobotMap::DrivebaseSystem &drivebaseSystem) : _drivebaseSystem(drivebaseSystem) {}
+  Auto(Drivetrain &drivetrain) : _drivetrain(drivetrain) {}
   void init();
   void periodic(double dt);
 
 private:
-  RobotMap::DrivebaseSystem &_drivebaseSystem;
+  // RobotMap::DrivebaseSystem &_drivebaseSystem;
+  Drivetrain &_drivetrain;
 };

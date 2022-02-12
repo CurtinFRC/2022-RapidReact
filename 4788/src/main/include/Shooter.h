@@ -1,60 +1,36 @@
-#pragma once 
+// #pragma once 
 
-#include "controllers/Controllers.h"
-#include "RobotMap.h"
+// #include "controllers/Controllers.h"
+// #include "RobotMap.h"
 
-/**
- * State machine for the shooter in teleop
- * kAuto -> fot auto firing 
- * kManual -> driver controlled firing with a trigger
- * kStill -> Shooter is stationary. 
- * kTesting -> for testing :)
- */
-enum class TeleopShooter {
-  kAuto,
-  kManual,
-  kStill, //like stationary but easier to spell (kIdle)
-  kTesting
-  // kStill, 
-  // kSpinUp,
-  // kInner,
-  // kOuter,
-  // kManual,
-  // kTesting,
-  // kEject
-};
+// enum class ShooterState {
+//   kPID,
+//   kManual,
+//   kIdle
+// };
 
-//i could put a state machine inside the state machine so that 
-// manual and teleop modes can have a couple of states. 
+// class Shooter : public wml::StrategySystem {
+//  public: 
+//   Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
 
-class Shooter {
- public: 
-  // Shooter(rev::CANSparkMax &leftFlyWheelMotor, rev::CANSparkMax &rightFlyWheelMotor, wml::controllers::SmartControllerGroup &contGroup);
-  Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
-  /**
-   * 
-   */
-  void teleopOnUpdate(double dt);
+//   void setManual(double voltage);
+//   void setPID(double angularVelocity, double dt);
+//   void setIndex(double voltage);
 
-  /**
-   * Sets the flywheel to a specific speed,
-   * later can be called in teleopOnUpdate for different distances.
-   */
-  double speed(double metersPerSecond, double dt);
+//   //PID for the shooter
+//   double calculatePID(double angularVelocity, double dt);
 
-  /**
-   * manual control of the shooter. 
-   */
-  void manualControl(double dt);
+//   void updateShooter(double dt);
+//   void update(double dt);
 
-  void testing(double dt);
+//  private:
+//   ShooterState _state{ ShooterState::kPID};
+//   wml::controllers::SmartControllerGroup &_contGroup;
+//   RobotMap::ShooterSystem &_shooterSystem;
 
- private:
-  TeleopShooter _teleopShooter{ TeleopShooter::kAuto};
-  wml::controllers::SmartControllerGroup &_contGroup;
-
-  double shooterManualSpeed = 0;
-  double shooterTestingSpeed = 0;
-  RobotMap::ShooterSystem &_shooterSystem;
-  double shooterSpeed;
-};
+//   double _flyWheelVoltage = 0;
+//   double _setIndexVoltage = 0;
+//   double _angularVelocityGoal = 0;
+//   double _sum = 0;
+//   double _previousError = 0;
+// };

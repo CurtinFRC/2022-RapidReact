@@ -2,19 +2,13 @@
 #include "Auto.h"
 #include "ControlMap.h"
 
-// double rotsPerMeter = (32/16); // 0.5 rotations per meter
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932386264338327
+#endif
 
-// Splines::Spline spline {{
-//   {0,0},{1,0},{2,2},{3,0},{4,0}
-// }};
-
-// int output = 0;
-// Splines::SplinePoint locationOnPath = {0,0};
-// double leftEncVal = 0;
-// double rightEncVal = 0;
-// double avgEncVal = 0;
-// double totalLength = 0;
+double gearboxRatio = 6.10;
+double wheelSize = 0.1016;
 
 #include "Trajectory.h"
 
@@ -40,12 +34,26 @@ void Auto::init() {
  * Periodic Update
  */
 void Auto::periodic(double dt) {
-  double leftPower = 0, rightPower = 0;
+  double leftPower = 0.15, rightPower = 0.15;
 
-  std::pair<double, double> output = robotControl.followSpline(dt);
-  leftPower = output.first;
-  rightPower = output.second;
+  std::cout << "Test" << std::endl;
 
-  _drivebaseSystem.drivetrain.Set(leftPower, rightPower);
+  // double leftRotations = _drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()/gearboxRatio;
+  // double rightRotations = _drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()/gearboxRatio;
+  // double averageRotations = (leftRotations+rightRotations)/2;
+  // gyro = _drivebaseSystem.drivetrain.GetConfig().gyro->GetAngle();
+  
+  // double wheelCirc = M_PI*wheelSize;
+
+  // // Gearbox ratio 6.10:1
+  // // Wheel size is 4 inches -> 0.1016
+  // // Distance = motor rotations -> wheel rotations -> circumference
+  // distance = wheelCirc*averageRotations;
+
+  // std::pair<double, double> output = robotControl.followSpline(dt);
+  // leftPower = output.first;
+  // rightPower = output.second;
+
+  _drivetrain.Set(leftPower, rightPower);
 
 }

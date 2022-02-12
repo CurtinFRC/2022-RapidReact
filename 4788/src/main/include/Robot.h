@@ -8,6 +8,8 @@
 #include "Drivebase.h"
 #include "Intake.h"
 
+#include "Strategy/ShooterStrategy.h"
+
 // Auto
 #include "Auto.h"
 
@@ -50,7 +52,8 @@ public:
 private:
   RobotMap robotMap;
   wml::Drivetrain *drivetrain;
-  Shooter *shooter;
+  // Shooter *shooter;
   Intake *intake;
   Auto *autonomous;
+  // Climber *climber;
 };

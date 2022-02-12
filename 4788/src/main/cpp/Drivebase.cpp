@@ -10,15 +10,11 @@ DrivetrainManual::DrivetrainManual(std::string name, Drivetrain &drivetrain, Sma
 }
 
 void DrivetrainManual::OnUpdate(double dt) {
-  // double leftPower = fabs(_contGroup.GetController(0).Get(ControlMap::drivebaseL)) > ControlMap::triggerDeadzone ? _contGroup.GetController(0).Get(ControlMap::drivebaseL) : 0;
-  // double rightPower = fabs(_contGroup.GetController(0).Get(ControlMap::drivebaseR)) > ControlMap::triggerDeadzone ? _contGroup.GetController(0).Get(ControlMap::drivebaseR) : 0;
+  double leftPower = fabs(_contGroup.Get(ControlMap::leftDrive)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::leftDrive) : 0;
+  double rightPower = fabs(_contGroup.Get(ControlMap::rightDrive)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::rightDrive) : 0;
 
-  double leftPower = fabs(_contGroup.Get(ControlMap::drivebaseL)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::drivebaseL) : 0;
-  double rightPower = fabs(_contGroup.Get(ControlMap::drivebaseR)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::drivebaseR) : 0;
+  leftPower *= ControlMap::Drivetrain::maxDrivetrainPower;
+  rightPower *= ControlMap::Drivetrain::maxDrivetrainPower;
 
-  leftPower *= ControlMap::maxDrivetrainPower;
-  rightPower *= ControlMap::maxDrivetrainPower;
-
-  // std::cout << leftPower << std::endl;
   _drivetrain.Set(leftPower, rightPower);
 }
