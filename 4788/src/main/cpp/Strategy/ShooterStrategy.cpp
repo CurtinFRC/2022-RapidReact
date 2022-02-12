@@ -25,6 +25,12 @@ void ShooterManualStrategy::OnUpdate(double dt) {
     _shooter.setManual(manualFlyWheelPower);
   }
 
-  double indexSpeed = fabs(_contGroup.Get(ControlMap::indexSpin)) > ControlMap::xboxDeadzone ? (0.5) : 0;
-  _shooter.setIndex(indexSpeed);
+  double indexSpeed = _contGroup.Get(ControlMap::indexSpin);
+  if (indexSpeed >= 0.1) {
+    _shooter.setIndex(0.5);
+  } else if (indexSpeed <= -0.1) {
+    _shooter.setIndex(-0.5);
+  } else {
+    _shooter.setIndex(0);
+  }
 }

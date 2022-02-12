@@ -24,7 +24,7 @@ struct ControlMap {
   // ------------------ Values ------------------
   //structmap 2 electric boogaloo
 
-  // Controllers
+  // Controllers  
   static constexpr int xbox1Port = driver;
   static constexpr int xbox2Port = coDriver;
 
@@ -33,7 +33,7 @@ struct ControlMap {
   static constexpr double triggerDeadzone = 0.05;
 
   // PCM1
-  static constexpr int pcModule = 9;
+  static constexpr int pcModule = 10;
   static constexpr int pressureSensorPort = 0;
   static constexpr int compressorPort = 0;
 
@@ -44,21 +44,21 @@ struct ControlMap {
     static constexpr double wheelRadius = 0.0762; 
     static constexpr double mass = 50;
 
-    static constexpr int leftMotorPort = 99;
-    static constexpr int rightMotorPort = 99;
+    static constexpr int leftMotorPort = 6;
+    static constexpr int rightMotorPort = 7;
 
     static constexpr double maxDrivetrainPower = 0.5; //never trust drivers
   };
 
   struct Intake {
-    static constexpr int  intakeMotorPort = 9;
+    static constexpr int  intakeMotorPort = 5;
   };
 
   struct Shooter {
-    static constexpr int leftFlyWheelPort = 99;
-    static constexpr int rightFlyWheelPort = 99;
-    static constexpr int centerFlyWheelPort = 99;
-    static constexpr int indexMotorPort = 8;
+    static constexpr int leftFlyWheelPort = 11;
+    static constexpr int rightFlyWheelPort = 12;
+    static constexpr int centerFlyWheelPort = 13;
+    static constexpr int indexMotorPort = 4;
     inline static bool shooterPID = false;
 
     inline static double shooterEjectPower = 0.2;
@@ -77,8 +77,8 @@ struct ControlMap {
 
   struct Climber {
     static constexpr int climberPort = 99;
-    static constexpr int climberPort1 = 99;
-    static constexpr int climberPort2 = 99;
+    static constexpr int climberPort1 = 1;
+    static constexpr int climberPort2 = 2;
   };
 
   // ------------------ Controls ------------------

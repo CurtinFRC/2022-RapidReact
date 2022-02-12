@@ -75,8 +75,8 @@ struct RobotMap {
    * Includes Pressure sensor and compressor
    */
   struct ControlSystem {
-    wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
-    wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+    // wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
+    // wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
@@ -124,8 +124,8 @@ struct RobotMap {
     wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
   }; IntakeSystem intakeSystem;
 
-  struct ClimberSystem {
-    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1};
-  }; ClimberSystem climberSystem;
+  // struct ClimberSystem {
+  //   wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1};
+  // }; ClimberSystem climberSystem;
 
 };
