@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Intake.h"
+#include "Strategy/DrivetrainTrajectoryStrategy.h"
 
 using namespace frc;
 using namespace wml;
@@ -10,11 +11,13 @@ double dt;
 
 template<typename Terminator>
 void t2000(Terminator terminate) {
-  std::cout << terminate << " Target Aquired" << std::endl;
+  std::cout << terminate << " Target Acquired" << std::endl;
 }
 
 // General Robot Logic
 void Robot::RobotInit() {
+
+  trajectories.build();
 
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
@@ -45,11 +48,8 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
-  autonomous = new Auto(*drivetrain);
-  autonomous->init();
-
   // Register our systems to be called via strategy
-  // StrategyController::Register(drivetrain);
+  StrategyController::Register(drivetrain);
   NTProvider::Register(drivetrain);
 }
 
@@ -78,10 +78,11 @@ void Robot::DisabledPeriodic() {
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {
-
+  auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  bool success = Schedule(testStrat);
+  std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {
-  autonomous->periodic(dt);
 }
 
 // Manual Robot Logic

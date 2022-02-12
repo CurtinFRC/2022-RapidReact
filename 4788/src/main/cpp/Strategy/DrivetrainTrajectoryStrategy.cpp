@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Auto.h"
+#include "Strategy/DrivetrainTrajectoryStrategy.h"
 #include "ControlMap.h"
 
 
@@ -16,24 +16,18 @@ double distance, gyro;
 
 
 // PID pidAngle({0.3, 0, 0});
-Trajectory trajectory{{{0,4}, {1,4}, {2,4}, {3,4}}};
-RobotControl robotControl{trajectory, {distance, gyro}, {{0.3, 0, 0}}};
+// Trajectory trajectory{{{0,4}, {1,4}, {2,4}, {3,4}}};
+// RobotControl robotControl{trajectory, {distance, gyro}, {{0.3, 0, 0}}};
 
-
-/**
- * Initializer (Updates once)
- */
-void Auto::init() {
-  trajectory.build();
-
-  // output = Splines::Splines::buildPath(spline);
-  // std::cout << "Total Length: " << spline.totalLength << std::endl;
+DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory) {
+  Requires(&drivetrain);
+  SetCanBeInterrupted(true);
 }
 
 /**
  * Periodic Update
  */
-void Auto::periodic(double dt) {
+void DrivetrainTrajectoryStrategy::OnUpdate(double dt) {
   double leftPower = 0.15, rightPower = 0.15;
 
   std::cout << "Test" << std::endl;
