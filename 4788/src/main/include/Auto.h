@@ -7,8 +7,8 @@
 class Auto {
 public:
   Auto(RobotMap::DrivebaseSystem &drivebaseSystem) : _drivebaseSystem(drivebaseSystem) {}
-  void Init();
-  void Periodic();
+  void init();
+  void periodic(double dt);
 
 private:
   RobotMap::DrivebaseSystem &_drivebaseSystem;

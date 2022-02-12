@@ -20,15 +20,17 @@
 
 double distance, gyro;
 
-Trajectory trajectory({distance, gyro});
+
+// PID pidAngle({0.3, 0, 0});
+Trajectory trajectory{{{0,4}, {1,4}, {2,4}, {3,4}}};
+RobotControl robotControl{trajectory, {distance, gyro}, {{0.3, 0, 0}}};
 
 
 /**
  * Initializer (Updates once)
  */
-void Auto::Init() {
+void Auto::init() {
   trajectory.build();
-
 
   // output = Splines::Splines::buildPath(spline);
   // std::cout << "Total Length: " << spline.totalLength << std::endl;
@@ -37,38 +39,13 @@ void Auto::Init() {
 /**
  * Periodic Update
  */
-void Auto::Periodic() {
-  // double leftPower = 0, rightPower = 0;
+void Auto::periodic(double dt) {
+  double leftPower = 0, rightPower = 0;
 
-  // leftEncVal = _drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations();
-  // rightEncVal = _drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations();
-  // avgEncVal = (leftEncVal + rightEncVal) / 2;
+  std::pair<double, double> output = robotControl.followSpline(dt);
+  leftPower = output.first;
+  rightPower = output.second;
 
-  // double distance = avgEncVal/2;
-
-  // std::cout << "Average Encoder: " << avgEncVal << std::endl;
-  // std::cout << "Average Meter: " << distance << std::endl;
-  // std::cout << "Total Lenght: " << spline.totalLength << std::endl;
-
-  // totalLength = spline.totalLength;
-
-  // // Main follower
-  // if (distance < spline.totalLength) {
-  //   float t = RobotControl::dist2t(distance, spline);
-  //   // std::cout << "t value: " << t << std::endl;
-
-  //   leftPower = 0.1;
-  //   rightPower = 0.1;
-
-  //   double goalAngle = Splines::getSplineAngleDeg(t, spline);
-  //   double robotAngle = _drivebaseSystem.drivetrain.GetConfig().gyro->GetAngle(); 
-
-  //   double angleError = (goalAngle - robotAngle) / 180;
-
-  //   leftPower += angleError;
-  //   rightPower -= angleError;
-  // }
-
-  // _drivebaseSystem.drivetrain.Set(leftPower, rightPower);
+  _drivebaseSystem.drivetrain.Set(leftPower, rightPower);
 
 }

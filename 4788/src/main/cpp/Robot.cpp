@@ -37,6 +37,8 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
+  autonomous = new Auto(robotMap.drivebaseSystem);
+
   // Register our systems to be called via strategy
   StrategyController::Register(drivetrain);
   NTProvider::Register(drivetrain);
@@ -59,8 +61,12 @@ void Robot::DisabledInit() {
 void Robot::DisabledPeriodic() {}
 
 // Auto Robot Logic
-void Robot::AutonomousInit() {}
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousInit() {
+  autonomous->init();
+}
+void Robot::AutonomousPeriodic() {
+  autonomous->periodic(dt);
+}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {

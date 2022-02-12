@@ -8,6 +8,9 @@
 #include "Drivebase.h"
 #include "Intake.h"
 
+// Auto
+#include "Auto.h"
+
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
 public:
 
@@ -49,4 +52,5 @@ private:
   wml::Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
+  Auto *autonomous;
 };
