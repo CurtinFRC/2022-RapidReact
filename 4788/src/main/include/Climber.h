@@ -1,21 +1,30 @@
-// #pragma once
+#pragma once
 
-// #include <iostream>
-// #include "controllers/Controller.h"
-// #include "RobotMap.h"
+#include <iostream>
+#include "controllers/Controller.h"
+#include "RobotMap.h"
 
-// enum class TeleopClimber {kStationary = 0, kZeroing, kManual, kMoving};
+enum class ClimberState {
+  kStowed,
+  kDeployed
+};
 
-// class Climber {
-//  public:
-//   Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
+class Climber {
+ public:
+  Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
-//   void teleopOnUpdate(double dt);
-//   void onDisable(double dt);
+  void onDisable(double dt);
+  void setState(double dt);
+  void _toggleClimber();
+  void setState(ClimberState state);
 
-//  private:
-//   bool ClimberToggle = false;
-//   // wml::actuators::DoubleSolenoid &_climberSolenoid;
-//   RobotMap::ClimberSystem &_climberSystem;
-//   wml::controllers::SmartControllerGroup &_contGroup;
-// };
+  void updateClimber(double dt);
+  void _update(double dt);
+
+ private:
+  bool ClimberToggle = false;
+
+  ClimberState _state{ ClimberState::kStowed };
+  RobotMap::ClimberSystem &_climberSystem;
+  wml::controllers::SmartControllerGroup &_contGroup;
+};

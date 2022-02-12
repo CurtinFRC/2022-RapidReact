@@ -22,7 +22,8 @@ void ShooterManualStrategy::OnUpdate(double dt) {
   } else if (_contGroup.Get(ControlMap::noahShoot)) {
     _shooter.setPID(ControlMap::Shooter::noahShootValue, dt);
   } else {
-    _shooter.setManual(manualFlyWheelPower);
+    // auto &motor = _shooter._shooterSystem.shooterGearbox.motor;
+    _shooter.setManual(manualFlyWheelPower * 12);
   }
 
   double indexSpeed = _contGroup.Get(ControlMap::indexSpin);

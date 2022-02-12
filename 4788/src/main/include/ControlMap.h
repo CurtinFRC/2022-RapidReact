@@ -33,9 +33,9 @@ struct ControlMap {
   static constexpr double triggerDeadzone = 0.05;
 
   // PCM1
-  static constexpr int pcModule = 10;
-  static constexpr int pressureSensorPort = 0;
-  static constexpr int compressorPort = 0;
+  static constexpr int pcModule = 1;
+  static constexpr int pressureSensorPort = 1;
+  static constexpr int compressorPort = 1;
 
   // Drivetrain
   struct Drivetrain {
@@ -52,6 +52,9 @@ struct ControlMap {
 
   struct Intake {
     static constexpr int  intakeMotorPort = 5;
+    static constexpr bool intakeSolenoid = false;
+    static constexpr int  intakeSolenoidPort = 14; //11
+    static constexpr int intakeSolenoidPort2 = 12; //15
   };
 
   struct Shooter {
@@ -62,23 +65,24 @@ struct ControlMap {
     inline static bool shooterPID = false;
 
     inline static double shooterEjectPower = 0.2;
-    inline static double innerCircleShootValue = 200;
+    inline static double innerCircleShootValue = 150;
     inline static double outerCircleShootValue = 400;
     inline static double farShootValue = 500;
     inline static double noahShootValue = 600;
   };
 
   struct ShooterGains {
-    inline static double kp = 0.46;
-    inline static double ki = 0;  
-    inline static double kd = -0.00001;
-    inline static double IMax = 40;
+    inline static double kp = 0.03;
+    inline static double ki = 0.007;
+    inline static double kd = -0.0001;
+    // inline static double kf = 0;
+    inline static double IMax = 100;
   };
 
   struct Climber {
     static constexpr int climberPort = 99;
-    static constexpr int climberPort1 = 1;
-    static constexpr int climberPort2 = 2;
+    static constexpr int climberPort1 = 15; //14 up
+    static constexpr int climberPort2 = 11; //12 down
   };
 
   // ------------------ Controls ------------------
@@ -101,7 +105,7 @@ struct ControlMap {
   inline static const wml::controllers::tAxis rightDrive{driver, XboxController::kRightYAxis};
 
   // Climber
-  inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
+  inline static const wml::controllers::tButton climberActuate{ coDriver, XboxController::kA };
 
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };

@@ -52,5 +52,5 @@ private:
   wml::Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
-  // Climber *climber;
+  Climber *climber;
 };

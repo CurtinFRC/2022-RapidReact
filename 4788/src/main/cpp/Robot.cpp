@@ -23,14 +23,15 @@ void Robot::RobotInit() {
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
   StrategyController::Register(shooter);
 
-  robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(false);
+  robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   // robotMap.shooterSystem.indexWheel.SetInverted(true);
+  shooter->StartLoop(100);
 
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(true);
 
-  // climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
+  climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
@@ -58,9 +59,12 @@ void Robot::RobotPeriodic() {
   // t2000("<Anna>");
 
   StrategyController::Update(dt);
-  shooter->update(dt);
+  // shooter->update(dt);
   // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   // robotMap.controlSystem.compressor.Update(dt);
+
+  std::cout << "Nav x: " << robotMap.drivebaseSystem.gyro.GetAngle() << std::endl;
+
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -71,7 +75,7 @@ void Robot::DisabledInit() {
   InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {
-  // climber->onDisable(dt);
+  climber->onDisable(dt);
 }
 
 // Auto Robot Logic
@@ -85,7 +89,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   intake->teleopOnUpdate(dt);
-  // climber->teleopOnUpdate(dt);
+  climber->updateClimber(dt);
 }
 
 // During Test Logic
