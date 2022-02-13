@@ -29,6 +29,9 @@ void Robot::RobotInit() {
 
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
+  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake teleop strategy", *intake, robotMap.contGroup));
+  StrategyController::Register(intake);
+
   robotMap.intakeSystem.intake.SetInverted(true);
 
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
@@ -86,9 +89,9 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
   Schedule(shooter->GetDefaultStrategy(), true);
+  // Schedule(intake->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-  intake->teleopOnUpdate(dt);
   climber->updateClimber(dt);
 }
 

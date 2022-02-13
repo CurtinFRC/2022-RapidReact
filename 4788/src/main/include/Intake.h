@@ -9,29 +9,23 @@ using Controllers = wml::controllers::SmartControllerGroup;
 
   //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
-  STOWED = 0,
-  DEPLOYED
+  kStowed = 0,
+  kDeployed
 };
 
   //A class to group the gamestage variables and structs from Robotmap.h
-class Intake {
+class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
  public:
   Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
-  void teleopOnUpdate (double dt);
-  void autoOnUpdate (double dt);
-  void testOnUpdate (double dt);
 
-  void setState(IntakeStates state);
+  void _toggleIntake();
+  void updateIntake(double dt);
+  void setIntake(double voltage);
  
  private:
-  void _update(double dt);
-  void _toggleIntake();
-
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
+  IntakeStates _intakeState{IntakeStates::kStowed};
 
-  //variable for power
-  double _power;
-  //sets the default to stowed
-  IntakeStates _intakeState{IntakeStates::STOWED};
+  double _intakeSpeed = 0;
 };

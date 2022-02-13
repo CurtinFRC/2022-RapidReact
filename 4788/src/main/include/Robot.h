@@ -10,6 +10,7 @@
 #include "Climber.h"
 
 #include "Strategy/ShooterStrategy.h"
+#include "Strategy/IntakeStrategy.h"
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
 public:
