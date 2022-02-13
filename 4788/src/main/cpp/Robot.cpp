@@ -1,5 +1,4 @@
 #include "Robot.h"
-#include "Intake.h"
 #include "Strategy/DrivetrainTrajectoryStrategy.h"
 
 using namespace frc;
@@ -20,15 +19,17 @@ void Robot::RobotInit() {
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
+  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter strategy", *shooter, robotMap.contGroup));
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   // robotMap.shooterSystem.indexWheel.SetInverted(true);
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  robotMap.intakeSystem.intake.SetInverted(true);
-
+  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, robotMap.contGroup));
+  intake->StartLoop(100);
+  // robotMap.intakeSystem.intake.SetInverted(true);
+  
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
@@ -48,9 +49,10 @@ void Robot::RobotInit() {
   // Register our systems to be called via strategy
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
+  StrategyController::Register(intake);
   NTProvider::Register(drivetrain);
 
-  trajectories.build();
+  // trajectories.build();
 }
 
 void Robot::RobotPeriodic() {
@@ -88,13 +90,13 @@ void Robot::AutonomousPeriodic() {
 // Manual Robot Logic
 void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
-  // Schedule(shooter->GetDefaultStrategy(), true);
+  Schedule(shooter->GetDefaultStrategy(), true);
+  Schedule(intake->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
   climber->updateClimber(dt);
-  intake->teleopOnUpdate(dt);
 }
 
 // During Test Logic
 void Robot::TestInit() {}
-void Robot::TestPeriodic() {} 
+void Robot::TestPeriodic() {}

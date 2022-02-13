@@ -7,33 +7,49 @@
 using Controllers = wml::controllers::SmartControllerGroup;
 
 
+enum class MagStates{
+  kEmpty, //robot has no balls 
+  kTransfer, //ball going from back to front of robot 
+  kOne, //ball at front
+  kTwo, //ball at front and back 
+  kEject, //send ball to the shooter
+  kManual, //sometime code bad
+  kOverride
+};
+
   //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
-  STOWED = 0,
-  DEPLOYED
+  kStowed,
+  kIdle,
+  kIntake,
+  kOutake,
+  kManual
 };
 
   //A class to group the gamestage variables and structs from Robotmap.h
-class Intake {
+class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
  public:
   Intake(RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup);
-  void teleopOnUpdate (double dt);
-  void autoOnUpdate (double dt);
-  void testOnUpdate (double dt);
 
-  void setState(IntakeStates state);
+  void updateIntake(double dt);
 
-  bool hasBall();
- 
+  void Update(double dt);
+  // void setIndex(double voltage, MagStates magState);
+  // void setIndex(MagStates magState);
+
+  // bool _frontSensor();
+  // bool _backSensor();
+
  private:
-  void _update(double dt);
-  void _toggleIntake();
 
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
 
+  IntakeStates _intakeState{ IntakeStates::kStowed };
+  MagStates _magState{ MagStates::kEmpty };
+
   //variable for power
   double _power;
-  //sets the default to stowed
-  IntakeStates _intakeState{IntakeStates::STOWED};
+  double _indexVoltage = 0;
+  double _indexSetVoltage = 0;
 };

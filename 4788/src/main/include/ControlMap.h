@@ -55,6 +55,8 @@ struct ControlMap {
     static constexpr bool intakeSolenoid = false;
     static constexpr int  intakeSolenoidPort = 14; //11
     static constexpr int intakeSolenoidPort2 = 12; //15
+
+    // static constexpr double 
   };
 
   struct Shooter {
@@ -111,4 +113,7 @@ struct ControlMap {
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
+
+  inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kA };
+  inline static const wml::controllers::tButton indexOverrideToggleButton{ driver, wml::controllers::XboxController::kB };
 };

@@ -127,7 +127,8 @@ struct RobotMap {
     wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
     wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
     wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
-    wml::sensors::LimitSwitch ballSensor{0, true, "kee-an"}; //ball sensor
+    wml::sensors::LimitSwitch intakeBallSensor{0, false, "kee-an"}; //ball sensor
+    wml::sensors::LimitSwitch shooterBallSensor{2, false, "Sam"};
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {
