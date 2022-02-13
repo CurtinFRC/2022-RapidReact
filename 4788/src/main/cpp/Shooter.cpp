@@ -27,10 +27,6 @@ void Shooter::setPID(double goal, double dt) {
 }
 
 void Shooter::updateShooter(double dt) {
-
-
-  // manualOutput = 5;
-  // std::cout << (5 / angularVel) << std::endl;
   switch (_state) {
   case ShooterState::kManual:
 
@@ -61,12 +57,9 @@ void Shooter::updateShooter(double dt) {
   double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
   double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
   double manualOutput = std::min(_flyWheelVoltage, Vmax);
-  // std::cout << angularVel << ", " << Vmax << ", " << Vmin << ", " << manualOutput << ", " << _flyWheelVoltage << std::endl;
-  // std::cout << motor.current(manualOutput, angularVel) << std::endl;
-
   // manualOutput = _flyWheelVoltage;
 
-  nt::NetworkTableInstance::GetDefault().GetTable("harry")->GetEntry("Vout").SetDouble(manualOutput);
+  nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
 
   _shooterSystem.shooterGearbox.transmission->SetVoltage(manualOutput);
 }
@@ -78,44 +71,26 @@ void Shooter::Update(double dt) {
 
 double Shooter::calculatePID(double angularVelocity, double dt) {
   double input = -(_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity());
-  // std::cout << "angular velocity" << input << std::endl;
   double error = angularVelocity - input;
   double derror = (error - _previousError) / dt;
   _sum += error * dt;
-  // std::cout << "Goal: " << _angularVelocityGoal << std::endl;
 
   auto &motor = _shooterSystem.shooterGearbox.motor;
   double output = ControlMap::ShooterGains::kp * error + ControlMap::ShooterGains::ki * _sum + (ControlMap::ShooterGains::kd) * derror +  motor.kw() * angularVelocity;
-  // std::cout << "P Value: " << ControlMap::ShooterGains::kp << std::endl;
-
-  // double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * input;
-  // double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * input;
-
-  // output = std::min(std::max(output, Vmin), Vmax);
-
-  // nt::NetworkTableInstance::GetDefault().Table("Shooter").PutNumber("shoot", 1);
 
   auto inst = nt::NetworkTableInstance::GetDefault();
-  auto table = inst.GetTable("harry");
-  auto inputEntry = table->GetEntry("input");
-  auto outputEntry = table->GetEntry("output");
-  auto goalEntry = table->GetEntry("goal");
-  auto errorEntry = table->GetEntry("error");
-  inputEntry.SetDouble(input);
-  outputEntry.SetDouble(output);
-  goalEntry.SetDouble(angularVelocity);
-  errorEntry.SetDouble(error);
+  auto table = inst.GetTable("shooter gains");
+
+  table->GetEntry("input").SetDouble(input);
+  table->GetEntry("output").SetDouble(output);
+  table->GetEntry("goal").SetDouble(angularVelocity);
+  table->GetEntry("error").SetDouble(error);
 
   table->GetEntry("P").SetDouble(ControlMap::ShooterGains::kp * error);
   table->GetEntry("I").SetDouble(ControlMap::ShooterGains::ki * _sum);
   table->GetEntry("D").SetDouble(ControlMap::ShooterGains::kd * derror);
-  //input, goal, error, output
 
 
   _previousError = error;
-
-  // std::cout << "error: " << error << std::endl;
-  // std::cout << "Output: " << output*12 << std::endl;
-  // std::cout << "DT: " << dt << std::endl;
   return output;
 }
