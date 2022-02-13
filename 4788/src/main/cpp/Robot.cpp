@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Intake.h"
+#include "Strategy/DrivetrainTrajectoryStrategy.h"
 
 using namespace frc;
 using namespace wml;
@@ -10,7 +11,7 @@ double dt;
 
 template<typename Terminator>
 void t2000(Terminator terminate) {
-  std::cout << terminate << " Target Aquired" << std::endl;
+  std::cout << terminate << " Target Acquired" << std::endl;
 }
 
 // General Robot Logic
@@ -18,15 +19,12 @@ void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-  // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
-  StrategyController::Register(shooter);
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   // robotMap.shooterSystem.indexWheel.SetInverted(true);
   shooter->StartLoop(100);
-
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(true);
@@ -49,7 +47,10 @@ void Robot::RobotInit() {
 
   // Register our systems to be called via strategy
   StrategyController::Register(drivetrain);
+  StrategyController::Register(shooter);
   NTProvider::Register(drivetrain);
+
+  trajectories.build();
 }
 
 void Robot::RobotPeriodic() {
@@ -62,9 +63,6 @@ void Robot::RobotPeriodic() {
   // shooter->update(dt);
   // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   // robotMap.controlSystem.compressor.Update(dt);
-
-  std::cout << "Nav x: " << robotMap.drivebaseSystem.gyro.GetAngle() << std::endl;
-
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -75,17 +73,22 @@ void Robot::DisabledInit() {
   InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {
-  climber->onDisable(dt);
+  // climber->onDisable(dt);
 }
 
 // Auto Robot Logic
-void Robot::AutonomousInit() {}
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousInit() {
+  auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  bool success = Schedule(testStrat);
+  std::cout << "TEST " << success << std::endl;
+}
+void Robot::AutonomousPeriodic() {
+}
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
-  Schedule(shooter->GetDefaultStrategy(), true);
+  // Schedule(shooter->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
   intake->teleopOnUpdate(dt);
