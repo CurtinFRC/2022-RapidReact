@@ -10,16 +10,13 @@ void Intake::_update(double dt) {
   switch(_intakeState) {
     case IntakeStates::DEPLOYED:
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
-      // _intakeSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
       break;
     case IntakeStates::STOWED:
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-      // _intakeSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
       break;
   }
  
   _intakeSystem.intakeSolenoid.Update(dt);
-  // _intakeSystem.climberSolenoid.Update(dt);
   _intakeSystem.intake.Set(_power);
 }
 
