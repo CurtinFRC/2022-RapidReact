@@ -32,16 +32,12 @@ void Shooter::setPID(double goal, double dt) {
 void Shooter::updateShooter(double dt) {
   switch (_state) {
   case ShooterState::kManual:
-
     _shooterSystem.indexWheel.Set(_setIndexVoltage);
-
     break;
 
   case ShooterState::kIdle:
-
     _shooterSystem.indexWheel.Set(_setIndexVoltage);
     _flyWheelVoltage = 0;
-
     break;
 
   case ShooterState::kPID:
@@ -62,7 +58,6 @@ void Shooter::updateShooter(double dt) {
   double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
   double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
   double manualOutput = std::min(_flyWheelVoltage, Vmax);
-  // manualOutput = _flyWheelVoltage;
 
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(IsDone());
