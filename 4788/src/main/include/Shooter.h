@@ -9,7 +9,7 @@ enum class ShooterState {
   kIdle
 };
 
-class Shooter : public wml::StrategySystem {
+class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
  public: 
   Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup);
 
@@ -21,7 +21,7 @@ class Shooter : public wml::StrategySystem {
   double calculatePID(double angularVelocity, double dt);
 
   void updateShooter(double dt);
-  void update(double dt);
+  void Update(double dt) override;
 
  private:
   ShooterState _state{ ShooterState::kPID};

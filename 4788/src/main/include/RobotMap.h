@@ -52,7 +52,7 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
-#include "MP_Trajedy.h"
+// #include "MP_Trajedy.h"
 
 // WML Rev
 #include <WMLRev.h>
@@ -76,7 +76,7 @@ struct RobotMap {
    */
   struct ControlSystem {
     wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
-    wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+    // wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
@@ -90,7 +90,11 @@ struct RobotMap {
 
     wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
 
-    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
+    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(
+      leftFlyWheelMotor,
+      rightFlyWheelMotor,
+      centerFlyWheelMotor
+    );
     wml::Gearbox shooterGearbox{
       &shooterMotorGroup,
       &rightFlyWheelMotor,
@@ -122,10 +126,11 @@ struct RobotMap {
 
   struct IntakeSystem {
     wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
+    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
+    // wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {
-    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1};
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ClimberSystem climberSystem;
-
 };

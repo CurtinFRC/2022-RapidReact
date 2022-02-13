@@ -24,9 +24,12 @@ void Robot::RobotInit() {
   StrategyController::Register(shooter);
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
+  // robotMap.shooterSystem.indexWheel.SetInverted(true);
+  shooter->StartLoop(100);
+
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  robotMap.intakeSystem.intake.SetInverted(false);
+  robotMap.intakeSystem.intake.SetInverted(true);
 
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
@@ -53,12 +56,15 @@ void Robot::RobotPeriodic() {
   currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
   dt = currentTimeStamp - lastTimeStamp;
 
-  t2000("<Anna>");
+  // t2000("<Anna>");
 
   StrategyController::Update(dt);
-  shooter->update(dt);
-  robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  robotMap.controlSystem.compressor.Update(dt);
+  // shooter->update(dt);
+  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  // robotMap.controlSystem.compressor.Update(dt);
+
+  std::cout << "Nav x: " << robotMap.drivebaseSystem.gyro.GetAngle() << std::endl;
+
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -83,7 +89,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   intake->teleopOnUpdate(dt);
-  climber->teleopOnUpdate(dt);
+  climber->updateClimber(dt);
 }
 
 // During Test Logic
