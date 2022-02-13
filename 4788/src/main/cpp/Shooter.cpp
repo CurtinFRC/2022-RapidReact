@@ -14,10 +14,6 @@ void Shooter::setManual(double voltage) {
   _state = ShooterState::kManual;
 }
 
-void Shooter::setIndex(double voltage) {
-  _setIndexVoltage = voltage;
-}
-
 void Shooter::setPID(double goal, double dt) {
   if (_state != ShooterState::kPID) {
     _flyWheelVoltage = 0;
@@ -32,17 +28,14 @@ void Shooter::setPID(double goal, double dt) {
 void Shooter::updateShooter(double dt) {
   switch (_state) {
   case ShooterState::kManual:
-    _shooterSystem.indexWheel.Set(_setIndexVoltage);
     break;
 
   case ShooterState::kIdle:
-    _shooterSystem.indexWheel.Set(_setIndexVoltage);
     _flyWheelVoltage = 0;
     break;
 
   case ShooterState::kPID:
     _flyWheelVoltage = calculatePID(_angularVelocityGoal, dt);
-    _shooterSystem.indexWheel.Set(_setIndexVoltage);
     break;
 
   default:

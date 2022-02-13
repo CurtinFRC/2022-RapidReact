@@ -22,6 +22,8 @@ class Intake {
   void testOnUpdate (double dt);
 
   void setState(IntakeStates state);
+
+  bool hasBall();
  
  private:
   void _update(double dt);

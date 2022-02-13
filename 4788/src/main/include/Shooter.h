@@ -16,7 +16,6 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
 
   void setManual(double voltage);
   void setPID(double angularVelocity, double dt);
-  void setIndex(double voltage);
 
   //PID for the shooter
   double calculatePID(double angularVelocity, double dt);

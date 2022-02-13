@@ -40,3 +40,7 @@ void Intake::teleopOnUpdate (double dt){
 
   _update(dt);
 }
+
+bool Intake::hasBall() {
+  return _intakeSystem.ballSensor.Get();
+}
