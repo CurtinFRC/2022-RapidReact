@@ -70,10 +70,11 @@ struct ControlMap {
     inline static double farShootValue = 500;
     inline static double noahShootValue = 600;
   };
+  
 
   struct ShooterGains {
-    inline static double kp = 0.03;
-    inline static double ki = 0.007;
+    inline static double kp = 0.04;
+    inline static double ki = 0.01;
     inline static double kd = -0.0001;
     // inline static double kf = 0;
     inline static double IMax = 100;
