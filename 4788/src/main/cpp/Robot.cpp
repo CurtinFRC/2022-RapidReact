@@ -22,15 +22,17 @@ void Robot::RobotInit() {
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter strategy", *shooter, robotMap.contGroup));
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
-  // robotMap.shooterSystem.indexWheel.SetInverted(true);
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, robotMap.contGroup));
   intake->StartLoop(100);
-  // robotMap.intakeSystem.intake.SetInverted(true);
+  robotMap.intakeSystem.intake.SetInverted(true);
+  robotMap.intakeSystem.indexWheel.SetInverted(true);
   
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
+  climber->SetDefault(std::make_shared<ClimberStrategy>("climber manual strategy", *climber, robotMap.contGroup));
+  climber->StartLoop(100);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
@@ -50,6 +52,7 @@ void Robot::RobotInit() {
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
   StrategyController::Register(intake);
+  StrategyController::Register(climber);
   NTProvider::Register(drivetrain);
 
   // trajectories.build();
@@ -62,9 +65,6 @@ void Robot::RobotPeriodic() {
   // t2000("<Anna>");
 
   StrategyController::Update(dt);
-  // shooter->update(dt);
-  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  // robotMap.controlSystem.compressor.Update(dt);
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -75,8 +75,9 @@ void Robot::DisabledInit() {
   InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {
-  // climber->onDisable(dt);
+  Schedule(std::make_shared<ClimberDisableStrategy>("climber disable strategy", *climber));
 }
+
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {
@@ -92,6 +93,7 @@ void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
   Schedule(shooter->GetDefaultStrategy(), true);
   Schedule(intake->GetDefaultStrategy(), true);
+  Schedule(climber->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
   climber->updateClimber(dt);

@@ -12,6 +12,7 @@
 
 #include "Strategy/ShooterStrategy.h"
 #include "Strategy/IntakeStrategy.h"
+#include "Strategy/ClimberStrategy.h"
 
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
