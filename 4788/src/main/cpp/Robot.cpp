@@ -18,6 +18,10 @@ void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
+  auto camera = CameraServer::GetInstance()->StartAutomaticCapture(0);
+  camera.SetFPS(30);
+  camera.SetResolution(160, 120);
+
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter strategy", *shooter, robotMap.contGroup));
 

@@ -34,11 +34,11 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void updateIntake(double dt);
 
   void Update(double dt);
-  // void setIndex(double voltage, MagStates magState);
-  // void setIndex(MagStates magState);
+  void setIndex(double voltage, MagStates magState);
+  void setIndex(MagStates magState);
 
-  // bool _frontSensor();
-  // bool _backSensor();
+  bool _frontSensor();
+  bool _backSensor();
 
  private:
 

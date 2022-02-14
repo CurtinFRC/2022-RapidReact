@@ -6,8 +6,11 @@
 Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) {}
 
 void Intake::updateIntake(double dt) {
-  // switch(_magState) {
-  //   case MagStates::kEmpty: //robot is empty, no balls
+  auto magInst = nt::NetworkTableInstance::GetDefault();
+  auto magSystem = magInst.GetTable("magSystem");
+
+  switch(_magState) {
+    case MagStates::kEmpty: //robot is empty, no balls
   //     if (_frontSensor() && _backSensor()) { //if yes for both
   //       std::cout << "both sensors have been activated in the empty stage, something is wrong" << std::endl;
   //       _magState = MagStates::kTwo;
@@ -21,81 +24,95 @@ void Intake::updateIntake(double dt) {
   //     } else {
   //       std::cout << "Mag state empty error" << std::endl;
   //     }
-      
-  //   break;
+      std::cout << "empty robot" << std::endl;
 
-  //   case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(true);
+      
+    break;
+
+    case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
   //     if (_backSensor() && !_frontSensor()) {
   //       _indexSetVoltage = 0.5;
   //     } else {
   //       _magState = MagStates::kOne;
   //     }
-  //   break;
+    break;
 
-  //   case MagStates::kOne:
+    case MagStates::kOne:
   //     nt::NetworkTableInstance::GetDefault().GetTable("intake states")->GetEntry("Mag One").SetBoolean(true);
   //     nt::NetworkTableInstance::GetDefault().GetTable("intake states")->GetEntry("Mag Two").SetBoolean(false);
-  //   break;
+    break;
 
-  //   case MagStates::kTwo:
+    case MagStates::kTwo:
   //     nt::NetworkTableInstance::GetDefault().GetTable("intake states")->GetEntry("Mag One").SetBoolean(true);
   //     nt::NetworkTableInstance::GetDefault().GetTable("intake states")->GetEntry("Mag Two").SetBoolean(true);
-  //   break;
+    break;
 
-    // case MagStates::kEject:
+    case MagStates::kEject:
     //   if (_frontSensor() || (_frontSensor() && _backSensor())) {
     //     _indexSetVoltage = 0.3;
     //   } else {
     //     _indexSetVoltage = 0;
     //   }
-    // break;
+    break;
 
-    // case MagStates::kOverride:
-    //   //a controller to spin mag till it gets to the front sensor 
-    //   // !_frontSensor ? setIndexWheel(ControlMap::indexWheelTransferSpeed) : setIndexWheel(0); 
-    //   _indexSetVoltage = _indexVoltage;
-    // break;
+    case MagStates::kOverride:
+      //a controller to spin mag till it gets to the front sensor 
+      // !_frontSensor ? setIndexWheel(ControlMap::indexWheelTransferSpeed) : setIndexWheel(0); 
+      _indexSetVoltage = _indexVoltage;
 
-    // case MagStates::kManual:
-    //   //controller to spin mag
-    //   //_intakeVoltage gets set straight to index wheel if 
-    //   if (_frontSensor()) {
-    //     _indexSetVoltage = 0;
-    //   } else {
-    //     _indexSetVoltage = _indexVoltage;
-    //   }
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(true);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
+    break;
 
-    // break;
+    case MagStates::kManual:
+      //controller to spin mag
+      //_intakeVoltage gets set straight to index wheel if 
+      if (_frontSensor()) {
+        _indexSetVoltage = 0;
+      } else {
+        _indexSetVoltage = _indexVoltage;
+      }
 
-    // default:
-    //   std::cout << "in mag default state, something is wrong, being reset to empty" << std::endl;
-    //   _magState = MagStates::kEmpty;
-    // break;
-  // }
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(true);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
+      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
 
-  // _intakeSystem.indexWheel.Set(_indexSetVoltage);
+    break;
+
+    default:
+      std::cout << "in mag default state, something is wrong, being reset to empty" << std::endl;
+      
+      _magState = MagStates::kEmpty;
+    break;
+  }
+
+  _intakeSystem.indexWheel.Set(_indexSetVoltage);
 }
 
-// void Intake::setIndex(double voltage, MagStates magState) {
-//   _indexVoltage = voltage;
-//   _magState = magState;
-// }
+void Intake::setIndex(double voltage, MagStates magState) {
+  _indexVoltage = voltage;
+  _magState = magState;
+}
 
-// void Intake::setIndex(MagStates magState) {
-//   _magState = magState;
-// }
+void Intake::setIndex(MagStates magState) {
+  _magState = magState;
+}
 
 void Intake::Update(double dt) {
   updateIntake(dt);
 }
 
-// bool Intake::_frontSensor() {
-//   return _intakeSystem.shooterBallSensor.Get();
-// }
+bool Intake::_frontSensor() {
+  return _intakeSystem.shooterBallSensor.Get();
+}
 
-// bool Intake::_backSensor() {
-//   return _intakeSystem.intakeBallSensor.Get();
-// }
+bool Intake::_backSensor() {
+  return _intakeSystem.intakeBallSensor.Get();
+}
 
 // void Intake::_update(double dt) {
 //   switch(_intakeState) {
