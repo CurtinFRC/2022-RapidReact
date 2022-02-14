@@ -9,6 +9,10 @@ void Intake::updateIntake(double dt) {
   auto magInst = nt::NetworkTableInstance::GetDefault();
   auto magSystem = magInst.GetTable("magSystem");
 
+  _magState == MagStates::kEmpty ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
+  _magState == MagStates::kManual ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
+  _magState == MagStates::kOverride ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
+
   switch(_magState) {
     case MagStates::kEmpty: //robot is empty, no balls
   //     if (_frontSensor() && _backSensor()) { //if yes for both
@@ -26,10 +30,6 @@ void Intake::updateIntake(double dt) {
   //     }
       std::cout << "empty robot" << std::endl;
 
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(true);
-      
     break;
 
     case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
@@ -59,27 +59,18 @@ void Intake::updateIntake(double dt) {
     break;
 
     case MagStates::kOverride:
-      //a controller to spin mag till it gets to the front sensor 
-      // !_frontSensor ? setIndexWheel(ControlMap::indexWheelTransferSpeed) : setIndexWheel(0); 
       _indexSetVoltage = _indexVoltage;
-
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(true);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
     break;
 
     case MagStates::kManual:
       //controller to spin mag
       //_intakeVoltage gets set straight to index wheel if 
+      
       if (_frontSensor()) {
         _indexSetVoltage = 0;
       } else {
         _indexSetVoltage = _indexVoltage;
       }
-
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(true);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
-      nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
 
     break;
 
@@ -87,6 +78,31 @@ void Intake::updateIntake(double dt) {
       std::cout << "in mag default state, something is wrong, being reset to empty" << std::endl;
       
       _magState = MagStates::kEmpty;
+    break;
+  }
+
+  switch(_intakeState) {
+    case IntakeStates::kIdle:
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+      _intakeState = IntakeStates::kIntake;
+    break;
+    case IntakeStates::kIntake:
+      _intakeSystem.intake.Set(fabs(_intakeSetVoltage));
+    break;
+    case IntakeStates::kOutake:
+      
+    break;
+
+    case IntakeStates::kManual:
+
+    break;
+
+    case IntakeStates::kStowed:
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+    break;
+
+    default:
+      std::cout << "In intake default state, something is wrong, being reset to Idle" << std::endl;
     break;
   }
 
@@ -112,6 +128,14 @@ bool Intake::_frontSensor() {
 
 bool Intake::_backSensor() {
   return _intakeSystem.intakeBallSensor.Get();
+}
+
+void Intake::setIntakeState(IntakeStates intakeState) {
+  _intakeState = intakeState;
+}
+
+void Intake::setIntake(double intakeVoltage) {
+  _intakeSetVoltage = intakeVoltage;
 }
 
 // void Intake::_update(double dt) {

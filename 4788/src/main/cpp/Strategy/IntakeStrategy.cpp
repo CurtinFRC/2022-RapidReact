@@ -8,9 +8,12 @@ IntakeStrategy::IntakeStrategy(std::string name, Intake &intake, Controllers &co
 }
 
 void IntakeStrategy::OnUpdate(double dt) {
-  double indexVoltage = (_contGroup.Get(ControlMap::indexSpin));
+  double indexVoltage = fabs(_contGroup.Get(ControlMap::indexSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::indexSpin) : 0;
+  double intakeVoltage = fabs(_contGroup.Get(ControlMap::intake)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::intake) : 0;
+  _intake.setIntake(intakeVoltage);
 
-  if (_contGroup.Get(ControlMap::indexManualToggleButton)) {
+
+  if (_contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
     if (indexManualToggle) {
       indexManualToggle = false;
     } else { 
@@ -18,7 +21,7 @@ void IntakeStrategy::OnUpdate(double dt) {
     }
   }
 
-  if (_contGroup.Get(ControlMap::indexOverrideToggleButton)) {
+  if (_contGroup.Get(ControlMap::indexOverrideToggleButton, wml::controllers::XboxController::ONRISE)) {
     if (indexOverrideToggle) {
       indexOverrideToggle = false;
     } else {
@@ -26,17 +29,32 @@ void IntakeStrategy::OnUpdate(double dt) {
     }
   }
 
+  auto magIns = nt::NetworkTableInstance::GetDefault();
+  auto magSyste = magIns.GetTable("magSystem");
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual").SetBoolean(indexManualToggle);
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override").SetBoolean(indexOverrideToggle);
+
+
   if (indexManualToggle) {
-    //set everything manually 
-    if (fabs(_contGroup.Get(ControlMap::indexSpin) > 0.4)) {
-      if (indexOverrideToggle) {
-        _intake.setIndex(indexVoltage, MagStates::kOverride); //will continue once it reaches the front sensor
-      } else {
-        _intake.setIndex(indexVoltage, MagStates::kManual); // will stop when it gets to the front sensor
-      }
+    _intake.setIndex(indexVoltage, MagStates::kManual); //will continue once it reaches the front sensor
+    if (indexOverrideToggle) {
+      _intake.setIndex(MagStates::kOverride);
     }
   } else {
-    //autoooooo
     _intake.setIndex(MagStates::kEmpty);
+  }
+
+  if (_contGroup.Get(ControlMap::intakeActuation, wml::controllers::XboxController::ONRISE)) {
+    if (_intakeToggle) {
+      _intakeToggle = false;
+    } else {
+      _intakeToggle = true;
+    }
+  }
+
+  if (_intakeToggle) {
+    _intake.setIntakeState(IntakeStates::kIdle);
+  } else {
+    _intake.setIntakeState(IntakeStates::kStowed);
   }
 }

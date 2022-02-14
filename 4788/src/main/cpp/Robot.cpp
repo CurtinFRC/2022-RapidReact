@@ -36,6 +36,7 @@ void Robot::RobotInit() {
   
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
   climber->SetDefault(std::make_shared<ClimberStrategy>("climber manual strategy", *climber, robotMap.contGroup));
+  StrategyController::Register(climber);
   climber->StartLoop(100);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
@@ -56,7 +57,6 @@ void Robot::RobotInit() {
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
   StrategyController::Register(intake);
-  StrategyController::Register(climber);
   NTProvider::Register(drivetrain);
 
   // trajectories.build();

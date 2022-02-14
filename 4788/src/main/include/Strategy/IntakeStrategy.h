@@ -16,4 +16,5 @@ class IntakeStrategy : public wml::Strategy {
 
   bool indexManualToggle = false;
   bool indexOverrideToggle = false;
+  bool _intakeToggle = false;
 };

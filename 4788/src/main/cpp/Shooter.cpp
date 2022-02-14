@@ -55,8 +55,11 @@ void Shooter::updateShooter(double dt) {
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(IsDone());
 
+
+  _shooterSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   _shooterSystem.shooterGearbox.transmission->SetVoltage(manualOutput);
 }
+
 
 void Shooter::Update(double dt) {
   updateShooter(dt);

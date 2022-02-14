@@ -100,6 +100,8 @@ struct RobotMap {
       1.0, 
       mNEO * 3
     };
+
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
@@ -114,7 +116,7 @@ struct RobotMap {
     wml::Gearbox LGearbox{&leftMotors, &leftMotor};
     wml::Gearbox RGearbox{&rightMotors, &rightMotor};
 
-    wml::sensors::NavX navX{frc::I2C::Port::kMXP};
+    wml::sensors::NavX navX{frc::SPI::Port::kMXP};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
     wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::Drivetrain::trackWidth, ControlMap::Drivetrain::trackDepth, ControlMap::Drivetrain::wheelRadius, ControlMap::Drivetrain::mass};
@@ -132,6 +134,6 @@ struct RobotMap {
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {
-    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
+    // wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ClimberSystem climberSystem;
 };

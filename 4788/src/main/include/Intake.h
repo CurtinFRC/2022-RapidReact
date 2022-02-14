@@ -37,6 +37,9 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void setIndex(double voltage, MagStates magState);
   void setIndex(MagStates magState);
 
+  void setIntake(double intakeVoltage);
+  void setIntakeState(IntakeStates intakeState);
+
   bool _frontSensor();
   bool _backSensor();
 
@@ -52,4 +55,5 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   double _power;
   double _indexVoltage = 0;
   double _indexSetVoltage = 0;
+  double _intakeSetVoltage = 0;
 };

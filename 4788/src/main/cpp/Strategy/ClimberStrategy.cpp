@@ -8,7 +8,7 @@ ClimberStrategy::ClimberStrategy(std::string name, Climber &climber, Controllers
 }
 
 void ClimberStrategy::OnUpdate(double dt) {
-  if (_contGroup.Get(ControlMap::climberActuate)) {
+  if (_contGroup.Get(ControlMap::climberActuate, wml::controllers::XboxController::ONRISE)) {
     if (_climberToggle) {
       _climberToggle = false;
     } else {
@@ -19,7 +19,7 @@ void ClimberStrategy::OnUpdate(double dt) {
   if (_climberToggle) {
     _climber.setState(ClimberState::kDeployed);
   } else {
-    _climber.setState(ClimberState::kDeployed);
+    _climber.setState(ClimberState::kStowed);
   }
 }
 
