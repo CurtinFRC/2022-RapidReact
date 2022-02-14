@@ -11,13 +11,14 @@ double gearboxRatio = 6.10;
 double wheelSize = 0.1016;
 
 
-// PID pidAngle({0.3, 0, 0});
-// Trajectory trajectory{{{0,4}, {1,4}, {2,4}, {3,4}}};
-// RobotControl robotControl{trajectory, {distance, gyro}, {{0.3, 0, 0}}};
 
 DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
+  _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  _drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  _drivetrain.GetConfig().gyro->Reset();
+
   // SetTimeout(2.5);  // stops after time
 }
 
@@ -28,8 +29,8 @@ void DrivetrainTrajectoryStrategy::OnUpdate(double dt) {
   double leftPower = 0, rightPower = 0;
 
   double leftRotations = _drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()/gearboxRatio;
-  double rightRotations = _drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()/gearboxRatio;
-  double averageRotations = (leftRotations+rightRotations)/2;
+  double rightRotations = _drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations()/gearboxRatio;
+  double averageRotations = (leftRotations-rightRotations)/2;
   double gyro = _drivetrain.GetConfig().gyro->GetAngle();
   
   double wheelCirc = M_PI*wheelSize;
@@ -41,14 +42,25 @@ void DrivetrainTrajectoryStrategy::OnUpdate(double dt) {
 
   std::cout << "\ngyro: " << gyro << "\ndistance: " << distance << std::endl;
 
-  RobotControl robotControl{_trajectory, {distance, gyro}, {{0.3, 0, 0}}};
+  RobotControl robotControl{_trajectory, {distance, gyro}, {{0.005, 0, 0}}};
 
-  std::pair<double, double> output = robotControl.followSpline(dt);
-  leftPower = output.first;
-  rightPower = output.second;
+  RobotControl::FollowInfo output = robotControl.followSpline(dt);
+  leftPower = output.left;
+  rightPower = output.right;
 
+
+  auto inst = nt::NetworkTableInstance::GetDefault();
+  auto table = inst.GetTable("Auto stuff");
+
+  table->GetEntry("Distance").SetDouble(distance);
+  table->GetEntry("is_done").SetBoolean(output.is_done);
+  table->GetEntry("goal_angle").SetDouble(output.goal_angle);
+  table->GetEntry("right").SetDouble(output.right);
+  table->GetEntry("left").SetDouble(output.left);
 
 
   _drivetrain.Set(-leftPower, -rightPower);
-
+  if (output.is_done) {
+    SetDone();
+  }
 }

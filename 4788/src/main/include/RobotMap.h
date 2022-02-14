@@ -115,7 +115,7 @@ struct RobotMap {
     wml::Gearbox LGearbox{&leftMotors, &leftMotor};
     wml::Gearbox RGearbox{&rightMotors, &rightMotor};
 
-    wml::sensors::NavX navX{frc::I2C::Port::kMXP};
+    wml::sensors::NavX navX{frc::SPI::Port::kMXP};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
     wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::Drivetrain::trackWidth, ControlMap::Drivetrain::trackDepth, ControlMap::Drivetrain::wheelRadius, ControlMap::Drivetrain::mass};
