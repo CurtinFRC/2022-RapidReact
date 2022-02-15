@@ -2,6 +2,8 @@
 
 #include "RobotMap.h"
 #include "controllers/Controllers.h"
+#include "Util.h"
+
 
 //Brings the nightmarish controller class into the scope 
 using Controllers = wml::controllers::SmartControllerGroup;
@@ -31,8 +33,9 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void updateIntake(double dt);
 
   void Update(double dt);
-  void setIndex(double voltage, MagStates magState);
-  void setIndex(MagStates magState);
+  // void setIndex(double voltage, MagStates magState);
+  // void setIndex(MagStates magState);
+  void setIndex(double voltage);
 
   void setIntake(double intakeVoltage);
   void setIntakeState(IntakeStates intakeState);
@@ -45,19 +48,25 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void manualSetIntake(double power);
   void manualSetIndex(double power);
 
+  IntakeStates _intakeState{ IntakeStates::kStowed };
+  MagStates _magState{ MagStates::kManual };
  private:
 
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
 
-  IntakeStates _intakeState{ IntakeStates::kStowed };
-  MagStates _magState{ MagStates::kEmpty };
+  Debounce db{2};
+
 
   //variable for power
   double _power;
   double _indexVoltage = 0;
+  double _intakeVoltage = 0;
+
+
   double _indexSetVoltage = 0;
   double _intakeSetVoltage = 0;
+  double _intakeSetVoltageSet = 0;
 
   double _testingManualIndex = 0;
   double _testingManualIntake = 0;
