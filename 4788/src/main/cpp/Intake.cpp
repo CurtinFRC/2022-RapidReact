@@ -117,7 +117,7 @@ void Intake::updateIntake(double dt) {
 
   switch(_intakeState) {
     case IntakeStates::kIdle:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
       _intakeState = IntakeStates::kIntake;
       intakeSetPower = 0;
     break;
@@ -135,7 +135,7 @@ void Intake::updateIntake(double dt) {
     break;
 
     case IntakeStates::kStowed:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
     break;
 
     default:
