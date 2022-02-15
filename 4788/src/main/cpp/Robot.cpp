@@ -51,6 +51,12 @@ void Robot::RobotInit() {
   NTProvider::Register(drivetrain);
 
   trajectories.build();
+
+  StartLoop(100);
+}
+
+void Robot::Update(double dt) {
+  StrategyController::Update(dt);
 }
 
 void Robot::RobotPeriodic() {
@@ -59,7 +65,7 @@ void Robot::RobotPeriodic() {
 
   // t2000("<Anna>");
 
-  StrategyController::Update(dt);
+  // StrategyController::Update(dt);
   // shooter->update(dt);
   // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   // robotMap.controlSystem.compressor.Update(dt);

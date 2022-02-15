@@ -14,6 +14,7 @@ class DrivetrainTrajectoryStrategy : public wml::Strategy {
  private:
   Drivetrain &_drivetrain;
   ::Trajectory &_trajectory;
+  RobotControl _control;
 };
 
 

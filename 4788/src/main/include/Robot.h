@@ -13,7 +13,7 @@
 #include "Strategy/ShooterStrategy.h"
 
 
-class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
+class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider, protected wml::loops::LoopSystem {
 public:
 
   /**
@@ -48,6 +48,8 @@ public:
    */
   void TestInit() override;
   void TestPeriodic() override;
+
+  void Update(double dt) override;
 
 private:
   RobotMap robotMap;

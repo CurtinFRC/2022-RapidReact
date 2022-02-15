@@ -12,7 +12,8 @@ double wheelSize = 0.1016;
 
 
 
-DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory) {
+DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) 
+  : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory), _control(trajectory, { {0.025, 0.001, 0} }) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
   _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
@@ -42,12 +43,9 @@ void DrivetrainTrajectoryStrategy::OnUpdate(double dt) {
 
   std::cout << "\ngyro: " << gyro << "\ndistance: " << distance << std::endl;
 
-  RobotControl robotControl{_trajectory, {distance, gyro}, {{0.005, 0, 0}}};
-
-  RobotControl::FollowInfo output = robotControl.followSpline(dt);
+  RobotControl::FollowInfo output = _control.followSpline(dt, distance, gyro);
   leftPower = output.left;
   rightPower = output.right;
-
 
   auto inst = nt::NetworkTableInstance::GetDefault();
   auto table = inst.GetTable("Auto stuff");
@@ -57,10 +55,12 @@ void DrivetrainTrajectoryStrategy::OnUpdate(double dt) {
   table->GetEntry("goal_angle").SetDouble(output.goal_angle);
   table->GetEntry("right").SetDouble(output.right);
   table->GetEntry("left").SetDouble(output.left);
-
+  table->GetEntry("gyro").SetDouble(gyro);
 
   _drivetrain.Set(-leftPower, -rightPower);
   if (output.is_done) {
     SetDone();
+  } else {
+    table->GetEntry("gyroError").SetDouble(output.goal_angle - gyro);
   }
 }
