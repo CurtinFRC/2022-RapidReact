@@ -29,7 +29,7 @@ void Robot::RobotInit() {
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, robotMap.contGroup));
+  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, *shooter,robotMap.contGroup));
   intake->StartLoop(100);
   robotMap.intakeSystem.intake.SetInverted(true);
   robotMap.intakeSystem.indexWheel.SetInverted(true);

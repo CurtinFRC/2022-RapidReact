@@ -13,18 +13,20 @@ void Climber::Update(double dt) {
 void Climber::updateClimber(double dt) {
   switch (_state) {
   case ClimberState::kDeployed:
-    // _climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+    _climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
     std::cout << "Deploy climber" << std::endl;
     break;
 
   case ClimberState::kStowed:
-    // _climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+    _climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
     break;
 
   default:
     std::cout << "In climber default state, something is wrong" << std::endl;
     break;
   }
+
+  _climberSystem.climberSolenoid.Update(dt);
 }
 
 void Climber::disabledClimber() {

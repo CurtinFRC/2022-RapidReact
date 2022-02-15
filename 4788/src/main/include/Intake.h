@@ -43,6 +43,8 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   bool _frontSensor();
   bool _backSensor();
 
+  void ejectBall(bool readyFire); //runs checks then sets to eject state
+
  private:
 
   RobotMap::IntakeSystem &_intakeSystem;

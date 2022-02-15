@@ -116,4 +116,6 @@ struct ControlMap {
 
   inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kA };
   inline static const wml::controllers::tButton indexOverrideToggleButton{ driver, wml::controllers::XboxController::kB };
+
+  inline static const wml::controllers::tAxis fire{ coDriver, wml::controllers::XboxController::kRightThrottle};
 };

@@ -1,7 +1,7 @@
 #include "Strategy/IntakeStrategy.h"
 #include <iostream>
 
-IntakeStrategy::IntakeStrategy(std::string name, Intake &intake, Controllers &contGroup) : Strategy(name), _intake(intake), _contGroup(contGroup) {
+IntakeStrategy::IntakeStrategy(std::string name, Intake &intake, Shooter &shooter, Controllers &contGroup) : Strategy(name), _intake(intake), _shooter(shooter), _contGroup(contGroup) {
   SetCanBeInterrupted(true);
   SetCanBeReused(true);
   Requires(&intake);
@@ -41,7 +41,9 @@ void IntakeStrategy::OnUpdate(double dt) {
       _intake.setIndex(MagStates::kOverride);
     }
   } else {
-    _intake.setIndex(MagStates::kEmpty);
+    if (indexManualToggle && _contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
+      _intake.setIndex(MagStates::kEmpty);
+    }
   }
 
   if (_contGroup.Get(ControlMap::intakeActuation, wml::controllers::XboxController::ONRISE)) {
@@ -56,5 +58,9 @@ void IntakeStrategy::OnUpdate(double dt) {
     _intake.setIntakeState(IntakeStates::kIdle);
   } else {
     _intake.setIntakeState(IntakeStates::kStowed);
+  }
+
+  if (_contGroup.Get(ControlMap::fire) > ControlMap::triggerDeadzone) {
+    _intake.ejectBall(_shooter.readyToFire);
   }
 }

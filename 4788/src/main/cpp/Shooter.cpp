@@ -44,7 +44,13 @@ void Shooter::updateShooter(double dt) {
     break;
   }
 
-  
+  if (isDone()) {
+    readyToFire = true;
+  } else {
+    readyToFire = true;
+  }
+
+  isDone() ? readyToFire = true : readyToFire = false; 
 
   double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
   auto &motor = _shooterSystem.shooterGearbox.motor;
@@ -53,10 +59,8 @@ void Shooter::updateShooter(double dt) {
   double manualOutput = std::min(_flyWheelVoltage, Vmax);
 
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
-  nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(IsDone());
+  nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(isDone());
 
-
-  _shooterSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   _shooterSystem.shooterGearbox.transmission->SetVoltage(manualOutput);
 }
 
@@ -104,6 +108,6 @@ void Shooter::SetIsDoneThreshold(double threshAvgPos, double threshAvgVel) {
   _threshAvgVel = threshAvgVel;
 }
 
-bool Shooter::IsDone() {
+bool Shooter::isDone() {
   return _state == ShooterState::kPID && _iterations > 20 && std::abs(_avgPos) < _threshAvgPos && std::abs(_avgVel) < _threshAvgVel;
 }

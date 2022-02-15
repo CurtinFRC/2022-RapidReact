@@ -24,7 +24,9 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   void Update(double dt) override;
 
   void SetIsDoneThreshold(double threshAvgPos, double threshAvgVel);
-  bool IsDone();
+  bool isDone();
+
+  bool readyToFire = false;
 
  private:
   ShooterState _state{ ShooterState::kPID};
@@ -45,4 +47,6 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   double _avgVel = 0;
   double _avgPos = 0;
 
+
+  //called in the intake class
 };

@@ -101,7 +101,6 @@ struct RobotMap {
       mNEO * 3
     };
 
-    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
@@ -134,6 +133,6 @@ struct RobotMap {
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {
-    // wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ClimberSystem climberSystem;
 };

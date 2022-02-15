@@ -1,17 +1,19 @@
 #pragma once 
 
 #include "Intake.h"
+#include "Shooter.h"
 #include "strategy/Strategy.h"
 
 using Controllers = wml::controllers::SmartControllerGroup;
 
 class IntakeStrategy : public wml::Strategy {
  public:
-  IntakeStrategy(std::string name, Intake &intake, Controllers &contGroup);
+  IntakeStrategy(std::string name, Intake &intake, Shooter &shooter ,Controllers &contGroup);
 
   void OnUpdate(double dt) override;
  private:
   Intake &_intake;
+  Shooter &_shooter;
   Controllers &_contGroup;
 
   bool indexManualToggle = false;
