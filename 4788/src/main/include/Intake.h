@@ -45,6 +45,9 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
 
   void ejectBall(bool readyFire); //runs checks then sets to eject state
 
+  void manualSetIntake(double power);
+  void manualSetIndex(double power);
+
  private:
 
   RobotMap::IntakeSystem &_intakeSystem;
@@ -58,4 +61,8 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   double _indexVoltage = 0;
   double _indexSetVoltage = 0;
   double _intakeSetVoltage = 0;
+
+  double _testingManualIndex = 0;
+  double _testingManualIntake = 0;
+  double intakeSetPower = 0;
 };

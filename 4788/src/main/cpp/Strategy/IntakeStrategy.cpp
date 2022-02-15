@@ -9,9 +9,6 @@ IntakeStrategy::IntakeStrategy(std::string name, Intake &intake, Shooter &shoote
 
 void IntakeStrategy::OnUpdate(double dt) {
   double indexVoltage = fabs(_contGroup.Get(ControlMap::indexSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::indexSpin) : 0;
-  double intakeVoltage = fabs(_contGroup.Get(ControlMap::intake)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::intake) : 0;
-  _intake.setIntake(intakeVoltage);
-
 
   if (_contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
     if (indexManualToggle) {
@@ -54,13 +51,32 @@ void IntakeStrategy::OnUpdate(double dt) {
     }
   }
 
+
+
+
+
+  double intakeVoltage = fabs(_contGroup.Get(ControlMap::intake)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::intake) : 0;
+  _intake.setIntake(intakeVoltage);
+
   if (_intakeToggle) {
     _intake.setIntakeState(IntakeStates::kIdle);
   } else {
     _intake.setIntakeState(IntakeStates::kStowed);
   }
 
-  if (_contGroup.Get(ControlMap::fire) > ControlMap::triggerDeadzone) {
-    _intake.ejectBall(_shooter.readyToFire);
-  }
+  
+
+  // if (_contGroup.Get(ControlMap::fire) > ControlMap::triggerDeadzone) {
+  //   _intake.ejectBall(_shooter.readyToFire);
+  // }
+
+
+
+
+  //testing stuff
+  // double manualSetIntake = fabs(_contGroup.Get(ControlMap::testingIntake)) > ControlMap::xboxDeadzone ? _contGroup.Get(ControlMap::testingIntake) : 0;
+  // double manualSetIndex = fabs(_contGroup.Get(ControlMap::testingIndex)) > ControlMap::xboxDeadzone ? _contGroup.Get(ControlMap::testingIndex) : 0;
+
+  // _intake.manualSetIntake(manualSetIntake);
+  // _intake.manualSetIndex(manualSetIndex);
 }

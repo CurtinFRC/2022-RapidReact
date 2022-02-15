@@ -12,6 +12,7 @@ struct ControlMap {
   // USB port numbers
   static constexpr int driver = 0;
   static constexpr int coDriver = 1;
+  static constexpr int tester = 2;
 
   static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
     contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
@@ -27,6 +28,7 @@ struct ControlMap {
   // Controllers  
   static constexpr int xbox1Port = driver;
   static constexpr int xbox2Port = coDriver;
+  static constexpr int xbox3Port = tester;
 
   // Deadzone
   static constexpr double xboxDeadzone = 0.15;
@@ -118,4 +120,7 @@ struct ControlMap {
   inline static const wml::controllers::tButton indexOverrideToggleButton{ driver, wml::controllers::XboxController::kB };
 
   inline static const wml::controllers::tAxis fire{ coDriver, wml::controllers::XboxController::kRightThrottle};
+
+  inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
+  inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };
 };
