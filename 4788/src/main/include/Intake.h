@@ -20,10 +20,7 @@ enum class MagStates{
   //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
   kStowed,
-  kIdle,
-  kIntake,
-  kOutake,
-  kManual
+  kDeployed
 };
 
   //A class to group the gamestage variables and structs from Robotmap.h

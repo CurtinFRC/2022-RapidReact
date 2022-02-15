@@ -116,27 +116,8 @@ void Intake::updateIntake(double dt) {
 
 
   switch(_intakeState) {
-    case IntakeStates::kIdle:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-      _intakeState = IntakeStates::kIntake;
-      intakeSetPower = 0;
-    break;
-    case IntakeStates::kIntake:
-      if (_magState == MagStates::kOne || _magState == MagStates::kTwo) {
-        intakeSetPower = fabs(_intakeSetVoltage);
-      }
-    break;
-    case IntakeStates::kOutake:
-      intakeSetPower = -fabs(_intakeSetVoltage);
-    break;
-
-    case IntakeStates::kManual:
-
-    break;
-
     case IntakeStates::kStowed:
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
-    break;
+    brea
 
     default:
       std::cout << "In intake default state, something is wrong, being reset to Idle" << std::endl;
