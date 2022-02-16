@@ -13,7 +13,7 @@ double wheelSize = 0.1016;
 
 
 DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) 
-  : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory), _control(trajectory, { {0.025, 0.001, 0} }) {
+  : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory), _control(trajectory, { {0.025, 0.005, 0.001} }) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
   _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
