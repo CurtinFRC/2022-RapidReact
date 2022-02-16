@@ -26,8 +26,6 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   void SetIsDoneThreshold(double threshAvgPos, double threshAvgVel);
   bool isDone();
 
-  bool readyToFire = false;
-
  private:
   ShooterState _state{ ShooterState::kPID};
   wml::controllers::SmartControllerGroup &_contGroup;
@@ -41,8 +39,8 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   double _sum = 0;
   double _previousError = 0;
 
-  double _threshAvgPos = 20;
-  double _threshAvgVel = 8;
+  double _threshAvgPos = 45;
+  double _threshAvgVel = 5;
   int _iterations = 0;
   double _avgVel = 0;
   double _avgPos = 0;

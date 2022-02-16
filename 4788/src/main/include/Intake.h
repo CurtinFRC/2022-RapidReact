@@ -11,13 +11,37 @@ using Controllers = wml::controllers::SmartControllerGroup;
 
 enum class MagStates{
   kEmpty, //robot has no balls 
-  kTransfer, //ball going from back to front of robot 
+  kTransfer, //ball going from back to front of robot
+  kTransfering, 
   kOne, //ball at front
   kTwo, //ball at front and back 
   kEject, //send ball to the shooter
   kManual, //sometime code bad
   kOverride
 };
+
+inline std::string mag_state_to_string(MagStates &state) {
+  switch (state) {
+    case MagStates::kEmpty:
+      return "Empty";
+    case MagStates::kManual:
+      return "Manual";
+    case MagStates::kOverride:
+      return "Override";
+    case MagStates::kOne:
+      return "One";
+    case MagStates::kTwo:
+      return "Two";
+    case MagStates::kEject:
+      return "Eject";
+    case MagStates::kTransfer:
+      return "Transfer";
+    case MagStates::kTransfering:
+      return "Transferring";
+  }
+}
+
+
 
   //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
@@ -37,11 +61,15 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   // void setIndex(MagStates magState);
   void setIndex(double voltage);
 
-  void setIntake(double intakeVoltage);
   void setIntakeState(IntakeStates intakeState);
+  void setIntake(double intakeVoltage);
+
+  void setMagState(MagStates magState);
 
   bool _frontSensor();
   bool _backSensor();
+
+  void fireBall();
 
   void ejectBall(bool readyFire); //runs checks then sets to eject state
 
@@ -49,13 +77,17 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void manualSetIndex(double power);
 
   IntakeStates _intakeState{ IntakeStates::kStowed };
-  MagStates _magState{ MagStates::kManual };
+  MagStates _magState{ MagStates::kEmpty };
  private:
-
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
 
-  Debounce db{2};
+  // Debounce db{
+  //   3};
+  // Debounce jaci{0.2};
+  // Debounce george{0.2};
+  Debounce ejectDebounce{0.5};
+  Debounce transferDebounce{2};
 
 
   //variable for power

@@ -6,89 +6,196 @@
 Intake::Intake (RobotMap::IntakeSystem &intakeSystem, Controllers &contGroup) : _intakeSystem(intakeSystem), _contGroup(contGroup) {}
 
 void Intake::updateIntake(double dt) {
-  // auto magInst = nt::NetworkTableInstance::GetDefault();
-  // auto magSystem = magInst.GetTable("magSystem");
+  auto magInst = nt::NetworkTableInstance::GetDefault();
+  auto magSystem = magInst.GetTable("magSystem");
 
-  // _magState == MagStates::kEmpty ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
+  // _magreturn= MagStates::kEmpty ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Empty State").SetBoolean(false);
   // _magState == MagStates::kManual ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual State").SetBoolean(false);
   // _magState == MagStates::kOverride ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override State").SetBoolean(false);
   // _magState == MagStates::kOne ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("One State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("One State").SetBoolean(false);
   // _magState == MagStates::kTwo ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Two State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Two State").SetBoolean(false);
   // _magState == MagStates::kEject ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Eject State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Eject State").SetBoolean(false);
   // _magState == MagStates::kTransfer ? nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Transfer State").SetBoolean(true) : nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Transfer State").SetBoolean(false);
-  
-  // nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Front Sensor").SetBoolean(_frontSensor());
-  // nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Back Sensor").SetBoolean(_backSensor());
-
-  // switch(_magState) {
-  //   case MagStates::kEmpty: //robot is empty, no balls
-
-  //   break;
-
-  //   case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
-      
-  //   break;
-
-  //   case MagStates::kOne:
-
-  //   break;
-
-  //   case MagStates::kTwo:
-
-  //   break;
-
-  //   case MagStates::kEject:
-
-  //   break;
-
-  //   case MagStates::kOverride:
-
-  //   break;
-
-  //   case MagStates::kManual:
-  //     _indexSetVoltage = _indexVoltage;
-  //     _intakeSetVoltage = _intakeVoltage;
-
-  //     if (db.Get(_frontSensor())) {
-  //       std::cout << "AGHGHG" << std::endl;
-  //     }
-  //   break;
-
-  //   default:
-  //     std::cout << "in mag default state, something is wrong, being reset to empty" << std::endl;
-  //   break;
-  // }
-
-  // switch(_intakeState) {
-  //   case IntakeStates::kStowed:
-  //     _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-  //   break;
     
-  //   case IntakeStates::kDeployed:
-  //     _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
-  //   break;
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("State").SetString(mag_state_to_string(_magState));
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Front Sensor").SetBoolean(_frontSensor());
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Back Sensor").SetBoolean(_backSensor());
 
-  //   default:
-  //     std::cout << "In intake default state, something is wrong, being reset to Idle" << std::endl;
-  //   break;
-  // }
+  switch(_magState) {
+    case MagStates::kEmpty: //robot is empty, no balls
+      _indexSetVoltage = 0;
+      if (!_frontSensor() && _backSensor()) {
+        _magState = MagStates::kOne;
+      } else if (_frontSensor() && !_backSensor()) {
+        _magState = MagStates::kTransfer;
+      } else if (_frontSensor() && _backSensor()) {
+        _magState = MagStates::kTwo;
+      }
+      // if (!_frontSensor() && _backSensor()) {
+      //   _magState = MagStates::kOne;
+      // } else if (!db.Get(!(_frontSensor() && !_backSensor()))) {
+      //   _magState = MagStates::kTransfer;
+      // } else if (_frontSensor() && _backSensor()) {
+      //   _magState = MagStates::kTwo;
+      // } else if (!_frontSensor() && !_backSensor()) {
+      //   _magState = MagStates::kEmpty;
+      // }
+    break;
 
-  // _intakeSystem.intake.Set(_intakeSetVoltage);
-  // _intakeSystem.indexWheel.Set(_indexSetVoltage);
+    case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
+      if (_frontSensor()) {
+        _intakeSetVoltage = 0.9;
+        _indexSetVoltage = -0.35;
+        _magState = MagStates::kTransfering;
+      }
+      // if (!jaci.Get(!(_frontSensor() && !_backSensor()))) {
+      //   _intakeSetVoltage = 0.5;
+      //   _indexSetVoltage = -0.5;
+      // } else {
+      //   if (!_frontSensor() && _backSensor()) {
+      //     _magState = MagStates::kOne;
+      //   } else if (!db.Get(!(_frontSensor() && !_backSensor()))) {
+      //     _magState = MagStates::kTransfer;
+      //   } else if (_frontSensor() && _backSensor()) {
+      //     _magState = MagStates::kTwo;
+      //   } else if (!_frontSensor() && !_backSensor()) {
+      //     _magState = MagStates::kEmpty;
+      //   }
+      // }
+    break;
 
-  // _intakeSystem.intakeSolenoid.Update(dt);
+    case MagStates::kTransfering:
+      if (_backSensor() && !_frontSensor()) {
+        _intakeSetVoltage = 0;
+        _indexSetVoltage = 0;
+        _magState = MagStates::kOne;
+
+        // if (!_frontSensor() && _backSensor()) {
+        //   _magState = MagStates::kOne;
+        // } else if (!db.Get(!(_frontSensor() && !_backSensor()))) {
+        //   _magState = MagStates::kTransfer;
+        // } else if (_frontSensor() && _backSensor()) {
+        //   _magState = MagStates::kTwo;
+        // } else if (!_frontSensor() && !_backSensor()) {
+        //   _magState = MagStates::kEmpty;
+        // }
+      } else if (transferDebounce.Get(true)) {
+        // Prevent the system getting stuck in 'transferring'
+        // by imposing a time limit set by transferDebounce
+        transferDebounce.Get(false);
+        _magState = MagStates::kEmpty;
+      }
+      break;
+
+    case MagStates::kOne:
+      _indexSetVoltage = 0;
+      if (_frontSensor() && !_backSensor()) {
+        _magState = MagStates::kTransfer;
+      } else if (_frontSensor() && _backSensor()) {
+        _magState = MagStates::kTwo;
+      } else if (!_frontSensor() && !_backSensor()) {
+        _magState = MagStates::kEmpty;
+      }
+      // if (!_frontSensor() && _backSensor()) {
+      //   _magState = MagStates::kOne;
+      // } else if (!db.Get(!(_frontSensor() && !_backSensor()))) {
+      //   _magState = MagStates::kTransfer;
+      // } else if (_frontSensor() && _backSensor()) {
+      //   _magState = MagStates::kTwo;
+      // } else if (!_frontSensor() && !_backSensor()) {
+      //   _magState = MagStates::kEmpty;
+      // }
+
+    break;
+
+    case MagStates::kTwo:
+      if (!_frontSensor() && _backSensor()) {
+        _magState = MagStates::kOne;
+      } else if (_frontSensor() && _backSensor()) {
+        _magState = MagStates::kTwo;
+      } else if (!_frontSensor() && !_backSensor()) {
+        _magState = MagStates::kEmpty;
+      }
+      _intakeSetVoltage = 0;
+      _indexSetVoltage = 0;
+    break;
+
+    case MagStates::kEject:
+      if (!ejectDebounce.Get(true)) {
+        _indexSetVoltage = -0.7;
+        // _intakeSetVoltage = 0.5;
+      } else {
+        ejectDebounce.Get(false);
+        _magState = MagStates::kEmpty;
+        std::cout << "EJECT" << std::endl;
+        // _indexSetVoltage = 0;
+        // if (_frontSensor() && !_backSensor()) {
+        //   _magState = MagStates::kTransfer;
+        // } else {
+        //   _magState = MagStates::kEmpty;
+        // }
+      }
+    break;
+
+    case MagStates::kOverride:
+
+    break;
+
+    case MagStates::kManual:
+      std::cout << _indexSetVoltage << std::endl;
+      _indexSetVoltage = _indexVoltage;
+    break;
+
+    default:
+  //     std::cout << "in mag default state, something is wrong, being reset to empty" << std::endl;
+    break;
+  }
+
+  switch(_intakeState) {
+    case IntakeStates::kStowed:
+      _intakeSetVoltage = 0;
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+    break;
+    
+    case IntakeStates::kDeployed:
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+
+      // if (!(_magState == MagStates::kTransfer)) {
+      //   _intakeSetVoltage = _intakeVoltage;
+      // }
+
+      // if (!(_magState == MagStates::kOne) && !(_magState == MagStates::kTwo)) {
+      //   _intakeSetVoltage = _intakeVoltage;
+      // }
+    break;
+
+    default:
+      std::cout << "In intake default state, something is wrong, being reset to Idle" << std::endl;
+    break;
+  }
+
+  _intakeSystem.intake.Set(_intakeSetVoltage);
+  _intakeSystem.indexWheel.Set(_indexSetVoltage);
+  nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Index").SetDouble(_indexSetVoltage);
+
+  _intakeSystem.intakeSolenoid.Update(dt);
 }
 
 void Intake::setIndex(double voltage) {
   _indexVoltage = voltage;
 }
 
-void Intake::setIntake(double intakeVoltage) {
-  _intakeVoltage = intakeVoltage;
-}
-
 void Intake::setIntakeState(IntakeStates intakeState) {
   _intakeState = intakeState;
+}
+
+void Intake::setMagState(MagStates magState) {
+  _magState = magState;
+}
+
+void Intake::setIntake(double voltage) {
+  if (_magState != MagStates::kTransfer && _magState != MagStates::kTransfering)
+    _intakeSetVoltage = voltage;
 }
 
 bool Intake::_frontSensor() {
@@ -97,6 +204,12 @@ bool Intake::_frontSensor() {
 
 bool Intake::_backSensor() {
   return !_intakeSystem.intakeBallSensor.Get();
+}
+
+void Intake::fireBall() {
+  if (_backSensor()) {
+    _magState = MagStates::kEject;
+  }
 }
 
 void Intake::Update(double dt) {

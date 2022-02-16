@@ -68,8 +68,8 @@ struct ControlMap {
     static constexpr int indexMotorPort = 4;
     inline static bool shooterPID = false;
 
-    inline static double shooterEjectPower = 0.2;
-    inline static double innerCircleShootValue = 150;
+    inline static double shooterEjectPower = 0.8;
+    inline static double innerCircleShootValue = 200;
     inline static double outerCircleShootValue = 400;
     inline static double farShootValue = 500;
     inline static double noahShootValue = 600;
@@ -77,8 +77,8 @@ struct ControlMap {
   
 
   struct ShooterGains {
-    inline static double kp = 0.04;
-    inline static double ki = 0.01;
+    inline static double kp = 0.025;
+    inline static double ki = 0.045;
     inline static double kd = -0.0001;
     // inline static double kf = 0;
     inline static double IMax = 100;
@@ -116,10 +116,10 @@ struct ControlMap {
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kA };
-  inline static const wml::controllers::tButton indexOverrideToggleButton{ driver, wml::controllers::XboxController::kB };
+  inline static const wml::controllers::tButton indexManualToggleButton{ tester, wml::controllers::XboxController::kA };
+  inline static const wml::controllers::tButton indexManualStop{ tester, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tAxis fire{ coDriver, wml::controllers::XboxController::kRightThrottle};
+  inline static const wml::controllers::tButton fire{ coDriver, wml::controllers::XboxController::kY};
 
   inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };

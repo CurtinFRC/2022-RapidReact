@@ -11,7 +11,7 @@ class Debounce {
     double now = (double)frc::Timer::GetFPGATimestamp();
 
     //rising edge
-    if (current != _lastState) {
+    if (current != _lastState || _lastChange < 1e-9) {
       _lastChange = now;
       _lastState = current;
     }

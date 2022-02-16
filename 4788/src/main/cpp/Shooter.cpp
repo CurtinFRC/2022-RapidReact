@@ -44,14 +44,6 @@ void Shooter::updateShooter(double dt) {
     break;
   }
 
-  if (isDone()) {
-    readyToFire = true;
-  } else {
-    readyToFire = true;
-  }
-
-  isDone() ? readyToFire = true : readyToFire = false; 
-
   double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
   auto &motor = _shooterSystem.shooterGearbox.motor;
   double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
