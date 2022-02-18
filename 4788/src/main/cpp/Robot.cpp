@@ -1,6 +1,7 @@
 #include "Robot.h"
 #include "Intake.h"
 #include "Strategy/DrivetrainTrajectoryStrategy.h"
+#include "Strategy/DriveToDistanceStrategy.h"
 
 using namespace frc;
 using namespace wml;
@@ -84,8 +85,10 @@ void Robot::DisabledPeriodic() {
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {
-  auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  // auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  auto testStrat = std::make_shared<DriveToDistanceStrategy>("testStrat", *drivetrain, -2.0);
   bool success = Schedule(testStrat);
+
   std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {

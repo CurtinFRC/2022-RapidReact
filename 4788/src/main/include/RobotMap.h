@@ -112,8 +112,8 @@ struct RobotMap {
     wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(rightMotor);
 
     // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &leftMotor};
-    wml::Gearbox RGearbox{&rightMotors, &rightMotor};
+    wml::Gearbox LGearbox{&leftMotors, &leftMotor, 6.1};
+    wml::Gearbox RGearbox{&rightMotors, &rightMotor, 6.1};
 
     wml::sensors::NavX navX{frc::SPI::Port::kMXP};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
