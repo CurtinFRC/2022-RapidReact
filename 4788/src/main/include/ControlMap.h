@@ -77,10 +77,9 @@ struct ControlMap {
   
 
   struct ShooterGains {
-    inline static double kp = 0.025;
-    inline static double ki = 0.045;
-    inline static double kd = -0.0001;
-    // inline static double kf = 0;
+    inline static double kp = 0.002; //0.002
+    inline static double ki = 0.0005; //0.0005
+    inline static double kd = -0.001; //-0.001
     inline static double IMax = 100;
   };
 
@@ -123,4 +122,7 @@ struct ControlMap {
 
   inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };
+
+  inline static const wml::controllers::tButton GetOut{ driver, wml::controllers::XboxController::kY };
+  inline static const wml::controllers::tButton GetOutBoogalloo{ driver, wml::controllers::XboxController::kA };
 };

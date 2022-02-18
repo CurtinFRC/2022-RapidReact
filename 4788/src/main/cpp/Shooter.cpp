@@ -26,6 +26,11 @@ void Shooter::setPID(double goal, double dt) {
 }
 
 void Shooter::updateShooter(double dt) {
+  auto shooterInst = nt::NetworkTableInstance::GetDefault();
+  auto shooterSystem = shooterInst.GetTable("shooterSystem");
+
+  nt::NetworkTableInstance::GetDefault().GetTable("shooterSystem")->GetEntry("State").SetString(shooter_state_to_string(_state));
+
   switch (_state) {
   case ShooterState::kManual:
     break;
@@ -38,17 +43,23 @@ void Shooter::updateShooter(double dt) {
     _flyWheelVoltage = calculatePID(_angularVelocityGoal, dt);
     break;
 
+  case ShooterState::kRaw:
+    manualOutput = -_rawPower;
+  break;
+
   default:
     _state = ShooterState::kIdle;
     std::cout << "in default case, somthing is wrong" << std::endl;
     break;
   }
 
-  double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
-  auto &motor = _shooterSystem.shooterGearbox.motor;
-  double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
-  double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
-  double manualOutput = std::min(_flyWheelVoltage, Vmax);
+  if (_state != ShooterState::kRaw) {
+    double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
+    auto &motor = _shooterSystem.shooterGearbox.motor;
+    double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
+    double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
+    manualOutput = std::min(_flyWheelVoltage, Vmax);
+  }
 
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(isDone());
@@ -89,7 +100,6 @@ double Shooter::calculatePID(double angularVelocity, double dt) {
   table->GetEntry("avg_pos").SetDouble(_avgPos);
   table->GetEntry("avg_vel").SetDouble(_avgVel);
 
-
   _previousError = error;
   _iterations ++;
   return output;
@@ -102,4 +112,10 @@ void Shooter::SetIsDoneThreshold(double threshAvgPos, double threshAvgVel) {
 
 bool Shooter::isDone() {
   return _state == ShooterState::kPID && _iterations > 20 && std::abs(_avgPos) < _threshAvgPos && std::abs(_avgVel) < _threshAvgVel;
+}
+
+
+void Shooter::GetOut(double dt, double power) {
+  _state = ShooterState::kRaw;
+  _rawPower = power;
 }

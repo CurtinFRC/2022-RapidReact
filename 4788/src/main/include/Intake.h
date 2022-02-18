@@ -76,6 +76,8 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void manualSetIntake(double power);
   void manualSetIndex(double power);
 
+  void GetOut();
+
   IntakeStates _intakeState{ IntakeStates::kStowed };
   MagStates _magState{ MagStates::kEmpty };
  private:
@@ -86,7 +88,7 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   //   3};
   // Debounce jaci{0.2};
   // Debounce george{0.2};
-  Debounce ejectDebounce{0.5};
+  Debounce ejectDebounce{0.1};
   Debounce transferDebounce{2};
 
 

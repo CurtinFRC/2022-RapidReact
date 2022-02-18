@@ -44,7 +44,7 @@ void Intake::updateIntake(double dt) {
 
     case MagStates::kTransfer: //if a ball is sensed in the intake sensor, move it to the front 
       if (_frontSensor()) {
-        _intakeSetVoltage = 0.9;
+        _intakeSetVoltage = 1;
         _indexSetVoltage = -0.35;
         _magState = MagStates::kTransfering;
       }
@@ -115,6 +115,8 @@ void Intake::updateIntake(double dt) {
         _magState = MagStates::kTwo;
       } else if (!_frontSensor() && !_backSensor()) {
         _magState = MagStates::kEmpty;
+      } else if (_frontSensor() && !_backSensor()) {
+        _magState = MagStates::kTransfer;
       }
       _intakeSetVoltage = 0;
       _indexSetVoltage = 0;
@@ -186,7 +188,11 @@ void Intake::setIndex(double voltage) {
 }
 
 void Intake::setIntakeState(IntakeStates intakeState) {
-  _intakeState = intakeState;
+  if (_magState == MagStates::kTwo) {
+    _intakeState = IntakeStates::kDeployed;
+  } else {
+    _intakeState = intakeState;
+  }
 }
 
 void Intake::setMagState(MagStates magState) {
@@ -194,7 +200,7 @@ void Intake::setMagState(MagStates magState) {
 }
 
 void Intake::setIntake(double voltage) {
-  if (_magState != MagStates::kTransfer && _magState != MagStates::kTransfering)
+  if (_magState != MagStates::kTransfer && _magState != MagStates::kTransfering && _magState != MagStates::kTwo)
     _intakeSetVoltage = voltage;
 }
 
@@ -214,4 +220,9 @@ void Intake::fireBall() {
 
 void Intake::Update(double dt) {
   updateIntake(dt);
+}
+
+void Intake::GetOut() {
+  _intakeSystem.intake.Set(-0.6);
+  _intakeSystem.indexWheel.Set(0.6);
 }
