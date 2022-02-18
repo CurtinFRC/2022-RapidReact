@@ -8,45 +8,6 @@ IntakeStrategy::IntakeStrategy(std::string name, Intake &intake, Shooter &shoote
 }
 
 void IntakeStrategy::OnUpdate(double dt) {
-  // double indexVoltage = fabs(_contGroup.Get(ControlMap::indexSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::indexSpin) : 0;
-  // _intake.setIndex(indexVoltage);
-  // if (_intake._magState == MagStates::kManual) {
-  //   _intake.setIndex(indexVoltage);
-  // }
-
-  // if (_contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
-  //   if (indexManualToggle) {
-  //     indexManualToggle = false;
-  //   } else { 
-  //     indexManualToggle = true;
-  //   }
-  // }
-
-  // if (_contGroup.Get(ControlMap::indexOverrideToggleButton, wml::controllers::XboxController::ONRISE)) {
-  //   if (indexOverrideToggle) {
-  //     indexOverrideToggle = false;
-  //   } else {
-  //     indexOverrideToggle = true;
-  //   }
-  // }
-
-  // auto magIns = nt::NetworkTableInstance::GetDefault();
-  // auto magSyste = magIns.GetTable("magSystem");
-  // nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Manual").SetBoolean(indexManualToggle);
-  // nt::NetworkTableInstance::GetDefault().GetTable("magSystem")->GetEntry("Override").SetBoolean(indexOverrideToggle);
-
-
-  // if (indexManualToggle) {
-  //   _intake.setIndex(indexVoltage, MagStates::kManual); //will continue once it reaches the front sensor
-  //   if (indexOverrideToggle) {
-  //     _intake.setIndex(MagStates::kOverride);
-  //   }
-  // } else {
-  //   if (indexManualToggle && _contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
-  //     _intake.setIndex(MagStates::kEmpty);
-  //   }
-  // }
-
   if (_contGroup.Get(ControlMap::indexManualToggleButton, wml::controllers::XboxController::ONRISE)) {
     if (indexManualToggle) {
       indexManualToggle = false;
@@ -91,7 +52,6 @@ void IntakeStrategy::OnUpdate(double dt) {
   double indexVoltage = fabs(_contGroup.Get(ControlMap::testingIndex)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::testingIndex) : 0;
   _intake.setIndex(indexVoltage);
 
-  // std::cout << _contGroup.Get(ControlMap::fire) << std::endl;
   if (_contGroup.Get(ControlMap::fire)) {
     if (_shooter.isDone()) {
       _intake.fireBall();

@@ -42,7 +42,6 @@ inline std::string mag_state_to_string(MagStates &state) {
 }
 
 
-
   //Different states for the arm (stowed or deployed)
 enum class IntakeStates{
   kStowed,
@@ -57,8 +56,6 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void updateIntake(double dt);
 
   void Update(double dt);
-  // void setIndex(double voltage, MagStates magState);
-  // void setIndex(MagStates magState);
   void setIndex(double voltage);
 
   void setIntakeState(IntakeStates intakeState);
@@ -84,13 +81,8 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   RobotMap::IntakeSystem &_intakeSystem;
   Controllers &_contGroup;
 
-  // Debounce db{
-  //   3};
-  // Debounce jaci{0.2};
-  // Debounce george{0.2};
   Debounce ejectDebounce{0.1};
   Debounce transferDebounce{2};
-
 
   //variable for power
   double _power;

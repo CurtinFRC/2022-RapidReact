@@ -8,7 +8,6 @@ ShooterManualStrategy::ShooterManualStrategy(std::string name, Shooter &shooter,
 
 }
 
-//TODO dumb name, change
 void ShooterManualStrategy::OnUpdate(double dt) {
   double manualFlyWheelPower = fabs(_contGroup.Get(ControlMap::manualFlyWheel)) > fabs(ControlMap::xboxDeadzone) ? _contGroup.Get(ControlMap::manualFlyWheel) : 0;
 

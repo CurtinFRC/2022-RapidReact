@@ -8,9 +8,6 @@ GetOutStrategy::GetOutStrategy(std::string name, Intake &intake, Shooter &shoote
 }
 
 void GetOutStrategy::OnUpdate(double dt) {
-  // _power += 12 * dt;
-  // _power = std::min(_power, 12.0);
-
   if (_contGroup.Get(ControlMap::GetOut)) {
     std::cout << "stop getout" << std::endl;
     SetDone();
