@@ -12,6 +12,7 @@
 #include <frc/GenericHID.h>
 
 #include <cameraserver/CameraServer.h>
+
 #include <frc/DriverStation.h>
 
 #include <frc/SpeedControllerGroup.h>
@@ -69,7 +70,8 @@ struct RobotMap {
    */
   wml::controllers::XboxController xbox1{ ControlMap::xbox1Port };
   wml::controllers::XboxController xbox2{ ControlMap::xbox2Port };
-  wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2};
+  wml::controllers::XboxController xbox3{ ControlMap::xbox3Port };
+  wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2, xbox3};
 
   /**
    * Robot Control System
@@ -89,7 +91,6 @@ struct RobotMap {
     wml::SparkMax rightFlyWheelMotor{ ControlMap::Shooter::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
     wml::SparkMax centerFlyWheelMotor{ ControlMap::Shooter::centerFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
 
-    wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
 
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(
       leftFlyWheelMotor,
@@ -102,6 +103,7 @@ struct RobotMap {
       1.0, 
       mNEO * 3
     };
+
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
@@ -128,7 +130,9 @@ struct RobotMap {
   struct IntakeSystem {
     wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
     wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
-    // wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
+    wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
+    wml::sensors::LimitSwitch intakeBallSensor{0, false, "kee-an"}; //ball sensor
+    wml::sensors::LimitSwitch shooterBallSensor{2, false, "Sam"};
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {

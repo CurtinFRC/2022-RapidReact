@@ -9,17 +9,15 @@ enum class ClimberState {
   kDeployed
 };
 
-class Climber {
+class Climber : public wml::StrategySystem, public wml::loops::LoopSystem {
  public:
   Climber(RobotMap::ClimberSystem &climberSystem, SmartControllerGroup &contGroup);
 
-  void onDisable(double dt);
-  void setState(double dt);
-  void _toggleClimber();
-  void setState(ClimberState state);
-
   void updateClimber(double dt);
-  void _update(double dt);
+  void disabledClimber();
+  void setState(ClimberState _climberState);
+
+  void Update(double dt) override;
 
  private:
   bool ClimberToggle = false;

@@ -12,6 +12,7 @@ struct ControlMap {
   // USB port numbers
   static constexpr int driver = 0;
   static constexpr int coDriver = 1;
+  static constexpr int tester = 2;
 
   static void InitSmartControllerGroup(wml::controllers::SmartControllerGroup &contGroup) {
     contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
@@ -27,6 +28,7 @@ struct ControlMap {
   // Controllers  
   static constexpr int xbox1Port = driver;
   static constexpr int xbox2Port = coDriver;
+  static constexpr int xbox3Port = tester;
 
   // Deadzone
   static constexpr double xboxDeadzone = 0.15;
@@ -55,6 +57,8 @@ struct ControlMap {
     static constexpr bool intakeSolenoid = false;
     static constexpr int  intakeSolenoidPort = 14; //11
     static constexpr int intakeSolenoidPort2 = 12; //15
+
+    // static constexpr double 
   };
 
   struct Shooter {
@@ -64,18 +68,18 @@ struct ControlMap {
     static constexpr int indexMotorPort = 4;
     inline static bool shooterPID = false;
 
-    inline static double shooterEjectPower = 0.2;
-    inline static double innerCircleShootValue = 150;
+    inline static double shooterEjectPower = 0.8;
+    inline static double innerCircleShootValue = 200;
     inline static double outerCircleShootValue = 400;
     inline static double farShootValue = 500;
     inline static double noahShootValue = 600;
   };
+  
 
   struct ShooterGains {
-    inline static double kp = 0.03;
-    inline static double ki = 0.007;
-    inline static double kd = -0.0001;
-    // inline static double kf = 0;
+    inline static double kp = 0.002; //0.002
+    inline static double ki = 0.0005; //0.0005
+    inline static double kd = -0.001; //-0.001
     inline static double IMax = 100;
   };
 
@@ -110,4 +114,15 @@ struct ControlMap {
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
+
+  inline static const wml::controllers::tButton indexManualToggleButton{ tester, wml::controllers::XboxController::kA };
+  inline static const wml::controllers::tButton indexManualStop{ tester, wml::controllers::XboxController::kB };
+
+  inline static const wml::controllers::tButton fire{ coDriver, wml::controllers::XboxController::kY};
+
+  inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
+  inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };
+
+  inline static const wml::controllers::tButton GetOut{ driver, wml::controllers::XboxController::kY };
+  inline static const wml::controllers::tButton GetOutBoogalloo{ driver, wml::controllers::XboxController::kA };
 };
