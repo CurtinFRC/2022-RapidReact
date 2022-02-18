@@ -12,7 +12,6 @@ DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Dri
   SetCanBeInterrupted(true);
   _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
   _drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
-  _drivetrain.GetConfig().gyro->Reset();
 
   // SetTimeout(2.5);  // stops after time
 }

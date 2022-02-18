@@ -3,7 +3,8 @@
 #include "ControlMap.h"
 
 DriveToDistanceStrategy::DriveToDistanceStrategy(std::string name, Drivetrain &drivetrain, double goal) 
-  : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), _distancePID({ 1, 0.05, 0 }), _anglePID({ 0.0025, 0.001, 0 }) {
+  : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), 
+  _distancePID({ 0.8, 0.03, 0 }), _anglePID({ 0.0025, 0.001, 0 }) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
 
@@ -38,6 +39,39 @@ void DriveToDistanceStrategy::OnUpdate(double dt) {
 
   leftPower += output;  // replace with anglePID
   rightPower -= output;  // replace with anglePID
+
+  _drivetrain.Set(-leftPower, -rightPower);
+}
+
+
+// ----------------- Angle Strats -----------------
+
+DrivetrainAngleStrategy::DrivetrainAngleStrategy(std::string name, Drivetrain &drivetrain, double goal) 
+  : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), _anglePID({ 0.022, 0.0001, -0.00025 }) {
+  Requires(&drivetrain);
+  SetCanBeInterrupted(true);
+
+  _goal = goal;
+}
+
+void DrivetrainAngleStrategy::OnUpdate(double dt) {
+  double leftPower = 0, rightPower = 0;
+  double gyro = _drivetrain.GetConfig().gyro->GetAngle();
+
+  double output = _anglePID.calculate(gyro, _goal, dt);
+  // double output = _control.getAnglePID().calculate(gyro, _heading, dt);
+
+  auto inst = nt::NetworkTableInstance::GetDefault();
+  auto table = inst.GetTable("Auto stuff");
+  table->GetEntry("Angles").SetDouble(output);
+  table->GetEntry("gyro").SetDouble(gyro);
+
+
+  leftPower += output;  // replace with anglePID
+  rightPower -= output;  // replace with anglePID
+
+  table->GetEntry("leftPre").SetDouble(leftPower);
+  table->GetEntry("rightPre").SetDouble(rightPower);
 
   _drivetrain.Set(-leftPower, -rightPower);
 }
