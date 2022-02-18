@@ -10,9 +10,11 @@
 #include "Trajectories.h"
 #include "Climber.h"
 
+
 #include "Strategy/ShooterStrategy.h"
 #include "Strategy/IntakeStrategy.h"
 #include "Strategy/ClimberStrategy.h"
+#include "Strategy/GetOutStrategy.h"
 
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
@@ -58,4 +60,6 @@ private:
   Shooter *shooter;
   Intake *intake;
   Climber *climber;
+
+  bool outToggle = false;
 };

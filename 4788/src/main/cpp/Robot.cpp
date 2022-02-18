@@ -39,6 +39,8 @@ void Robot::RobotInit() {
   StrategyController::Register(climber);
   climber->StartLoop(100);
 
+
+
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
   // Zero the Encoders
@@ -94,6 +96,7 @@ void Robot::AutonomousPeriodic() {
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
+  outToggle = false;
   Schedule(drivetrain->GetDefaultStrategy(), true);
   Schedule(shooter->GetDefaultStrategy(), true);
   Schedule(intake->GetDefaultStrategy(), true);
@@ -101,6 +104,20 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   climber->updateClimber(dt);
+
+
+  if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {
+    if (outToggle) {
+      outToggle = false;
+    } else {
+      outToggle = true;
+    }
+  }
+
+  if (outToggle) {
+    Schedule(std::make_shared<GetOutStrategy>("EJECT ALL FROM INTAKE, MAG, SHOOT",  *intake, *shooter, robotMap.contGroup));
+  }
+
 }
 
 // During Test Logic
