@@ -21,17 +21,10 @@ void ShooterManualStrategy::OnUpdate(double dt) {
     _shooter.setPID(ControlMap::Shooter::farShootValue, dt);
   } else if (_contGroup.Get(ControlMap::noahShoot)) {
     _shooter.setPID(ControlMap::Shooter::noahShootValue, dt);
+  } else if (_contGroup.Get(ControlMap::GetOutBoogalloo)) {
+    _shooter.setManual(-1 * 12);
   } else {
     // auto &motor = _shooter._shooterSystem.shooterGearbox.motor;
     _shooter.setManual(manualFlyWheelPower * 12);
-  }
-
-  double indexSpeed = _contGroup.Get(ControlMap::indexSpin);
-  if (indexSpeed >= 0.1) {
-    _shooter.setIndex(0.5);
-  } else if (indexSpeed <= -0.1) {
-    _shooter.setIndex(-0.5);
-  } else {
-    _shooter.setIndex(0);
   }
 }
