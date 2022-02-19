@@ -62,6 +62,7 @@
 #include "ControlMap.h"
 
 static wml::physics::DcMotor mNEO { 12.0, wml::physics::DcMotor::rpm2rads(5880), 1.3, 166, 3.36 };
+static wml::physics::DcMotor mFalcon500 { 12.0, wml::physics::DcMotor::rpm2rads(6380), 1.5, 257, 4.69 };
 
 struct RobotMap {
   /**
@@ -114,8 +115,8 @@ struct RobotMap {
     wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(rightMotor);
 
     // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &leftMotor};
-    wml::Gearbox RGearbox{&rightMotors, &rightMotor};
+    wml::Gearbox LGearbox{&leftMotors, &leftMotor, 6.1, mFalcon500};
+    wml::Gearbox RGearbox{&rightMotors, &rightMotor, 6.1, mFalcon500};
 
     wml::sensors::NavX navX{frc::SPI::Port::kMXP};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};

@@ -5,6 +5,7 @@
 #include "RobotMap.h"
 #include "Trajectory.h"
 #include "RobotControl.h"
+
 class DrivetrainTrajectoryStrategy : public wml::Strategy {
  public:
   DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory);
@@ -14,4 +15,7 @@ class DrivetrainTrajectoryStrategy : public wml::Strategy {
  private:
   Drivetrain &_drivetrain;
   ::Trajectory &_trajectory;
+  RobotControl _control;
 };
+
+

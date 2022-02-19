@@ -43,7 +43,7 @@ struct ControlMap {
   struct Drivetrain {
     static constexpr double trackWidth = 0.56;
     static constexpr double trackDepth = 0.60;
-    static constexpr double wheelRadius = 0.0762; 
+    static constexpr double wheelRadius = 0.0508; 
     static constexpr double mass = 50;
 
     static constexpr int leftMotorPort = 6;
