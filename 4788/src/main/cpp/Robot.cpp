@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Strategy/DrivetrainTrajectoryStrategy.h"
+#include "Strategy/DriveToDistanceStrategy.h"
 
 using namespace frc;
 using namespace wml;
@@ -39,13 +40,13 @@ void Robot::RobotInit() {
   StrategyController::Register(climber);
   climber->StartLoop(100);
 
-
-
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
   // Zero the Encoders
   robotMap.drivebaseSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
   robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  robotMap.drivebaseSystem.leftMotor.SetUpdateRate(200);
+  robotMap.drivebaseSystem.rightMotor.SetUpdateRate(200);
   
   // Set the default strategy for drivetrain to manual
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
@@ -61,7 +62,13 @@ void Robot::RobotInit() {
   StrategyController::Register(intake);
   NTProvider::Register(drivetrain);
 
-  // trajectories.build();
+  trajectories.build();
+
+  StartLoop(50);
+}
+
+void Robot::Update(double dt) {
+  StrategyController::Update(dt);
 }
 
 void Robot::RobotPeriodic() {
@@ -70,8 +77,19 @@ void Robot::RobotPeriodic() {
 
   // t2000("<Anna>");
 
-  StrategyController::Update(dt);
+  // StrategyController::Update(dt);
+  // shooter->update(dt);
+  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  // robotMap.controlSystem.compressor.Update(dt);
+  auto table = nt::NetworkTableInstance::GetDefault().GetTable("Robot Data");
+  auto dt_strat = drivetrain->GetActiveStrategy();
+  if (dt_strat)
+    table->GetEntry("Drivetrain Strategy").SetString(dt_strat->GetStrategyName());
+  else
+    table->GetEntry("Drivetrain Strategy").SetString("<none>");
   NTProvider::Update();
+
+  table->GetEntry("Gyro").SetDouble(drivetrain->GetConfig().gyro->GetAngle());
 
   lastTimeStamp = currentTimeStamp;
 }
@@ -87,8 +105,13 @@ void Robot::DisabledPeriodic() {
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {
-  auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
-  bool success = Schedule(testStrat);
+  drivetrain->GetConfig().gyro->Reset();
+  // auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  // auto testStrat = std::make_shared<DriveToDistanceStrategy>("testStrat", *drivetrain, 1);
+  // auto testStrat = std::make_shared<DrivetrainAngleStrategy>("testStrat", *drivetrain, 90.0);
+
+  bool success = Schedule(_auto.FiveBallTerminal(*drivetrain));
+
   std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {

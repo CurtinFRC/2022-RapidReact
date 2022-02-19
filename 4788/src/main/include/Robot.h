@@ -9,6 +9,7 @@
 #include "Intake.h"
 #include "Trajectories.h"
 #include "Climber.h"
+#include "Auto.h"
 
 
 #include "Strategy/ShooterStrategy.h"
@@ -17,7 +18,7 @@
 #include "Strategy/GetOutStrategy.h"
 
 
-class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
+class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider, protected wml::loops::LoopSystem {
 public:
 
   /**
@@ -53,6 +54,8 @@ public:
   void TestInit() override;
   void TestPeriodic() override;
 
+  void Update(double dt) override;
+
 private:
   RobotMap robotMap;
   Trajectories trajectories;
@@ -60,6 +63,8 @@ private:
   Shooter *shooter;
   Intake *intake;
   Climber *climber;
+
+  Auto _auto;
 
   bool outToggle = false;
 };
