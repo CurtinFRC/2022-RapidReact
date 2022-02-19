@@ -66,6 +66,7 @@ IntakeAutoStrategy::IntakeAutoStrategy(std::string name, Intake &intake, bool tw
 }
 
 void IntakeAutoStrategy::OnUpdate(double dt) {
+  _intake.setIntakeState(IntakeStates::kDeployed);
   _intake.setIntake(1); //take in target number of balls, in 
   if (_twoBall && _intake._magState == MagStates::kTwo || !_twoBall && _intake._magState == MagStates::kOne)
     SetDone();

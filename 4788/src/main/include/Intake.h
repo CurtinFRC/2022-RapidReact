@@ -84,6 +84,7 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   Controllers &_contGroup;
 
   Debounce ejectDebounce{0.1};
+  Debounce transferSensorDebounce{0.03};
   Debounce transferDebounce{2};
 
   //variable for power

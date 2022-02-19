@@ -55,7 +55,7 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   double _sum = 0;
   double _previousError = 0;
 
-  double _threshAvgPos = 45;
+  double _threshAvgPos = 25;
   double _threshAvgVel = 5;
   int _iterations = 0;
   double _avgVel = 0;

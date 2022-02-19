@@ -70,9 +70,9 @@ struct ControlMap {
 
     inline static double shooterEjectPower = 0.8;
     inline static double innerCircleShootValue = 200;
-    inline static double outerCircleShootValue = 400;
-    inline static double farShootValue = 500;
-    inline static double noahShootValue = 600;
+    inline static double outerCircleShootValue = 300;
+    inline static double farShootValue = 400;
+    inline static double noahShootValue = 500;
   };
   
 

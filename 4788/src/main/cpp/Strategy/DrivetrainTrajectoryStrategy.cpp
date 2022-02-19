@@ -7,7 +7,7 @@
 #endif
 
 DrivetrainTrajectoryStrategy::DrivetrainTrajectoryStrategy(std::string name, Drivetrain &drivetrain, ::Trajectory &trajectory) 
-  : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory), _control(trajectory, { {0.02, 0, 0}, 1 }, { {1, 0, 0}, 0.1 }) {
+  : wml::Strategy(name), _drivetrain(drivetrain), _trajectory(trajectory), _control(trajectory, { {0.02, 0, 0}, 0.2, 1 }, { {1, 0, 0}, 3, 0.1 }) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
   _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();

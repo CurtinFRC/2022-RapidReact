@@ -2,6 +2,8 @@
 
 #include "strategy/Strategy.h"
 #include "Drivetrain.h"
+#include "Intake.h"
+#include "Shooter.h"
 
 // class Auto : public wml::Strategy, protected wml::StrategyController {
 //  public:
@@ -14,6 +16,6 @@
 
 class Auto {
  public:
-  std::shared_ptr<wml::Strategy> FiveBallTerminal(wml::Drivetrain &drivetrain);
+  std::shared_ptr<wml::Strategy> FiveBallTerminal(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter);
 };
 

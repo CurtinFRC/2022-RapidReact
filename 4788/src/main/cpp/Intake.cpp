@@ -34,7 +34,7 @@ void Intake::updateIntake(double dt) {
     break;
 
     case MagStates::kTransfering:
-      if (_backSensor() && !_frontSensor()) {
+      if (transferSensorDebounce.Get(_backSensor()) && !_frontSensor()) {
         _intakeSetVoltage = 0;
         _indexSetVoltage = 0;
         _magState = MagStates::kOne;
@@ -70,6 +70,7 @@ void Intake::updateIntake(double dt) {
       }
       _intakeSetVoltage = 0;
       _indexSetVoltage = 0;
+      _intakeState = IntakeStates::kDeployed;
     break;
 
     case MagStates::kEject:
@@ -78,7 +79,11 @@ void Intake::updateIntake(double dt) {
         // _intakeSetVoltage = 0.5;
       } else {
         ejectDebounce.Get(false);
-        _magState = MagStates::kEmpty;
+        if (_frontSensor()) {
+          _magState = MagStates::kTransfer;
+        } else {
+          _magState = MagStates::kEmpty;
+        }
         std::cout << "EJECT" << std::endl;
       }
     break;

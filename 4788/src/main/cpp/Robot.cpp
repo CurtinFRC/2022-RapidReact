@@ -24,13 +24,13 @@ void Robot::RobotInit() {
   camera.SetResolution(160, 120);
 
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter strategy", *shooter, robotMap.contGroup));
+  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, *shooter,robotMap.contGroup));
+  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake teleop strategy", *intake, *shooter,robotMap.contGroup));
   intake->StartLoop(100);
   robotMap.intakeSystem.intake.SetInverted(true);
   robotMap.intakeSystem.indexWheel.SetInverted(true);
@@ -47,6 +47,7 @@ void Robot::RobotInit() {
   robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
   robotMap.drivebaseSystem.leftMotor.SetUpdateRate(200);
   robotMap.drivebaseSystem.rightMotor.SetUpdateRate(200);
+  // robotMap.drivebaseSystem.gyro
   
   // Set the default strategy for drivetrain to manual
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
@@ -64,7 +65,7 @@ void Robot::RobotInit() {
 
   trajectories.build();
 
-  StartLoop(50);
+  StartLoop(100);
 }
 
 void Robot::Update(double dt) {
@@ -87,7 +88,22 @@ void Robot::RobotPeriodic() {
     table->GetEntry("Drivetrain Strategy").SetString(dt_strat->GetStrategyName());
   else
     table->GetEntry("Drivetrain Strategy").SetString("<none>");
+
+  auto in_strat = intake->GetActiveStrategy();
+  if (in_strat)
+    table->GetEntry("Intake Strategy").SetString(in_strat->GetStrategyName());
+  else
+    table->GetEntry("Intake Strategy").SetString("<none>");
+
+  auto sh_strat = shooter->GetActiveStrategy();
+  if (sh_strat)
+    table->GetEntry("Shooter Strategy").SetString(sh_strat->GetStrategyName());
+  else
+    table->GetEntry("Shooter Strategy").SetString("<none>");
+
   NTProvider::Update();
+
+  
 
   table->GetEntry("Gyro").SetDouble(drivetrain->GetConfig().gyro->GetAngle());
 
@@ -110,7 +126,7 @@ void Robot::AutonomousInit() {
   // auto testStrat = std::make_shared<DriveToDistanceStrategy>("testStrat", *drivetrain, 1);
   // auto testStrat = std::make_shared<DrivetrainAngleStrategy>("testStrat", *drivetrain, 90.0);
 
-  bool success = Schedule(_auto.FiveBallTerminal(*drivetrain));
+  bool success = Schedule(_auto.FiveBallTerminal(*drivetrain, *intake, *shooter));
 
   std::cout << "TEST " << success << std::endl;
 }

@@ -4,9 +4,10 @@
 
 DriveToDistanceStrategy::DriveToDistanceStrategy(std::string name, Drivetrain &drivetrain, double goal) 
   : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), 
-  _distancePID({ 0.8, 0.03, 0 }, 0.2), _anglePID({ 0.0025, 0.001, 0 }, 1) {
+  _distancePID({ 0.8, 0.1, 0 }, 0.1, 0.2), _anglePID({ 0.0025, 0.001, 0 }, 3, 1) {
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
+  _distancePID.setIZone(0.25);
 }
 
 void DriveToDistanceStrategy::OnStart() {
@@ -47,19 +48,22 @@ void DriveToDistanceStrategy::OnUpdate(double dt) {
 
   _drivetrain.Set(-leftPower, -rightPower);
 
-  if (_distancePID.isDone())
+  if (_distancePID.isDone()) {
+    _drivetrain.Set(0, 0);
     SetDone();
+  }
 }
 
 
 // ----------------- Angle Strats -----------------
 
 DrivetrainAngleStrategy::DrivetrainAngleStrategy(std::string name, Drivetrain &drivetrain, double goal) 
-  : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), _anglePID({ 0.02, 0.025, -0.0001 }, 0.2) {
-  Requires(&drivetrain);
+  : wml::Strategy(name), _drivetrain(drivetrain), _goal(goal), _anglePID({ 0.012, 0.0005, -0.00000 }, 2, 0.5) {
+  Requires(&drivetrain); //0.012, 0.012, -0
   SetCanBeInterrupted(true);
 
   _anglePID.setIZone(10);
+  _anglePID.setWrap(360);
   _goal = goal;
 }
 
@@ -76,6 +80,11 @@ void DrivetrainAngleStrategy::OnUpdate(double dt) {
   _accSpeed = std::min(_accSpeed, 0.35);
 
   double output = _anglePID.calculate(gyro, _goal, dt);
+  // Poor man's feedforward
+  if (output > 0)
+    output += 0.1;
+  else
+    output -= 0.1;
   // double output = _control.getAnglePID().calculate(gyro, _heading, dt);
 
   auto inst = nt::NetworkTableInstance::GetDefault();
@@ -93,6 +102,8 @@ void DrivetrainAngleStrategy::OnUpdate(double dt) {
 
   _drivetrain.Set(-leftPower, -rightPower);
 
-  if (_anglePID.isDone())
+  if (_anglePID.isDone()) {
+    _drivetrain.Set(0, 0);
     SetDone();
+  }
 }
