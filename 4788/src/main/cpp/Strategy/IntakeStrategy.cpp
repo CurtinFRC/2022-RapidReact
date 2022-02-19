@@ -58,3 +58,15 @@ void IntakeStrategy::OnUpdate(double dt) {
     }
   } 
 }
+
+IntakeAutoStrategy::IntakeAutoStrategy(std::string name, Intake &intake, bool twoBall) : Strategy(name), _intake(intake), _twoBall(twoBall) {
+  SetCanBeInterrupted(true);
+  SetCanBeReused(true);
+  Requires(&intake);
+}
+
+void IntakeAutoStrategy::OnUpdate(double dt) {
+  _intake.setIntake(1); //take in target number of balls, in 
+  if (_twoBall && _intake._magState == MagStates::kTwo || !_twoBall && _intake._magState == MagStates::kOne)
+    SetDone();
+}

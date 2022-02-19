@@ -28,3 +28,46 @@ void ShooterManualStrategy::OnUpdate(double dt) {
     _shooter.setManual(manualFlyWheelPower * 12);
   }
 }
+
+ShooterSpinUpStrategy::ShooterSpinUpStrategy(std::string name, Shooter &shooter, double angularVelocity) : Strategy(name), _shooter(shooter), _angularVelocity(angularVelocity) {
+  SetCanBeInterrupted(true);
+  SetCanBeReused(true);
+  Requires(&shooter);
+}
+
+
+void ShooterSpinUpStrategy::OnUpdate(double dt) {
+  _shooter.setPID(_angularVelocity, dt);
+}
+
+ShooterShootStrategy::ShooterShootStrategy(std::string name, Shooter &shooter, Intake &intake, double angularVelocity, bool twoBall) : Strategy(name), _shooter(shooter), _intake(intake), _angularVelocity(angularVelocity), _twoBall(twoBall) {
+  SetCanBeInterrupted(true);
+  SetCanBeReused(true);
+  Requires(&shooter);
+  SetTimeout(4);
+}
+
+void ShooterShootStrategy::OnUpdate(double dt) {
+  _shooter.setPID(_angularVelocity, dt);
+  if (_intake._magState == MagStates::kEmpty || (!_twoBall && _intake._magState == MagStates::kOne)) {
+    SetDone();
+  } else if (_shooter.isDone() && _intake.isIdle()) {
+    _intake.fireBall();
+  }
+  // if (_shooter.isDone()) {
+  //   if (_twoBall) {
+  //     if (autoShooterIterations < 2) {
+  //       _intake.fireBall();
+  //       autoShooterIterations ++;
+  //     } else {
+  //       SetDone();
+  //     }
+  //   } else {
+  //     if (autoShooterIterations < 1) {
+  //       _intake.fireBall();
+  //     } else {
+  //       SetDone();
+  //     }
+  //   }
+  // }
+}

@@ -158,6 +158,10 @@ void Intake::Update(double dt) {
   updateIntake(dt);
 }
 
+bool Intake::isIdle() {
+  return _magState == MagStates::kOne || _magState == MagStates::kTwo;
+}
+
 void Intake::GetOut() {
   _intakeSystem.intake.Set(-0.6);
   _intakeSystem.indexWheel.Set(0.6);

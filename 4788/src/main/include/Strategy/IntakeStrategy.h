@@ -8,7 +8,7 @@ using Controllers = wml::controllers::SmartControllerGroup;
 
 class IntakeStrategy : public wml::Strategy {
  public:
-  IntakeStrategy(std::string name, Intake &intake, Shooter &shooter ,Controllers &contGroup);
+  IntakeStrategy(std::string name, Intake &intake, Shooter &shooter, Controllers &contGroup);
 
   void OnUpdate(double dt) override;
  private:
@@ -19,4 +19,14 @@ class IntakeStrategy : public wml::Strategy {
   bool indexManualToggle = false;
   bool indexOverrideToggle = false;
   bool _intakeToggle = false;
+};
+
+class IntakeAutoStrategy : public wml::Strategy {
+ public:
+  IntakeAutoStrategy(std::string name,  Intake &intake, bool twoBall);
+
+  void OnUpdate(double dt) override;
+ private:
+  Intake &_intake;
+  bool _twoBall = false;
 };

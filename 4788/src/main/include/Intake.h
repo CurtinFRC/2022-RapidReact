@@ -73,6 +73,8 @@ class Intake : public wml::StrategySystem, public wml::loops::LoopSystem {
   void manualSetIntake(double power);
   void manualSetIndex(double power);
 
+  bool isIdle();
+
   void GetOut();
 
   IntakeStates _intakeState{ IntakeStates::kStowed };
