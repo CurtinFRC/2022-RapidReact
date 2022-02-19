@@ -52,7 +52,7 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
-#include "MP_Trajedy.h"
+//#include "MP_Trajedy.h"
 
 // WML Rev
 #include <WMLRev.h>
@@ -126,6 +126,32 @@ struct RobotMap {
     wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
   }; DrivebaseSystem drivebaseSystem;
+
+  struct DeathbaseSystem{
+    //Drivetrain Left Motors
+    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 99};
+    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 99};
+
+    //Drivetrain right Motors
+    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 99};
+    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 99};
+    
+     // Motor Grouping
+    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
+    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
+
+    // Gearboxes
+    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
+    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
+
+    wml::sensors::NavX navX{};
+    wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
+
+    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::trackWidth, ControlMap::trackDepth, ControlMap::wheelRadius, ControlMap::mass};
+    wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
+    wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
+
+  };
 
   struct ClimberSystem {
     wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::climberPort1, ControlMap::climberPort2, 0.1};

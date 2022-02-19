@@ -69,6 +69,10 @@ struct ControlMap {
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
   inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
+
+  // Deathtrain
+  inline static const wml::controllers::tAxis drivebaseL{driver, XboxController::kLeftYAxis};
+  inline static const wml::controllers::tAxis drivebaseR{driver, XboxController::kRightYAxis};
   
   // Climber
   inline static const wml::controllers::tButton climberToggle{ coDriver, XboxController::kA };
