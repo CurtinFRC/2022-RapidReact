@@ -9,6 +9,7 @@
 #include "Intake.h"
 #include "Trajectories.h"
 #include "Climber.h"
+#include "Auto.h"
 
 
 #include "Strategy/ShooterStrategy.h"
@@ -62,6 +63,8 @@ private:
   Shooter *shooter;
   Intake *intake;
   Climber *climber;
+
+  Auto _auto;
 
   bool outToggle = false;
 };
