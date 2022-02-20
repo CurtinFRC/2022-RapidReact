@@ -57,7 +57,49 @@ std::shared_ptr<wml::Strategy> Auto::FiveBallTerminal(wml::Drivetrain &drivetrai
   return autoStrat;
 };
 
+std::shared_ptr<wml::Strategy> Auto::ThreeBallTerminal(wml::Drivetrain &drivetrain) {
+  auto autoStrat = wml::StrategyBuilder{}.Start()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 10.750))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to ball 2", drivetrain, 120.25))
+    ->Then()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 2", drivetrain, 2.9744))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 125.250))
+    ->Build();
 
+  return autoStrat;
+};
+
+std::shared_ptr<wml::Strategy> Auto::ThreeBallHanger(wml::Drivetrain &drivetrain) {
+  auto autoStrat = wml::StrategyBuilder{}.Start()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn robot to right angle", drivetrain, 48))
+    ->Then()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, -57.75))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to ball 2", drivetrain, -120.25))
+    ->Then()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 2", drivetrain, 9.75))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 77.25))
+    ->Build();
+
+  return autoStrat;
+};
+
+std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain) {
+  auto autoStrat = wml::StrategyBuilder{}.Start()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
+    ->Then()
+    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 10.750))
+    ->Build();
+
+  return autoStrat;
+};
 
 
 // void someFunction() {
