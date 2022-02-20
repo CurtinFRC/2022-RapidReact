@@ -41,7 +41,7 @@ void ShooterSpinUpStrategy::OnUpdate(double dt) {
   _shooter.setPID(_angularVelocity, dt);
 }
 
-ShooterShootStrategy::ShooterShootStrategy(std::string name, Shooter &shooter, Intake &intake, double angularVelocity) : Strategy(name), _shooter(shooter), _intake(intake), _angularVelocity(angularVelocity) {
+ShooterShootStrategy::ShooterShootStrategy(std::string name, Shooter &shooter, Intake &intake, double angularVelocity, bool cont) : Strategy(name), _shooter(shooter), _intake(intake), _angularVelocity(angularVelocity), _cont(cont) {
   SetCanBeInterrupted(true);
   SetCanBeReused(true);
   Requires(&shooter);
@@ -50,26 +50,9 @@ ShooterShootStrategy::ShooterShootStrategy(std::string name, Shooter &shooter, I
 
 void ShooterShootStrategy::OnUpdate(double dt) {
   _shooter.setPID(_angularVelocity, dt);
-  if (emptyDB.Get(_intake._magState == MagStates::kEmpty)) {
+  if (!_cont && emptyDB.Get(_intake._magState == MagStates::kEmpty)) {
     SetDone();
   } else if (db.Get(_shooter.isDone() && _intake.isIdle())) {
     _intake.fireBall();
   }
-
-  // if (_shooter.isDone()) {
-  //   if (_twoBall) {
-  //     if (autoShooterIterations < 2) {
-  //       _intake.fireBall();
-  //       autoShooterIterations ++;
-  //     } else {
-  //       SetDone();
-  //     }
-  //   } else {
-  //     if (autoShooterIterations < 1) {
-  //       _intake.fireBall();
-  //     } else {
-  //       SetDone();
-  //     }
-  //   }
-  // }
 }

@@ -53,21 +53,39 @@ void IntakeStrategy::OnUpdate(double dt) {
   _intake.setIndex(indexVoltage);
 
   if (_contGroup.Get(ControlMap::fire)) {
-    if (_shooter.isDone()) {
+    if (_shooter.isDone() || _shooter.getShooterState() == ShooterState::kManual) {
       _intake.fireBall();
     }
   } 
 }
 
-IntakeAutoStrategy::IntakeAutoStrategy(std::string name, Intake &intake, bool twoBall) : Strategy(name), _intake(intake), _twoBall(twoBall) {
+IntakeAutoStrategy::IntakeAutoStrategy(std::string name, Intake &intake, bool twoBall, bool passive) : Strategy(name), _intake(intake), _twoBall(twoBall), _passive(passive) {
   SetCanBeInterrupted(true);
   SetCanBeReused(true);
+  SetPassive(passive);
   Requires(&intake);
 }
 
 void IntakeAutoStrategy::OnUpdate(double dt) {
   _intake.setIntakeState(IntakeStates::kDeployed);
   _intake.setIntake(1); //take in target number of balls, in 
-  if (_twoBall && _intake._magState == MagStates::kTwo || !_twoBall && _intake._magState == MagStates::kOne)
-    SetDone();
+  if (!_passive) {
+    if (_twoBall && _intake._magState == MagStates::kTwo || !_twoBall && _intake._magState == MagStates::kOne) {
+      SetDone();
+    }
+  }
 }
+
+// IntakeAutoPassiveStrategy::IntakeAutoPassiveStrategy(std::string name, Intake &intake) : Strategy(name), _intake(intake) {
+//   SetCanBeInterrupted(true);
+//   SetCanBeReused(true);
+//   Requires(&intake);
+//   SetPassive(true);
+// }
+
+// void IntakeAutoPassiveStrategy::OnUpdate(double dt) {
+//   _intake.setIntakeState(IntakeStates::kDeployed);
+//   if (_intake._magState == MagStates::kTwo) {
+//     _intake.setIntake(1);
+//   }
+// }

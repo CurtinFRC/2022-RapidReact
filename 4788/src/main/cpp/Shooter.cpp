@@ -119,3 +119,7 @@ void Shooter::GetOut(double dt, double power) {
   _state = ShooterState::kRaw;
   _rawPower = power;
 }
+
+ShooterState Shooter::getShooterState() {
+  return _state;
+}

@@ -42,6 +42,8 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
   void SetIsDoneThreshold(double threshAvgPos, double threshAvgVel);
   bool isDone();
 
+  ShooterState getShooterState();
+
  private:
   ShooterState _state{ ShooterState::kPID};
   wml::controllers::SmartControllerGroup &_contGroup;

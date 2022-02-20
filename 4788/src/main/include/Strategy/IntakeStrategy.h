@@ -23,10 +23,23 @@ class IntakeStrategy : public wml::Strategy {
 
 class IntakeAutoStrategy : public wml::Strategy {
  public:
-  IntakeAutoStrategy(std::string name,  Intake &intake, bool twoBall);
+  IntakeAutoStrategy(std::string name,  Intake &intake, bool twoBall, bool passive = false);
 
   void OnUpdate(double dt) override;
  private:
+
+  Debounce humanPlayerWait{3.5};
+
   Intake &_intake;
   bool _twoBall = false;
+  bool _passive = false; //TODO @Jaci add getter to wml
 };
+
+// class IntakeAutoPassiveStrategy : public wml::Strategy {
+//  public:
+//   IntakeAutoPassiveStrategy(std::string name, Intake &intake);
+
+//   void OnUpdate(double dt) override;
+//  private:
+//   Intake &_intake;
+// };
