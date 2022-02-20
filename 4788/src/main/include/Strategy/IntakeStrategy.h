@@ -34,12 +34,3 @@ class IntakeAutoStrategy : public wml::Strategy {
   bool _twoBall = false;
   bool _passive = false; //TODO @Jaci add getter to wml
 };
-
-// class IntakeAutoPassiveStrategy : public wml::Strategy {
-//  public:
-//   IntakeAutoPassiveStrategy(std::string name, Intake &intake);
-
-//   void OnUpdate(double dt) override;
-//  private:
-//   Intake &_intake;
-// };

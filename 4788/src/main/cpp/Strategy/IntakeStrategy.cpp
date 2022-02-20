@@ -76,6 +76,7 @@ void IntakeAutoStrategy::OnUpdate(double dt) {
   }
 }
 
+
 // IntakeAutoPassiveStrategy::IntakeAutoPassiveStrategy(std::string name, Intake &intake) : Strategy(name), _intake(intake) {
 //   SetCanBeInterrupted(true);
 //   SetCanBeReused(true);

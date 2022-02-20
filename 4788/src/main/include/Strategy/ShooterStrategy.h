@@ -42,17 +42,3 @@ class ShooterShootStrategy : public wml::Strategy {
   int autoShooterIterations = 0;
   bool _cont;
 };
-
-/**
- * turn faster
- * go less to 2nd ball
- * -> increase isDone
- * 
- * 3.01 - take half robot 
- * 3.8 - take half robot 
- * 
- * bypass the 3rd ball and go shoot 3 at 4+5 
- * 
- * needs a shoot thingo for manual
- * 
- */

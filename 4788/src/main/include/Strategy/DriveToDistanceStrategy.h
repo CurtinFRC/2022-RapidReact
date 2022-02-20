@@ -19,8 +19,8 @@ class DriveToDistanceStrategy : public wml::Strategy {
   Drivetrain &_drivetrain;
   double _heading;
   double _goal;
-  PID _anglePID;
-  PID _distancePID;
+  wml::control::PIDController _anglePID;
+  wml::control::PIDController _distancePID;
   double _accSpeed = 0.2;
 };
 
@@ -34,6 +34,18 @@ class DrivetrainAngleStrategy : public wml::Strategy {
  private:
   Drivetrain &_drivetrain;
   double _goal;
-  PID _anglePID;
+  wml::control::PIDController _anglePID;
+
   double _accSpeed = 0.2;
+};
+
+class DriveToAngleRoughStrategy : public wml::Strategy {
+ public:
+  DriveToAngleRoughStrategy(std::string name, Drivetrain &drivetrain, double goal);
+
+  void OnUpdate(double dt) override;
+
+ private:
+  Drivetrain &_drivetrain;
+  double _goal;
 };

@@ -32,3 +32,4 @@ ClimberDisableStrategy::ClimberDisableStrategy(std::string name, Climber &climbe
 void ClimberDisableStrategy::OnUpdate(double dt) {
   _climber.disabledClimber();
 }
+

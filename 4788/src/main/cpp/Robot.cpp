@@ -115,7 +115,7 @@ void Robot::DisabledInit() {
   InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {
-  Schedule(std::make_shared<ClimberDisableStrategy>("climber disable strategy", *climber));
+  // Schedule(std::make_shared<ClimberDisableStrategy>("climber disable strategy", *climber));
 }
 
 
@@ -157,6 +157,10 @@ void Robot::TeleopPeriodic() {
     Schedule(std::make_shared<GetOutStrategy>("EJECT ALL FROM INTAKE, MAG, SHOOT",  *intake, *shooter, robotMap.contGroup));
   }
 
+
+  if (frc::DriverStation::GetMatchTime() < 1) {
+    Schedule(std::make_shared<ClimberDisableStrategy>("Climber Disabled (Auto Stow)", *climber));
+  }
 }
 
 // During Test Logic
