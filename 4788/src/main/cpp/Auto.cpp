@@ -10,22 +10,22 @@ std::shared_ptr<wml::Strategy> Auto::FiveBallTerminal(wml::Drivetrain &drivetrai
   auto autoStrat = wml::StrategyBuilder{}.Start() //TODO set timeout to last intake in case of shoddy HP
     ->Add(std::make_shared<IntakeAutoStrategy>("Intake to ball 1", intake, true))
     ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
-    // ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
     ->Then()
     ->Add(std::make_shared<DriveToAngleRoughStrategy>("Rough turn to hub", drivetrain, 30))
-    // ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
     ->Then()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 11)) 
-    // ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
     ->Then()
-    // ->Add(std::make_shared<ShooterShootStrategy>("shoot first 2 balls", shooter, intake, 265))
+    ->Add(std::make_shared<ShooterShootStrategy>("shoot first 2 balls", shooter, intake, 265))
     ->Then()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to ball 3", drivetrain, 121.5))
-    // ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
     ->Then()
     ->Add(std::make_shared<IntakeAutoStrategy>("intake ball 3", intake, false))
     ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 2", drivetrain, 2.9744))
-    // ->Add(std::make_shared<ShooterSpinUpStrategy>("spin up shooter for ball 3", shooter, 265))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("spin up shooter for ball 3", shooter, 265))
     ->Then()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 53.5))
     ->Add(std::make_shared<ShooterSpinUpStrategy>("shooter spin up initial", shooter, 265))
@@ -57,7 +57,7 @@ std::shared_ptr<wml::Strategy> Auto::FiveBallTerminal(wml::Drivetrain &drivetrai
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::ThreeBallTerminal(wml::Drivetrain &drivetrain) {
+std::shared_ptr<wml::Strategy> Auto::ThreeBallTerminal(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
     ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
     ->Then()
@@ -73,7 +73,7 @@ std::shared_ptr<wml::Strategy> Auto::ThreeBallTerminal(wml::Drivetrain &drivetra
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::ThreeBallHanger(wml::Drivetrain &drivetrain) {
+std::shared_ptr<wml::Strategy> Auto::ThreeBallHanger(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn robot to right angle", drivetrain, 48))
     ->Then()
@@ -87,11 +87,10 @@ std::shared_ptr<wml::Strategy> Auto::ThreeBallHanger(wml::Drivetrain &drivetrain
     ->Then()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 77.25))
     ->Build();
-
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain) {
+std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
     ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
     ->Then()

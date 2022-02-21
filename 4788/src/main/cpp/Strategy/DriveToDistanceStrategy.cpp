@@ -3,12 +3,12 @@
 #include "ControlMap.h"
 
 static wml::control::PIDGains &getAngleGains() {
-  static wml::control::PIDGains gains{"AngleStratGains", 0.023, 0.17, 0.0025, 0.1};
+  static wml::control::PIDGains gains{"AngleStratGains", 0.015, 0.01, 0, 0.06};
   return gains;
 };
 
 static wml::control::PIDGains &getDistanceGains() {
-  static wml::control::PIDGains gains{"DistanceStratGains", 1.2, 1.4, 0.27, 0.06};
+  static wml::control::PIDGains gains{"DistanceStratGains", 1.2, 0.4, 0, 0.06};
   return gains;
 };
 
@@ -85,7 +85,7 @@ DrivetrainAngleStrategy::DrivetrainAngleStrategy(std::string name, Drivetrain &d
   Requires(&drivetrain); //0.012, 0.012, -0
   SetCanBeInterrupted(true);
 
-  _anglePID.SetIZone(10);
+  _anglePID.SetIZone(15);
   _anglePID.SetWrap(360);
   _anglePID.SetIsDoneThreshold(1, 0.5);
   _goal = goal;
