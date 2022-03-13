@@ -12,6 +12,7 @@
 #include <frc/GenericHID.h>
 
 #include <cameraserver/CameraServer.h>
+
 #include <frc/DriverStation.h>
 
 #include <frc/SpeedControllerGroup.h>
@@ -30,7 +31,7 @@
 #include <WMLCtre.h>
 #include <controllers/Controllers.h>
 #include <actuators/BinaryServo.h>
-#include <actuators/Compressor.h>
+// #include <actuators/Compressor.h>
 #include <NTProvider.h>
 #include <actuators/DoubleSolenoid.h>
 #include <actuators/VoltageController.h>
@@ -52,7 +53,8 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
-//#include "MP_Trajedy.h"
+
+// #include "MP_Trajedy.h"
 
 // WML Rev
 #include <WMLRev.h>
@@ -60,13 +62,17 @@
 // Local Files
 #include "ControlMap.h"
 
+static wml::physics::DcMotor mNEO { 12.0, wml::physics::DcMotor::rpm2rads(5880), 1.3, 166, 3.36 };
+static wml::physics::DcMotor mFalcon500 { 12.0, wml::physics::DcMotor::rpm2rads(6380), 1.5, 257, 4.69 };
+
 struct RobotMap {
   /**
    * Controllers
    */
   wml::controllers::XboxController xbox1{ ControlMap::xbox1Port };
   wml::controllers::XboxController xbox2{ ControlMap::xbox2Port };
-  wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2};
+  wml::controllers::XboxController xbox3{ ControlMap::xbox3Port };
+  wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2, xbox3};
 
   /**
    * Robot Control System
@@ -74,92 +80,64 @@ struct RobotMap {
    */
   struct ControlSystem {
     wml::sensors::PressureSensor pressureSensor{ ControlMap::pressureSensorPort };
-    wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
+    // wml::actuators::Compressor compressor{ ControlMap::compressorPort, wml::actuators::PneumaticsModuleType::kCTRE, "Cj" };
   }; ControlSystem controlSystem;
 
   /**
    * Shooter subsystem 
-   * 2 spark maxs into a gearbox 
+   * 3 spark maxs into a gearbox 
    */
   struct ShooterSystem {
-    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO , 42 };
-    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
-    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
+    wml::SparkMax leftFlyWheelMotor{ ControlMap::Shooter::leftFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
+    wml::SparkMax rightFlyWheelMotor{ ControlMap::Shooter::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
+    wml::SparkMax centerFlyWheelMotor{ ControlMap::Shooter::centerFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
 
-    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
-    wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
 
-      //shooter PID stuff 
-    inline static double kp = 0.01;
-    inline static double ki = 0.0001;
-    inline static double kd = 0.00001;
+    wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(
+      leftFlyWheelMotor,
+      rightFlyWheelMotor,
+      centerFlyWheelMotor
+    );
+    wml::Gearbox shooterGearbox{
+      &shooterMotorGroup,
+      &rightFlyWheelMotor,
+      1.0, 
+      mNEO * 3
+    };
 
-    inline static double goal = 0;
-    inline static double sum = 0;
-    inline static double derror = 0;
-    inline static double previousError = 0;
-    inline static double error = 0;
   }; ShooterSystem shooterSystem;
 
   struct DrivebaseSystem {
-    // Drivetrain Left Motors
-    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 2048};
-    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 2048};
+    wml::TalonFX leftMotor{ ControlMap::Drivetrain::leftMotorPort, 2048 };
+    wml::TalonFX rightMotor{ ControlMap::Drivetrain::rightMotorPort, 2048 };
 
-    // Drivetrain Right Motors
-    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 2048};
-    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 2048};
-    
     // Motor Grouping
-    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
-    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
+    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(leftMotor);
+    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(rightMotor);
 
     // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
-    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
+    wml::Gearbox LGearbox{&leftMotors, &leftMotor, 6.1, mFalcon500};
+    wml::Gearbox RGearbox{&rightMotors, &rightMotor, 6.1, mFalcon500};
 
-    wml::sensors::NavX navX{};
+    wml::sensors::NavX navX{frc::SPI::Port::kMXP};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
-    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::trackWidth, ControlMap::trackDepth, ControlMap::wheelRadius, ControlMap::mass};
+    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::Drivetrain::trackWidth, ControlMap::Drivetrain::trackDepth, ControlMap::Drivetrain::wheelRadius, ControlMap::Drivetrain::mass};
     wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
     wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
 
   }; DrivebaseSystem drivebaseSystem;
 
-  struct DeathbaseSystem{
-    //Drivetrain Left Motors
-    wml::TalonSrx dbLeftMotor1{ControlMap::dbLeftPort1, 99};
-    wml::TalonSrx dbLeftMotor2{ControlMap::dbLeftPort2, 99};
-
-    //Drivetrain right Motors
-    wml::TalonSrx dbRightMotor1{ControlMap::dbRightPort1, 99};
-    wml::TalonSrx dbRightMotor2{ControlMap::dbRightPort2, 99};
-    
-     // Motor Grouping
-    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(dbLeftMotor1, dbLeftMotor2);
-    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(dbRightMotor1, dbRightMotor2);
-
-    // Gearboxes
-    wml::Gearbox LGearbox{&leftMotors, &dbLeftMotor1};
-    wml::Gearbox RGearbox{&rightMotors, &dbRightMotor1};
-
-    wml::sensors::NavX navX{};
-    wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
-
-    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::trackWidth, ControlMap::trackDepth, ControlMap::wheelRadius, ControlMap::mass};
-    wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
-    wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
-
-  };
-
-  struct ClimberSystem {
-    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::climberPort1, ControlMap::climberPort2, 0.1};
-  }; ClimberSystem climberSystem;
 
   struct IntakeSystem {
-    wml::TalonSrx intake{ControlMap::intakeMotorPort, 99};
-   // wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, ControlMap::intakeSolenoidPort, 0.1};
+    wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
+    wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
+    wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
+    wml::sensors::LimitSwitch intakeBallSensor{0, false, "kee-an"}; //ball sensor
+    wml::sensors::LimitSwitch shooterBallSensor{2, false, "Sam"};
   }; IntakeSystem intakeSystem;
 
+  struct ClimberSystem {
+    wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
+  }; ClimberSystem climberSystem;
 };

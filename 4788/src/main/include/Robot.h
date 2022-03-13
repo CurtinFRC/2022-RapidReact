@@ -6,11 +6,20 @@
 #include "RobotMap.h"
 #include "Shooter.h"
 #include "Drivebase.h"
-#include "Climber.h"
 #include "Intake.h"
+#include "Trajectories.h"
+#include "Climber.h"
+#include "Auto.h"
 
-class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
- public:
+
+#include "Strategy/ShooterStrategy.h"
+#include "Strategy/IntakeStrategy.h"
+#include "Strategy/ClimberStrategy.h"
+#include "Strategy/GetOutStrategy.h"
+
+
+class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider, protected wml::loops::LoopSystem {
+public:
 
   /**
    * Robot boot initilization.
@@ -45,10 +54,18 @@ class Robot : public frc::TimedRobot, protected wml::StrategyController, protect
   void TestInit() override;
   void TestPeriodic() override;
 
- private:
+
+  void Update(double dt) override;
+
+private:
   RobotMap robotMap;
-  Drivetrain *drivetrain;
+  Trajectories trajectories;
+  wml::Drivetrain *drivetrain;
   Shooter *shooter;
   Intake *intake;
   Climber *climber;
+
+  Auto _auto;
+
+  bool outToggle = false;
 };

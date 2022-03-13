@@ -1,82 +1,123 @@
 #include "Shooter.h"
 #include <iostream>
+#include "frc/RobotController.h"
 
 using namespace wml;
 using namespace wml::controllers;
 
-Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup) {}
+Shooter::Shooter(RobotMap::ShooterSystem &shooterSystem, SmartControllerGroup &contGroup) : _shooterSystem(shooterSystem), _contGroup(contGroup), _filterPos(wml::control::LinearFilter::MovingAverage(20)), _filterVel((wml::control::LinearFilter::MovingAverage(20))) {
 
-void Shooter::teleopOnUpdate(double dt) {
-  // TODO @Anna decide which case to switch to
+}
 
-  switch (_teleopShooter) {
-    case TeleopShooter::kAuto:
-      //left bumper for close shot, right bumper for far shot, POV button 
-      // if (_contGroup.Get(ControlMap::shortShoot)) {
-      //   speed(8, dt);
-      // }
-      break;
-    case TeleopShooter::kIdle:
+void Shooter::setManual(double voltage) {
+  _flyWheelVoltage = voltage;
+  _state = ShooterState::kManual;
+}
 
-      break;
-    case TeleopShooter::kManual:
-
-      manualControl(dt);
-
-      break;
-    case TeleopShooter::kTesting:
-      testing(dt);
-      break;
-    default:
-      break;
+void Shooter::setPID(double goal, double dt) {
+  if (_state != ShooterState::kPID) {
+    _flyWheelVoltage = 0;
+    _sum = 0;
+    _previousError = 0;
+    _iterations = 0;
   }
+  _state = ShooterState::kPID;
+  _angularVelocityGoal = goal;
 }
 
-//TODO @Anna figure out PID algorithm stuff
-/**
-  * Needs to be a closed loop PID system 
-  * 
-  */
-double Shooter::speed(double metersPerSecond, double dt) {
+void Shooter::updateShooter(double dt) {
+  auto shooterInst = nt::NetworkTableInstance::GetDefault();
+  auto shooterSystem = shooterInst.GetTable("shooterSystem");
 
-  // double input = _shooterSystem._flyWheel.encoder->GetAngularVelocity();
+  nt::NetworkTableInstance::GetDefault().GetTable("shooterSystem")->GetEntry("State").SetString(shooter_state_to_string(_state));
 
-  // ControlMap::error = ControlMap::goal - input;
-  // ControlMap::derror = (ControlMap::error - ControlMap::previousError) / dt;
-  // ControlMap::sum = ControlMap::sum + ControlMap::error * dt;
+  switch (_state) {
+  case ShooterState::kManual:
+    break;
 
-  // ControlMap::ouput = ControlMap::kp * ControlMap::error + ControlMap::ki * ControlMap::sum + ControlMap::kd * ControlMap::derror;
-  // ControlMap::previousError = ControlMap::error;
+  case ShooterState::kIdle:
+    _flyWheelVoltage = 0;
+    break;
 
-  // return ControlMap::output;
+  case ShooterState::kPID:
+    _flyWheelVoltage = calculatePID(_angularVelocityGoal, dt);
+    break;
+
+  case ShooterState::kRaw:
+    manualOutput = -_rawPower;
+  break;
+
+  default:
+    _state = ShooterState::kIdle;
+    std::cout << "in default case, somthing is wrong" << std::endl;
+    break;
+  }
+
+  if (_state != ShooterState::kRaw) {
+    double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
+    auto &motor = _shooterSystem.shooterGearbox.motor;
+    double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
+    double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
+    manualOutput = std::min(_flyWheelVoltage, Vmax);
+  }
+
+  nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
+  nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(isDone());
+
+  _shooterSystem.shooterGearbox.transmission->SetVoltage(manualOutput);
 }
 
 
-/**
-  * Left trigger controls the shooter manually
-  */
-void Shooter::manualControl(double dt) {
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
-
-  _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterManualSpeed);
+void Shooter::Update(double dt) {
+  updateShooter(dt);
 }
 
-/**
-  * for testing the shooter
-  */
-void Shooter::testing(double dt) {
 
-  shooterManualSpeed = fabs(_contGroup.Get(ControlMap::shooterManualSpin)) > ControlMap::triggerDeadzone ? _contGroup.Get(ControlMap::shooterManualSpin) : 0;
+double Shooter::calculatePID(double angularVelocity, double dt) {
+  double input = -(_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity());
+  double error = angularVelocity - input;
+  double derror = (error - _previousError) / dt;
+  _sum += error * dt;
 
-  // _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
+  auto &motor = _shooterSystem.shooterGearbox.motor;
+  double output = ControlMap::ShooterGains::kp * error + ControlMap::ShooterGains::ki * _sum + (ControlMap::ShooterGains::kd) * derror +  motor.kw() * angularVelocity;
 
-  _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
-  _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
-  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
+  auto inst = nt::NetworkTableInstance::GetDefault();
+  auto table = inst.GetTable("shooter gains");
 
-  // std::cout << shooterManualSpeed << std::endl;
-  // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
-  // std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
+  _avgPos = _filterPos.Get(error);
+  _avgVel = _filterVel.Get(derror);
 
-  nt::NetworkTableInstance::GetDefault().GetTable("RobotValue")->GetSubTable("Shooter")->GetEntry("Angular velocity").SetDouble(0.6);
+  table->GetEntry("input").SetDouble(input);
+  table->GetEntry("output").SetDouble(output);
+  table->GetEntry("goal").SetDouble(angularVelocity);
+  table->GetEntry("error").SetDouble(error);
+
+
+  table->GetEntry("P").SetDouble(ControlMap::ShooterGains::kp * error);
+  table->GetEntry("I").SetDouble(ControlMap::ShooterGains::ki * _sum);
+  table->GetEntry("D").SetDouble(ControlMap::ShooterGains::kd * derror);
+
+
+  table->GetEntry("avg_pos").SetDouble(_avgPos);
+  table->GetEntry("avg_vel").SetDouble(_avgVel);
+
+  _previousError = error;
+  _iterations ++;
+  return output;
+}
+
+void Shooter::SetIsDoneThreshold(double threshAvgPos, double threshAvgVel) {
+  _threshAvgPos = threshAvgPos;
+  _threshAvgVel = threshAvgVel;
+}
+
+bool Shooter::isDone() {
+  return _state == ShooterState::kPID && _iterations > 20 && std::abs(_avgPos) < _threshAvgPos && std::abs(_avgVel) < _threshAvgVel;
+}
+
+
+void Shooter::GetOut(double dt, double power) {
+  _state = ShooterState::kRaw;
+  _rawPower = power;
 }
