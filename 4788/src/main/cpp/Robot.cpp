@@ -81,16 +81,21 @@ void Robot::RobotPeriodic() {
   // shooter->update(dt);
   // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
   // robotMap.controlSystem.compressor.Update(dt);
+  
   auto table = nt::NetworkTableInstance::GetDefault().GetTable("Robot Data");
   auto dt_strat = drivetrain->GetActiveStrategy();
   if (dt_strat)
     table->GetEntry("Drivetrain Strategy").SetString(dt_strat->GetStrategyName());
   else
-    table->GetEntry("Drivetrain Strategy").SetString("<none>");
-  NTProvider::Update();
+    table->GetEntry("Drivetrain Strategy").SetString("<none>"); 
 
   table->GetEntry("Gyro").SetDouble(drivetrain->GetConfig().gyro->GetAngle());
 
+  auto visionTable = nt::NetworkTableInstance::GetDefault().GetTable("photonvision/visionCam");  // check this
+  double xCords = visionTable->GetEntry("targetPixelsX").GetDouble(0); 
+  double yCords = visionTable->GetEntry("targetPixelsY").GetDouble(0);
+
+  NTProvider::Update();
   lastTimeStamp = currentTimeStamp;
 }
 
