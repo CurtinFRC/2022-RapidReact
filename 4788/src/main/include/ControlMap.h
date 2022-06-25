@@ -57,8 +57,8 @@ struct ControlMap {
   struct Intake {
     static constexpr int  intakeMotorPort = 5;
     static constexpr bool intakeSolenoid = false;
-    static constexpr int  intakeSolenoidPort = 14; //11
-    static constexpr int intakeSolenoidPort2 = 12; //15
+    static constexpr int  intakeSolenoidPort = 10; //11   9
+    static constexpr int intakeSolenoidPort2 = 8; //15   11
 
     // static constexpr double 
   };
@@ -87,8 +87,8 @@ struct ControlMap {
 
   struct Climber {
     static constexpr int climberPort = 99;
-    static constexpr int climberPort1 = 15; //14 up
-    static constexpr int climberPort2 = 11; //12 down
+    static constexpr int climberPort1 = 11; //14 up   8
+    static constexpr int climberPort2 = 9; //12 down   10
   };
 
   // ------------------ Controls ------------------
@@ -111,7 +111,7 @@ struct ControlMap {
   inline static const wml::controllers::tAxis rightDrive{driver, XboxController::kRightYAxis};
 
   // Climber
-  inline static const wml::controllers::tButton climberActuate{ coDriver, XboxController::kA };
+  inline static const wml::controllers::tButton climberActuate{ coDriver, wml::controllers::XboxController::kY };
 
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
@@ -120,7 +120,7 @@ struct ControlMap {
   inline static const wml::controllers::tButton indexManualToggleButton{ tester, wml::controllers::XboxController::kA };
   inline static const wml::controllers::tButton indexManualStop{ tester, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tButton fire{ coDriver, wml::controllers::XboxController::kY};
+  inline static const wml::controllers::tButton fire{ tester, wml::controllers::XboxController::kY};
 
   inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };

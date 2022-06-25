@@ -37,7 +37,6 @@ void Robot::RobotInit() {
   
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
   climber->SetDefault(std::make_shared<ClimberStrategy>("climber manual strategy", *climber, robotMap.contGroup));
-  StrategyController::Register(climber);
   climber->StartLoop(100);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
@@ -58,6 +57,7 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
   // Register our systems to be called via strategy
+  StrategyController::Register(climber);
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
   StrategyController::Register(intake);
@@ -142,7 +142,7 @@ void Robot::TeleopInit() {
   Schedule(climber->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-  climber->updateClimber(dt);
+  // climber->updateClimber(dt);
 
 
   if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {

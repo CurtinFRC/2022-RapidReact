@@ -106,10 +106,12 @@ void Intake::updateIntake(double dt) {
     case IntakeStates::kStowed:
       _intakeSetVoltage = 0;
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+      // std::cout << "Intake stowed" << std::endl;
     break;
-    
+
     case IntakeStates::kDeployed:
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+      // std::cout << "Intake deployed" << std::endl;
     break;
 
     default:
@@ -129,11 +131,12 @@ void Intake::setIndex(double voltage) {
 }
 
 void Intake::setIntakeState(IntakeStates intakeState) {
-  if (_magState == MagStates::kTwo) {
-    _intakeState = IntakeStates::kDeployed;
-  } else {
+  // if (_magState == MagStates::kTwo) {
+  //   _intakeState = IntakeStates::kDeployed;
+  // } else {
     _intakeState = intakeState;
-  }
+
+  // }
 }
 
 void Intake::setMagState(MagStates magState) {
