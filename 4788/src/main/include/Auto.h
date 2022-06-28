@@ -9,5 +9,6 @@ class Auto {
   std::shared_ptr<wml::Strategy> ThreeBallTerminal(wml::Drivetrain &drivetrain);
   std::shared_ptr<wml::Strategy> ThreeBallHanger(wml::Drivetrain &drivetrain);
   std::shared_ptr<wml::Strategy> OneTwoBallAuto(wml::Drivetrain &drivetrain);
+  std::shared_ptr<wml::Strategy> Vision(wml::Drivetrain &drivetrain);
 };
 

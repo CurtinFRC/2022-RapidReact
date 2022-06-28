@@ -94,6 +94,7 @@ void Robot::RobotPeriodic() {
   auto visionTable = nt::NetworkTableInstance::GetDefault().GetTable("photonvision/visionCam");  // check this
   double xCords = visionTable->GetEntry("targetPixelsX").GetDouble(0); 
   double yCords = visionTable->GetEntry("targetPixelsY").GetDouble(0);
+  double yawCords = visionTable->GetEntry("targetYaw").GetDouble(0);
 
   NTProvider::Update();
   lastTimeStamp = currentTimeStamp;
@@ -115,7 +116,7 @@ void Robot::AutonomousInit() {
   // auto testStrat = std::make_shared<DriveToDistanceStrategy>("testStrat", *drivetrain, 1);
   // auto testStrat = std::make_shared<DrivetrainAngleStrategy>("testStrat", *drivetrain, 90.0);
 
-  bool success = Schedule(_auto.FiveBallTerminal(*drivetrain));
+  bool success = Schedule(_auto.Vision(*drivetrain));
 
   std::cout << "TEST " << success << std::endl;
 }

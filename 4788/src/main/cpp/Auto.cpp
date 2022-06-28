@@ -3,6 +3,7 @@
 #include <strategy/StrategyController.h>
 #include "Strategy/DrivetrainTrajectoryStrategy.h"
 #include "Strategy/DriveToDistanceStrategy.h"
+#include "Strategy/VisionAlignment.h"
 
 std::shared_ptr<wml::Strategy> Auto::FiveBallTerminal(wml::Drivetrain &drivetrain) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
@@ -70,6 +71,13 @@ std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain)
   return autoStrat;
 };
 
+std::shared_ptr<wml::Strategy> Auto::Vision(wml::Drivetrain &drivetrain) {
+  auto autoStrat = wml::StrategyBuilder{}.Start()
+    ->Add(std::make_shared<VisionAlignment>("Align", drivetrain))
+    ->Build();
+
+  return autoStrat;
+};
 
 // void someFunction() {
 //   auto autoStrat = StrategyBuilder{}.Start()

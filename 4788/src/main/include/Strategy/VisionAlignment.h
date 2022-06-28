@@ -16,4 +16,6 @@ class VisionAlignment : public wml::Strategy {
  private:
   Drivetrain &_drivetrain;
   std::shared_ptr<nt::NetworkTable> _visionTable = nt::NetworkTableInstance::GetDefault().GetTable("photonvision/visionCam");
+  PID _targetPID;
+  double _accSpeed = 0.2;
 };
