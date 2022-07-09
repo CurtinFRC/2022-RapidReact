@@ -3,13 +3,13 @@
 #include "Strategy/VisionAlignment.h"
 #include "ControlMap.h"
 
-VisionAlignment::VisionAlignment(std::string name, Drivetrain &drivetrain) : wml::Strategy(name), _drivetrain(drivetrain), _targetPID({ 0, 0, 0 }, 0){
+VisionAlignment::VisionAlignment(std::string name, Drivetrain &drivetrain) : wml::Strategy(name), _drivetrain(drivetrain), _drivetrainAngleStrategy("VisionAngle", drivetrain, _lastYaw){
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
 }
 
 void VisionAlignment::OnStart() {
-
+  _drivetrainAngleStrategy.OnStart();
 }
 
 void VisionAlignment::OnUpdate(double dt) {
@@ -19,24 +19,13 @@ void VisionAlignment::OnUpdate(double dt) {
   double yCords = _visionTable->GetEntry("targetPixelsY").GetDouble(0);
   double yawCords = _visionTable->GetEntry("targetYaw").GetDouble(0);
 
-  double output = _targetPID.calculate(yawCords, 0, dt);
+  if (std::abs(yawCords - _lastYaw) > 0.005)
+    _drivetrainAngleStrategy.SetGoal(yawCords);
 
-  auto inst = nt::NetworkTableInstance::GetDefault();
-  auto table = inst.GetTable("Vision Stuff");
-  table->GetEntry("Yaw").SetDouble(yawCords);
-  table->GetEntry("Distance from Goal").SetDouble(output);
+  _drivetrainAngleStrategy.OnUpdate(dt);
 
-  output = std::max(-_accSpeed, std::min(_accSpeed, output));
-
-  leftPower += output;
-  rightPower -= output;
-
-  table->GetEntry("leftPre").SetDouble(leftPower);
-  table->GetEntry("rightPre").SetDouble(rightPower);
-
-  _drivetrain.Set(-leftPower, -rightPower);
-
-  if (_targetPID.isDone())
+  if (_drivetrainAngleStrategy.IsFinished())
     SetDone();
 
+  _lastYaw = yawCords;
 }

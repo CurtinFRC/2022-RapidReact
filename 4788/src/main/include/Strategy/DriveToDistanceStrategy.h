@@ -28,6 +28,7 @@ class DrivetrainAngleStrategy : public wml::Strategy {
  public:
   DrivetrainAngleStrategy(std::string name, Drivetrain &drivetrain, double goal);
 
+  void SetGoal(double newGoal);
   void OnUpdate(double dt) override;
   void OnStart() override;
 

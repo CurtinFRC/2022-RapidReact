@@ -96,3 +96,7 @@ void DrivetrainAngleStrategy::OnUpdate(double dt) {
   if (_anglePID.isDone())
     SetDone();
 }
+
+void DrivetrainAngleStrategy::SetGoal(double newGoal) {
+  _goal = newGoal;
+}
