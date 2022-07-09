@@ -118,7 +118,7 @@ struct RobotMap {
     wml::Gearbox LGearbox{&leftMotors, &leftMotor, 6.1, mFalcon500};
     wml::Gearbox RGearbox{&rightMotors, &rightMotor, 6.1, mFalcon500};
 
-    wml::sensors::NavX navX{frc::SPI::Port::kMXP};
+    wml::sensors::NavX navX{frc::SPI::Port::kMXP, 200};
     wml::sensors::NavXGyro gyro{navX.Angular(wml::sensors::AngularAxis::YAW)};
 
     wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::Drivetrain::trackWidth, ControlMap::Drivetrain::trackDepth, ControlMap::Drivetrain::wheelRadius, ControlMap::Drivetrain::mass};
@@ -132,7 +132,7 @@ struct RobotMap {
     wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
     wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
     wml::sensors::LimitSwitch intakeBallSensor{0, false, "kee-an"}; //ball sensor
-    wml::sensors::LimitSwitch shooterBallSensor{2, false, "Sam"};
+    wml::sensors::LimitSwitch shooterBallSensor{9, false, "Sam"};
   }; IntakeSystem intakeSystem;
 
   struct ClimberSystem {
