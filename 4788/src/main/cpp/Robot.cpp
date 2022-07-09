@@ -144,6 +144,19 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   // climber->updateClimber(dt);
 
+  // if (robotMap.contGroup.Get(ControlMap::climberActuate)) {
+  //   climberToggle = false;
+  // } else {
+  //   climberToggle = true;
+  // }
+
+  // if (climberToggle) {
+  //   robotMap.climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+
+  // } else {
+  //   robotMap.climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+  // }
+
 
   if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {
     if (outToggle) {
@@ -158,9 +171,9 @@ void Robot::TeleopPeriodic() {
   }
 
 
-  if (frc::DriverStation::GetMatchTime() < 1) {
-    Schedule(std::make_shared<ClimberDisableStrategy>("Climber Disabled (Auto Stow)", *climber));
-  }
+  // if (frc::DriverStation::GetMatchTime() < 1) {
+  //   Schedule(std::make_shared<ClimberDisableStrategy>("Climber Disabled (Auto Stow)", *climber));
+  // }
 }
 
 // During Test Logic

@@ -18,7 +18,9 @@ struct ControlMap {
     contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
       { Controller::POVPos::kLeft, ControlMap::farShoot },
       { Controller::POVPos::kRight, ControlMap::noahShoot },
-      { Controller::POVPos::kBottom, ControlMap::shooterEject }
+      { Controller::POVPos::kBottom, ControlMap::shooterEject },
+      { Controller::POVPos::kBottom, ControlMap::indexManualToggleButton},
+      { Controller::POVPos::kTop, ControlMap::indexManualStop },
     });
   }
 
@@ -100,7 +102,7 @@ struct ControlMap {
 
   // inline static const wml::controllers::tButton pidON{ coDriver, XboxController::kBumperRight }; //used only for PID testing
   inline static const wml::controllers::tAxis indexSpin{ coDriver, XboxController::kRightYAxis };
-  inline static const wml::controllers::tButton shooterEject{ coDriver, __LINE__ + 30 }; //switch to a POV button later
+  inline static const wml::controllers::tButton shooterEject{ driver, __LINE__ + 30 }; //switch to a POV button later
 
   inline static const wml::controllers::tPOV shoot{ coDriver, 0};
   inline static const wml::controllers::tButton farShoot{ coDriver, __LINE__ + 30 };
@@ -117,12 +119,14 @@ struct ControlMap {
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tButton indexManualToggleButton{ tester, wml::controllers::XboxController::kA };
-  inline static const wml::controllers::tButton indexManualStop{ tester, wml::controllers::XboxController::kB };
+  inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kX };
+  inline static const wml::controllers::tButton indexManualStop{ driver, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tButton fire{ tester, wml::controllers::XboxController::kY};
+  inline static const wml::controllers::tButton intakeManualToggle{ coDriver, wml::controllers::XboxController::kA };
 
-  inline static const wml::controllers::tAxis testingIndex{ tester, wml::controllers::XboxController::kLeftYAxis };
+  inline static const wml::controllers::tButton fire{ coDriver, wml::controllers::XboxController::kX };
+
+  inline static const wml::controllers::tAxis testingIndex{ coDriver, wml::controllers::XboxController::kRightYAxis };
   inline static const wml::controllers::tAxis testingIntake{ tester, wml::controllers::XboxController::kRightYAxis };
 
   inline static const wml::controllers::tButton GetOut{ driver, wml::controllers::XboxController::kY };

@@ -67,4 +67,5 @@ private:
   Auto _auto;
 
   bool outToggle = false;
+  bool climberToggle = false;
 };
