@@ -133,6 +133,10 @@ void DrivetrainAngleStrategy::OnUpdate(double dt) {
   }
 }
 
+void DrivetrainAngleStrategy::SetGoal(double newGoal) {
+  _goal = newGoal;
+}
+
 DriveToAngleRoughStrategy::DriveToAngleRoughStrategy(std::string name, Drivetrain &drivetrain, double goal) : Strategy(name), _drivetrain(drivetrain), _goal(goal) {
   SetCanBeInterrupted(true);
   SetCanBeReused(true);
@@ -150,3 +154,4 @@ void DriveToAngleRoughStrategy::OnUpdate(double dt) {
     SetDone();
   }
 }
+
