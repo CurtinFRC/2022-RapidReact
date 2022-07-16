@@ -55,8 +55,8 @@ struct ControlMap {
   struct Intake {
     static constexpr int  intakeMotorPort = 5;
     static constexpr bool intakeSolenoid = false;
-    static constexpr int  intakeSolenoidPort = 14; //11
-    static constexpr int intakeSolenoidPort2 = 12; //15
+    static constexpr int  intakeSolenoidPort = 10; //11
+    static constexpr int intakeSolenoidPort2 = 8; //15
 
     // static constexpr double 
   };
@@ -85,8 +85,8 @@ struct ControlMap {
 
   struct Climber {
     static constexpr int climberPort = 99;
-    static constexpr int climberPort1 = 15; //14 up
-    static constexpr int climberPort2 = 11; //12 down
+    static constexpr int climberPort1 = 11; //14 up
+    static constexpr int climberPort2 = 9; //12 down
   };
 
   // ------------------ Controls ------------------
