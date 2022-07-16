@@ -24,20 +24,19 @@ void Robot::RobotInit() {
   camera.SetResolution(160, 120);
 
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter strategy", *shooter, robotMap.contGroup));
+  shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
 
   robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
-  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake strategy", *intake, *shooter,robotMap.contGroup));
+  intake->SetDefault(std::make_shared<IntakeStrategy>("Intake teleop strategy", *intake, *shooter,robotMap.contGroup));
   intake->StartLoop(100);
   robotMap.intakeSystem.intake.SetInverted(true);
   robotMap.intakeSystem.indexWheel.SetInverted(true);
   
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
   climber->SetDefault(std::make_shared<ClimberStrategy>("climber manual strategy", *climber, robotMap.contGroup));
-  StrategyController::Register(climber);
   climber->StartLoop(100);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
@@ -47,6 +46,7 @@ void Robot::RobotInit() {
   robotMap.drivebaseSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
   robotMap.drivebaseSystem.leftMotor.SetUpdateRate(200);
   robotMap.drivebaseSystem.rightMotor.SetUpdateRate(200);
+  // robotMap.drivebaseSystem.gyro
   
   // Set the default strategy for drivetrain to manual
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
@@ -57,6 +57,7 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
   // Register our systems to be called via strategy
+  StrategyController::Register(climber);
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
   StrategyController::Register(intake);
@@ -64,7 +65,7 @@ void Robot::RobotInit() {
 
   trajectories.build();
 
-  StartLoop(50);
+  StartLoop(100);
 }
 
 void Robot::Update(double dt) {
@@ -87,7 +88,23 @@ void Robot::RobotPeriodic() {
   if (dt_strat)
     table->GetEntry("Drivetrain Strategy").SetString(dt_strat->GetStrategyName());
   else
-    table->GetEntry("Drivetrain Strategy").SetString("<none>"); 
+    table->GetEntry("Drivetrain Strategy").SetString("<none>");
+
+  auto in_strat = intake->GetActiveStrategy();
+  if (in_strat)
+    table->GetEntry("Intake Strategy").SetString(in_strat->GetStrategyName());
+  else
+    table->GetEntry("Intake Strategy").SetString("<none>");
+
+  auto sh_strat = shooter->GetActiveStrategy();
+  if (sh_strat)
+    table->GetEntry("Shooter Strategy").SetString(sh_strat->GetStrategyName());
+  else
+    table->GetEntry("Shooter Strategy").SetString("<none>");
+
+  NTProvider::Update();
+
+  
 
   table->GetEntry("Gyro").SetDouble(drivetrain->GetConfig().gyro->GetAngle());
 
@@ -105,7 +122,7 @@ void Robot::DisabledInit() {
   InterruptAll(true);
 }
 void Robot::DisabledPeriodic() {
-  Schedule(std::make_shared<ClimberDisableStrategy>("climber disable strategy", *climber));
+  // Schedule(std::make_shared<ClimberDisableStrategy>("climber disable strategy", *climber));
 }
 
 
@@ -132,7 +149,20 @@ void Robot::TeleopInit() {
   Schedule(climber->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-  climber->updateClimber(dt);
+  // climber->updateClimber(dt);
+
+  // if (robotMap.contGroup.Get(ControlMap::climberActuate)) {
+  //   climberToggle = false;
+  // } else {
+  //   climberToggle = true;
+  // }
+
+  // if (climberToggle) {
+  //   robotMap.climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+
+  // } else {
+  //   robotMap.climberSystem.climberSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+  // }
 
 
   if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {
@@ -147,6 +177,10 @@ void Robot::TeleopPeriodic() {
     Schedule(std::make_shared<GetOutStrategy>("EJECT ALL FROM INTAKE, MAG, SHOOT",  *intake, *shooter, robotMap.contGroup));
   }
 
+
+  // if (frc::DriverStation::GetMatchTime() < 1) {
+  //   Schedule(std::make_shared<ClimberDisableStrategy>("Climber Disabled (Auto Stow)", *climber));
+  // }
 }
 
 // During Test Logic

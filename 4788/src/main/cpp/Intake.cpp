@@ -34,7 +34,7 @@ void Intake::updateIntake(double dt) {
     break;
 
     case MagStates::kTransfering:
-      if (_backSensor() && !_frontSensor()) {
+      if (transferSensorDebounce.Get(_backSensor()) && !_frontSensor()) {
         _intakeSetVoltage = 0;
         _indexSetVoltage = 0;
         _magState = MagStates::kOne;
@@ -70,6 +70,7 @@ void Intake::updateIntake(double dt) {
       }
       _intakeSetVoltage = 0;
       _indexSetVoltage = 0;
+      _intakeState = IntakeStates::kDeployed;
     break;
 
     case MagStates::kEject:
@@ -78,7 +79,11 @@ void Intake::updateIntake(double dt) {
         // _intakeSetVoltage = 0.5;
       } else {
         ejectDebounce.Get(false);
-        _magState = MagStates::kEmpty;
+        if (_frontSensor()) {
+          _magState = MagStates::kTransfer;
+        } else {
+          _magState = MagStates::kEmpty;
+        }
         std::cout << "EJECT" << std::endl;
       }
     break;
@@ -100,11 +105,14 @@ void Intake::updateIntake(double dt) {
   switch(_intakeState) {
     case IntakeStates::kStowed:
       _intakeSetVoltage = 0;
-      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
-    break;
-    
-    case IntakeStates::kDeployed:
       _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kReverse);
+
+      // std::cout << "Intake stowed" << std::endl;
+    break;
+
+    case IntakeStates::kDeployed:
+      _intakeSystem.intakeSolenoid.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+      // std::cout << "Intake deployed" << std::endl;
     break;
 
     default:
@@ -124,11 +132,12 @@ void Intake::setIndex(double voltage) {
 }
 
 void Intake::setIntakeState(IntakeStates intakeState) {
-  if (_magState == MagStates::kTwo) {
-    _intakeState = IntakeStates::kDeployed;
-  } else {
+  // if (_magState == MagStates::kTwo) {
+  //   _intakeState = IntakeStates::kDeployed;
+  // } else {
     _intakeState = intakeState;
-  }
+
+  // }
 }
 
 void Intake::setMagState(MagStates magState) {
@@ -156,6 +165,10 @@ void Intake::fireBall() {
 
 void Intake::Update(double dt) {
   updateIntake(dt);
+}
+
+bool Intake::isIdle() {
+  return _magState == MagStates::kOne || _magState == MagStates::kTwo;
 }
 
 void Intake::GetOut() {
