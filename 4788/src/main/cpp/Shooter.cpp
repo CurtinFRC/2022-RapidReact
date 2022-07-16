@@ -114,8 +114,11 @@ bool Shooter::isDone() {
   return _state == ShooterState::kPID && _iterations > 20 && std::abs(_avgPos) < _threshAvgPos && std::abs(_avgVel) < _threshAvgVel;
 }
 
-
 void Shooter::GetOut(double dt, double power) {
   _state = ShooterState::kRaw;
   _rawPower = power;
+}
+
+ShooterState Shooter::getShooterState() {
+  return _state;
 }
